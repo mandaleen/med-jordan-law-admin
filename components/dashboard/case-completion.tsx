@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { TrendingUp } from "lucide-react";
 
 interface CaseCompletionProps {
   percentage?: number;
@@ -9,82 +10,75 @@ interface CaseCompletionProps {
 
 export function CaseCompletion({
   percentage = 74,
-  label = "Cases closed",
+  label = "Cases Closed",
 }: CaseCompletionProps) {
-  // Semi-circle gauge parameters
-  // Radius R = 85, Center = (120, 110)
-  // Arc spans from 180 deg (left) to 0 deg (right), top half
-  const radius = 80;
-  const strokeWidth = 22;
-  const circumference = Math.PI * radius; // Half-circle circumference ≈ 251.3
-  
-  // Completed portion: 52%
-  // In Progress portion: 22%
-  // Pending portion: 26%
-  const completedOffset = circumference * 0.52;
-  const inProgressOffset = circumference * 0.22;
-  const pendingOffset = circumference * 0.26;
+  // Half-circle arch geometry
+  // Radius R = 72, Center = (100, 95)
+  // Arc length = PI * R ≈ 226.2
+  const radius = 72;
+  const strokeWidth = 14;
+  const circumference = Math.PI * radius;
 
   return (
-    <div className="rounded-[22px] bg-white border border-[#EBEFF3] p-5 shadow-2xs flex flex-col justify-between h-full min-h-[300px]">
+    <div className="rounded-xl apple-glass-card p-6 flex flex-col justify-between h-full min-h-[330px]">
       {/* Header */}
-      <div>
-        <h3 className="text-base font-bold text-slate-900">
-          Case completion
-        </h3>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-base font-semibold text-[#1D1D1F] tracking-tight">
+            Case Resolution
+          </h3>
+          <p className="text-xs text-[#86868B]">Litigation clearance rate</p>
+        </div>
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#34C759] bg-[#34C759]/10 px-2 py-0.5 rounded-full">
+          <TrendingUp className="w-3 h-3" /> Target Met
+        </span>
       </div>
 
-      {/* Semi-Circle Arch Chart */}
-      <div className="relative flex flex-col items-center justify-center my-auto pt-4">
+      {/* Apple Activity Ring Arch */}
+      <div className="relative flex flex-col items-center justify-center my-auto py-2">
         <svg
-          className="w-48 h-28 overflow-visible"
-          viewBox="0 0 200 120"
+          className="w-52 h-32 overflow-visible"
+          viewBox="0 0 200 110"
         >
           <defs>
-            {/* Hatched pattern for pending arc */}
-            <pattern
-              id="gaugeHatch"
-              width="5"
-              height="5"
-              patternTransform="rotate(45 0 0)"
-              patternUnits="userSpaceOnUse"
-            >
-              <line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="5"
-                stroke="#CBD5E1"
-                strokeWidth="2"
-              />
-            </pattern>
+            {/* Apple Blue Gradient */}
+            <linearGradient id="appleBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#007AFF" />
+              <stop offset="100%" stopColor="#30B0C7" />
+            </linearGradient>
+
+            {/* Apple Teal Gradient */}
+            <linearGradient id="appleTealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#30B0C7" />
+              <stop offset="100%" stopColor="#34C759" />
+            </linearGradient>
           </defs>
 
-          {/* Background / Pending Track (Hatched) */}
+          {/* Background Track */}
           <path
-            d="M 20 110 A 80 80 0 0 1 180 110"
+            d="M 28 95 A 72 72 0 0 1 172 95"
             fill="none"
-            stroke="url(#gaugeHatch)"
+            stroke="rgba(0, 0, 0, 0.06)"
             strokeWidth={strokeWidth}
             strokeLinecap="round"
           />
 
-          {/* In Progress Arc (Blue) */}
+          {/* In Progress Arc (Teal/Green) */}
           <path
-            d="M 20 110 A 80 80 0 0 1 180 110"
+            d="M 28 95 A 72 72 0 0 1 172 95"
             fill="none"
-            stroke="#2563EB"
+            stroke="#30B0C7"
             strokeWidth={strokeWidth}
             strokeDasharray={`${circumference * 0.74} ${circumference}`}
             strokeDashoffset={0}
             strokeLinecap="round"
           />
 
-          {/* Completed Arc (Deep Navy) */}
+          {/* Completed Arc (Apple System Blue) */}
           <path
-            d="M 20 110 A 80 80 0 0 1 180 110"
+            d="M 28 95 A 72 72 0 0 1 172 95"
             fill="none"
-            stroke="#0A2342"
+            stroke="url(#appleBlueGrad)"
             strokeWidth={strokeWidth}
             strokeDasharray={`${circumference * 0.52} ${circumference}`}
             strokeDashoffset={0}
@@ -94,30 +88,28 @@ export function CaseCompletion({
 
         {/* Center Numbers */}
         <div className="absolute bottom-2 flex flex-col items-center justify-center text-center">
-          <span className="text-3xl font-extrabold text-slate-900 tracking-tight leading-none">
+          <span className="text-3xl font-bold text-[#1D1D1F] tracking-tight font-mono apple-mono leading-none">
             {percentage}%
           </span>
-          <span className="text-xs text-slate-400 font-medium mt-1">
+          <span className="text-[11px] text-[#86868B] font-medium mt-1">
             {label}
           </span>
         </div>
       </div>
 
-      {/* Legend at bottom */}
-      <div className="flex items-center justify-between text-xs text-slate-600 font-medium pt-3 border-t border-slate-100">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#0A2342]" />
-          <span className="text-[11px] text-slate-500">Completed</span>
+      {/* Legend Breakdown Pills */}
+      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/[0.04]">
+        <div className="flex flex-col text-center p-1.5 rounded-xl bg-black/[0.02]">
+          <span className="text-[10px] text-[#86868B] font-medium">Closed</span>
+          <span className="text-xs font-bold text-[#007AFF] font-mono">52%</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]" />
-          <span className="text-[11px] text-slate-500">In Progress</span>
+        <div className="flex flex-col text-center p-1.5 rounded-xl bg-black/[0.02]">
+          <span className="text-[10px] text-[#86868B] font-medium">Active</span>
+          <span className="text-xs font-bold text-[#30B0C7] font-mono">22%</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full border border-slate-300 bg-slate-100 relative overflow-hidden">
-            <span className="absolute inset-0 pattern-hatched opacity-60" />
-          </span>
-          <span className="text-[11px] text-slate-500">Pending</span>
+        <div className="flex flex-col text-center p-1.5 rounded-xl bg-black/[0.02]">
+          <span className="text-[10px] text-[#86868B] font-medium">Review</span>
+          <span className="text-xs font-bold text-[#86868B] font-mono">26%</span>
         </div>
       </div>
     </div>

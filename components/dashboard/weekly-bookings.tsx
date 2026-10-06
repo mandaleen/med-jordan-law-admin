@@ -2,75 +2,97 @@
 
 import React, { useState } from "react";
 import { WEEKLY_CHART_DATA, DayBarData } from "@/lib/mock-data";
-import { cn } from "@/lib/utils";
+import { TrendingUp } from "lucide-react";
 
 interface WeeklyBookingsProps {
   initialData?: DayBarData[];
 }
 
 export function WeeklyBookings({ initialData = WEEKLY_CHART_DATA }: WeeklyBookingsProps) {
-  const [data, setData] = useState<DayBarData[]>(initialData);
-  const [activeDayIndex, setActiveDayIndex] = useState<number>(3); // Wednesday active by default
+  const [data] = useState<DayBarData[]>(initialData);
+  const [activeDayIndex, setActiveDayIndex] = useState<number>(3); // Wednesday active
+  const [timeRange, setTimeRange] = useState<"week" | "month">("week");
+
+  const activeItem = data[activeDayIndex] || data[3];
 
   const handleBarClick = (index: number) => {
     setActiveDayIndex(index);
   };
 
+  const totalBookings = data.reduce((acc, curr) => acc + curr.bookings, 0);
+
   return (
-    <div className="rounded-[22px] bg-white border border-[#EBEFF3] p-5 shadow-2xs flex flex-col justify-between h-full min-h-[300px]">
-      {/* Card Header */}
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-base font-bold text-slate-900">
-          Weekly bookings
-        </h3>
-        <span className="text-xs text-slate-400 font-medium">This Week</span>
+    <div className="rounded-xl apple-glass-card p-6 flex flex-col justify-between h-full min-h-[330px]">
+      {/* Header: Title, Total & Segmented Range Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-semibold text-[#0A2342] tracking-tight">
+              Weekly Bookings
+            </h3>
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#34C759] bg-[#34C759]/10 px-2 py-0.5 rounded-md border border-[#34C759]/20 whitespace-nowrap shrink-0">
+              <TrendingUp className="w-3 h-3 shrink-0" /> +14.2%
+            </span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-1">
+            <span className="text-2xl font-bold text-[#0A2342] font-mono apple-mono">
+              {totalBookings}
+            </span>
+            <span className="text-xs text-slate-500 whitespace-nowrap">
+              Consultations logged • Avg 5.4 / day
+            </span>
+          </div>
+        </div>
+
+        {/* Minimal Segmented Switcher */}
+        <div className="inline-flex p-1 bg-slate-100 rounded-lg border border-slate-200 self-start sm:self-auto shrink-0">
+          <button
+            type="button"
+            onClick={() => setTimeRange("week")}
+            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+              timeRange === "week"
+                ? "bg-white text-[#0A2342] shadow-xs font-semibold"
+                : "text-slate-500 hover:text-[#0A2342]"
+            }`}
+          >
+            This Week
+          </button>
+          <button
+            type="button"
+            onClick={() => setTimeRange("month")}
+            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+              timeRange === "month"
+                ? "bg-white text-[#0A2342] shadow-xs font-semibold"
+                : "text-slate-500 hover:text-[#0A2342]"
+            }`}
+          >
+            Past 30 Days
+          </button>
+        </div>
       </div>
 
-      {/* Bar Chart Container */}
-      <div className="relative flex-1 flex flex-col justify-end pt-8 pb-1">
-        {/* SVG Patterns Definition */}
-        <svg className="w-0 h-0 absolute pointer-events-none" aria-hidden="true">
-          <defs>
-            <pattern
-              id="diagonalHatch"
-              width="6"
-              height="6"
-              patternTransform="rotate(45 0 0)"
-              patternUnits="userSpaceOnUse"
-            >
-              <line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="6"
-                stroke="#CBD5E1"
-                strokeWidth="2.5"
-              />
-            </pattern>
-            <pattern
-              id="diagonalHatchHover"
-              width="6"
-              height="6"
-              patternTransform="rotate(45 0 0)"
-              patternUnits="userSpaceOnUse"
-            >
-              <line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="6"
-                stroke="#94A3B8"
-                strokeWidth="2.5"
-              />
-            </pattern>
-          </defs>
-        </svg>
+      {/* Bar Chart Area */}
+      <div className="relative flex-1 flex flex-col justify-end pt-6 pb-2">
+        {/* Floating Tooltip for Active Day */}
+        <div className="flex justify-center mb-3">
+          <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-md bg-white border border-slate-200 shadow-xs text-xs font-medium whitespace-nowrap shrink-0">
+            <span className="w-2 h-2 rounded-sm bg-[#0A2342] shrink-0" />
+            <span className="font-semibold text-[#0A2342] whitespace-nowrap">
+              {activeItem.fullDay}:
+            </span>
+            <span className="font-mono font-bold text-[#1D4ED8] whitespace-nowrap">
+              {activeItem.bookings} Bookings
+            </span>
+            <span className="text-[10px] text-slate-400 whitespace-nowrap">
+              ({activeItem.heightPercent}%)
+            </span>
+          </div>
+        </div>
 
-        {/* 7 Bars Grid */}
-        <div className="grid grid-cols-7 gap-2 sm:gap-3 items-end h-[180px] px-1">
+        {/* 7 Day Column Pillar Bars */}
+        <div className="grid grid-cols-7 gap-3 sm:gap-4 items-end h-[160px] px-2">
           {data.map((item, index) => {
             const isActive = activeDayIndex === index;
-            // Height calculation
             const barHeight = `${item.heightPercent}%`;
 
             return (
@@ -79,62 +101,27 @@ export function WeeklyBookings({ initialData = WEEKLY_CHART_DATA }: WeeklyBookin
                 onClick={() => handleBarClick(index)}
                 className="flex flex-col items-center h-full justify-end cursor-pointer group"
               >
-                {/* Floating percentage badge above active bar */}
-                {isActive && (
-                  <div className="mb-2 animate-in fade-in zoom-in-95 duration-200">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white border border-slate-200 text-[#0A2342] text-[11px] font-bold shadow-xs">
-                      {item.activeLabel || `${item.heightPercent}%`}
-                    </span>
-                  </div>
-                )}
-
-                {/* The Pill Bar */}
-                <div
-                  className="w-full max-w-[34px] transition-all duration-300 rounded-full overflow-hidden relative"
-                  style={{ height: barHeight }}
-                >
-                  {isActive ? (
-                    /* Active Solid Navy Bar */
-                    <div className="w-full h-full bg-[#0A2342] rounded-full shadow-xs group-hover:bg-[#133863] transition-colors" />
-                  ) : (
-                    /* Hatched Inactive Bar matching reference */
-                    <svg
-                      className="w-full h-full rounded-full transition-opacity group-hover:opacity-90"
-                      preserveAspectRatio="none"
-                      viewBox="0 0 34 100"
-                    >
-                      <rect
-                        width="34"
-                        height="100"
-                        rx="17"
-                        ry="17"
-                        fill="#F8FAFC"
-                      />
-                      <rect
-                        width="34"
-                        height="100"
-                        rx="17"
-                        ry="17"
-                        fill="url(#diagonalHatch)"
-                        className="transition-all"
-                      />
-                    </svg>
-                  )}
-                </div>
-
-                {/* Day Label below bar */}
-                <div className="mt-3">
-                  <span
-                    className={cn(
-                      "text-xs font-semibold transition-colors",
+                {/* Outer Column Track */}
+                <div className="w-full max-w-[28px] h-full flex items-end justify-center bg-slate-100 hover:bg-slate-200/80 rounded-t-sm p-0.5 border-b border-slate-300">
+                  {/* Inner Filled Pillar */}
+                  <div
+                    className={`w-full rounded-t-sm transition-all ${
                       isActive
-                        ? "text-[#0A2342] font-bold"
-                        : "text-slate-400 group-hover:text-slate-600"
-                    )}
-                  >
-                    {item.day}
-                  </span>
+                        ? "bg-[#0A2342] shadow-xs"
+                        : "bg-slate-300 group-hover:bg-slate-400"
+                    }`}
+                    style={{ height: barHeight }}
+                  />
                 </div>
+
+                {/* Day Label with Active Indicator */}
+                <span
+                  className={`text-xs font-semibold mt-2.5 transition-colors ${
+                    isActive ? "text-[#0A2342] font-bold" : "text-slate-400 group-hover:text-slate-700"
+                  }`}
+                >
+                  {item.day}
+                </span>
               </div>
             );
           })}

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { RECENT_BOOKINGS, ACTIVE_MATTERS } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 
 interface SpotlightModalProps {
   isOpen: boolean;
@@ -182,11 +183,13 @@ export function SpotlightModal({
                     className="w-full flex items-center justify-between px-3.5 py-2 rounded-lg hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer apple-press"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div
-                        className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold ${client.avatarBg} group-hover:bg-white group-hover:text-navy-900 shrink-0`}
-                      >
-                        {client.initials}
-                      </div>
+                      <ClientAvatar
+                        name={client.name}
+                        src={client.avatarUrl}
+                        initials={client.initials}
+                        className="w-7 h-7 rounded-md shrink-0 ring-1 ring-black/10 shadow-xs"
+                        fallbackClassName="text-xs font-bold rounded-md"
+                      />
                       <div className="min-w-0">
                         <div className="text-sm font-semibold tracking-tight leading-none truncate">
                           {client.name}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Briefcase } from "lucide-react";
+import { Briefcase, X, Scale } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface NewCaseModalProps {
@@ -43,50 +43,70 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4"
+        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4 animate-in fade-in duration-200"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-navy-50 text-navy-900 flex items-center justify-center shrink-0">
-            <Briefcase className="w-5 h-5" />
+        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold shrink-0">
+              <Scale className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
+                Open Active Litigation Matter
+              </h3>
+              <p className="text-xs text-gray-500">
+                Initialize official judicial docket and client vault
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-base font-bold text-navy-900">Open Case from Consultation</h3>
-            <p className="text-xs text-gray-500">Convert intake consultation into active legal matter</p>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
           <div>
-            <label className="text-xs font-bold text-gray-700">Client / Company Name:</label>
+            <label className="font-semibold text-gray-700 block mb-1">
+              Client / Corporate Entity Name:
+            </label>
             <input
               type="text"
               required
               placeholder="e.g. Sara Odeh (Odeh Industrial Group)"
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 mt-1 focus:outline-none focus:ring-1 focus:ring-navy-600 text-gray-900"
+              className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700">Matter Title / Dispute:</label>
+            <label className="font-semibold text-gray-700 block mb-1">
+              Matter Title / Dispute Summary:
+            </label>
             <input
               type="text"
               required
               placeholder="e.g. Commercial Shareholder Restructuring & Asset Defense"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 mt-1 focus:outline-none focus:ring-1 focus:ring-navy-600 text-gray-900"
+              className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-bold text-gray-700">Assigned Lead Counsel:</label>
+              <label className="font-semibold text-gray-700 block mb-1">
+                Assigned Lead Counsel:
+              </label>
               <select
                 value={assignedLawyer}
                 onChange={(e) => setAssignedLawyer(e.target.value)}
-                className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 mt-1 text-gray-900 focus:outline-none"
+                className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
               >
                 <option value="Tariq Qudah">Tariq Qudah (Senior Partner)</option>
                 <option value="Sara Al-Majali">Sara Al-Majali (Partner)</option>
@@ -95,16 +115,19 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
             </div>
 
             <div>
-              <label className="text-xs font-bold text-gray-700">Practice Area:</label>
+              <label className="font-semibold text-gray-700 block mb-1">
+                Practice Area:
+              </label>
               <select
                 value={practiceArea}
                 onChange={(e) => setPracticeArea(e.target.value)}
-                className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 mt-1 text-gray-900 focus:outline-none"
+                className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
               >
                 <option value="Corporate & M&A">Corporate & M&A</option>
                 <option value="Commercial Litigation">Commercial Litigation</option>
                 <option value="Real Estate & Construction">Real Estate & Construction</option>
                 <option value="Patent & IP">Patent & IP</option>
+                <option value="Commercial Arbitration">Commercial Arbitration</option>
               </select>
             </div>
           </div>
@@ -113,15 +136,15 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+              className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-xl shadow-xs cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer transition-colors"
             >
-              Open Case Matter
+              Initialize Matter Docket
             </button>
           </div>
         </form>

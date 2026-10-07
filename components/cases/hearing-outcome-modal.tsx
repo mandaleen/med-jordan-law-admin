@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Gavel } from "lucide-react";
+import { Gavel, X } from "lucide-react";
 import { HearingItem } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -30,16 +30,16 @@ function HearingOutcomeForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-bold text-gray-700">Official Outcome / Bench Ruling:</label>
+        <label className="font-semibold text-gray-700">Official Outcome / Bench Ruling:</label>
         <textarea
           rows={3}
           required
           placeholder="e.g. Adjourned to Nov 12 for expert witness cross-examination; evidence accepted by court."
           value={outcomeText}
           onChange={(e) => setOutcomeText(e.target.value)}
-          className="w-full p-2.5 text-xs border border-gray-300 rounded-xl bg-gray-50 text-gray-900 focus:outline-none focus:ring-1 focus:ring-navy-600"
+          className="w-full p-2.5 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
         />
       </div>
 
@@ -47,15 +47,15 @@ function HearingOutcomeForm({
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+          className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-xl shadow-xs cursor-pointer whitespace-nowrap shrink-0 transition-colors"
+          className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer transition-colors"
         >
-          Record Outcome
+          Record Bench Ruling
         </button>
       </div>
     </form>
@@ -69,18 +69,30 @@ export function HearingOutcomeModal({ hearing, onClose, onSave }: HearingOutcome
     <Dialog open={!!hearing} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4"
+        className="max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4 animate-in fade-in duration-200"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-navy-50 text-navy-700 flex items-center justify-center shrink-0">
-            <Gavel className="w-5 h-5" />
+        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold shrink-0">
+              <Gavel className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
+                Log Court Hearing Outcome
+              </h3>
+              <p className="text-xs text-gray-500">
+                {hearing.date} · {hearing.chamber}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-base font-bold text-navy-900">Log Hearing Outcome</h3>
-            <p className="text-xs text-gray-500">
-              {hearing.date} · {hearing.chamber}
-            </p>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         <HearingOutcomeForm key={hearing.id} hearing={hearing} onClose={onClose} onSave={onSave} />

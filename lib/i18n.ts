@@ -31,6 +31,8 @@ export const I18N_DICTIONARY: TranslationDictionary = {
   "sidebar.all_caught_up": { en: "All notices caught up", ar: "تمت مراجعة جميع الإشعارات" },
   "sidebar.sign_out": { en: "Sign Out", ar: "تسجيل الخروج" },
 
+  "topbar.search": { en: "Search matters, clients, documents", ar: "ابحث في القضايا والموكلين والمستندات" },
+
   // Common UI actions
   "action.new": { en: "New", ar: "جديد" },
   "action.new_consultation": { en: "New Consultation", ar: "حجز موعد استشارة" },

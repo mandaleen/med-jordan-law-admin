@@ -68,6 +68,9 @@ export interface PracticeContextType {
   addCaseHearing: (caseId: string, hearing: HearingItem) => void;
   updateHearingOutcome: (caseId: string, hearingId: string, outcome: string) => void;
   addCaseDocument: (caseId: string, document: DocumentItem) => void;
+  toggleCaseDocumentVisibility: (caseId: string, documentId: string) => void;
+  updateCaseDocumentStatus: (caseId: string, documentId: string, status: DocumentItem["status"], rejectionReason?: string) => void;
+  deleteCaseDocument: (caseId: string, documentId: string) => void;
 
   // Cross-entity workflow bridge
   openCaseFromConsultation: (clientName: string, notes: string) => void;
@@ -605,6 +608,69 @@ export function PracticeProvider({ children }: { children: React.ReactNode }) {
     [showToast]
   );
 
+  const toggleCaseDocumentVisibility = useCallback(
+    (caseId: string, documentId: string) => {
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === caseId
+            ? {
+                ...c,
+                documents: c.documents.map((d) =>
+                  d.id === documentId
+                    ? { ...d, isOfficeVisibleToClient: !d.isOfficeVisibleToClient }
+                    : d
+                ),
+              }
+            : c
+        )
+      );
+      showToast("Document client portal visibility updated.");
+    },
+    [showToast]
+  );
+
+  const updateCaseDocumentStatus = useCallback(
+    (caseId: string, documentId: string, status: DocumentItem["status"], rejectionReason?: string) => {
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === caseId
+            ? {
+                ...c,
+                documents: c.documents.map((d) =>
+                  d.id === documentId
+                    ? {
+                        ...d,
+                        status,
+                        rejectionReason: rejectionReason ?? (status === "Validated" ? undefined : d.rejectionReason),
+                      }
+                    : d
+                ),
+              }
+            : c
+        )
+      );
+      showToast(`✓ Document audit status updated to "${status}".`);
+    },
+    [showToast]
+  );
+
+  const deleteCaseDocument = useCallback(
+    (caseId: string, documentId: string) => {
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === caseId
+            ? {
+                ...c,
+                documents: c.documents.filter((d) => d.id !== documentId),
+              }
+            : c
+        )
+      );
+      showToast("Document removed from case vault.");
+    },
+    [showToast]
+  );
+
   // Cross-entity workflow bridge: Open Case directly from Booking Consultation
   const openCaseFromConsultation = useCallback(
     (clientName: string, notes: string) => {
@@ -655,6 +721,9 @@ export function PracticeProvider({ children }: { children: React.ReactNode }) {
         addCaseHearing,
         updateHearingOutcome,
         addCaseDocument,
+        toggleCaseDocumentVisibility,
+        updateCaseDocumentStatus,
+        deleteCaseDocument,
         openCaseFromConsultation,
         stats,
         notifications,

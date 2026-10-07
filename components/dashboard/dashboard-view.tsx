@@ -16,6 +16,7 @@ interface DashboardViewProps {
   onAcceptBooking?: (id: string) => void;
   onDeclineBooking?: (id: string) => void;
   onNewBooking?: () => void;
+  onExport?: () => void;
 }
 
 export function DashboardView({
@@ -26,6 +27,7 @@ export function DashboardView({
   onAcceptBooking,
   onDeclineBooking,
   onNewBooking,
+  onExport,
 }: DashboardViewProps) {
   return (
     <div className="flex flex-col gap-4">

@@ -145,6 +145,8 @@ export interface DocumentItem {
   status: "Validated" | "Rejected" | "Pending";
   rejectionReason?: string;
   isOfficeVisibleToClient: boolean;
+  category?: string;
+  docHash?: string;
 }
 
 export interface InternalNoteItem {
@@ -154,6 +156,7 @@ export interface InternalNoteItem {
   date: string;
   content: string;
   isPrivileged: boolean;
+  tag?: "Case Strategy" | "Procedural Motion" | "Discovery Finding" | "Client Conference" | "Hearing Debrief";
 }
 
 export interface HearingItem {
@@ -166,6 +169,7 @@ export interface HearingItem {
   reminderTimestamp?: string;
   outcome?: string;
   status: "Upcoming" | "Completed";
+  sessionType?: "Evidentiary Hearing" | "Pleading Submission" | "Pre-Trial Conference" | "Bench Judgment" | "Appeal Hearing";
 }
 
 export interface CaseItem {
@@ -182,6 +186,9 @@ export interface CaseItem {
   lastActivity: string;
   openedDate: string;
   courtChamber: string;
+  opposingParty?: string;
+  presidingJudge?: string;
+  matterValue?: string;
   documents: DocumentItem[];
   internalNotes: InternalNoteItem[];
   hearings: HearingItem[];
@@ -294,6 +301,16 @@ export interface ClientProfile {
   signedAgreements: SignedAgreementItem[];
   invoices: InvoiceItem[];
   messageLog: MessageLogItem[];
+  entityType?: "Corporate" | "Individual";
+  commercialReg?: string;
+  taxNumber?: string;
+  chamberOfCommerce?: string;
+  poaNumber?: string;
+  poaType?: string;
+  poaStatus?: "Verified on File" | "Pending Notarization" | "N/A";
+  assignedPartner?: string;
+  retainerTier?: string;
+  internalNotes?: InternalNoteItem[];
 }
 
 export interface FinanceTransaction {
@@ -729,6 +746,9 @@ export const INITIAL_CASES: CaseItem[] = [
     lastActivity: "Hearing outcome logged 2 hours ago",
     openedDate: "Aug 14, 2026",
     courtChamber: "Amman Court of Appeal - Commercial Chamber 3",
+    opposingParty: "Aqaba Special Economic Zone Authority & Jordan Ports Co.",
+    presidingJudge: "Hon. Judge Ziad Al-Khasawneh",
+    matterValue: "$480,000.00 (340,000 JOD)",
     documents: [
       {
         id: "doc-1",
@@ -737,7 +757,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Aug 14, 2026",
         size: "1.4 MB",
         status: "Validated",
+        category: "Power of Attorney Scan",
         isOfficeVisibleToClient: true,
+        docHash: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
       },
       {
         id: "doc-2",
@@ -746,8 +768,10 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Oct 6, 2026",
         size: "3.2 MB",
         status: "Rejected",
-        rejectionReason: "Ministry stamp illegible & expired extract (>90 days old). Please upload a current Ministry of Industry certified copy.",
+        category: "Commercial Register Extract",
+        rejectionReason: "Ministry stamp illegible & expired extract (>90 days old). Please upload a current certified copy.",
         isOfficeVisibleToClient: true,
+        docHash: "a1c904de4492bf2315b8045e7e17df209214b7e8ff1149e29a393a52bb5f84d2",
       },
       {
         id: "doc-3",
@@ -756,7 +780,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Sep 28, 2026",
         size: "4.8 MB",
         status: "Validated",
+        category: "Pleading & Memorandum",
         isOfficeVisibleToClient: true,
+        docHash: "4b924872cf3985116ec7c81d89b3f305f2c416194bcf9db7e62a11b138ff40c6",
       },
       {
         id: "doc-4",
@@ -765,7 +791,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Oct 2, 2026",
         size: "8.1 MB",
         status: "Validated",
+        category: "Expert Financial Report",
         isOfficeVisibleToClient: true,
+        docHash: "1894b9f074d2bcfc862bc7b05537651a2d4807d938b81640a3e3518a478be32a",
       },
     ],
     internalNotes: [
@@ -776,6 +804,7 @@ export const INITIAL_CASES: CaseItem[] = [
         date: "Oct 6, 2026 at 10:15 AM",
         content: "Strategy note: Opposite counsel attempted to introduce late customs manifests. We objected under Civil Procedure Code Art. 112. Judge agreed and gave them 7 days strictly to substantiate.",
         isPrivileged: true,
+        tag: "Case Strategy",
       },
       {
         id: "note-2",
@@ -784,6 +813,7 @@ export const INITIAL_CASES: CaseItem[] = [
         date: "Sep 29, 2026 at 04:30 PM",
         content: "Verified court docket stamps with clerk. Filing receipt attached in internal archive box #4.",
         isPrivileged: true,
+        tag: "Procedural Motion",
       },
     ],
     hearings: [
@@ -796,6 +826,7 @@ export const INITIAL_CASES: CaseItem[] = [
         remindersSent: true,
         reminderTimestamp: "Scheduled for Nov 10, 09:00 AM via WhatsApp",
         status: "Upcoming",
+        sessionType: "Evidentiary Hearing",
       },
       {
         id: "h-2",
@@ -806,6 +837,7 @@ export const INITIAL_CASES: CaseItem[] = [
         remindersSent: true,
         outcome: "Opposing party given final 7-day grace period to respond to expert claim. Adjourned to Nov 12.",
         status: "Completed",
+        sessionType: "Pleading Submission",
       },
     ],
   },
@@ -823,6 +855,9 @@ export const INITIAL_CASES: CaseItem[] = [
     lastActivity: "New draft memorandum added yesterday",
     openedDate: "Sep 01, 2026",
     courtChamber: "Companies Controller Directorate (CCD)",
+    opposingParty: "Minority Shareholder Group (Consolidated)",
+    presidingJudge: "Director of Corporate Registry, CCD",
+    matterValue: "$1,250,000.00 (885,000 JOD)",
     documents: [
       {
         id: "doc-201",
@@ -831,7 +866,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Sep 02, 2026",
         size: "2.1 MB",
         status: "Validated",
+        category: "Power of Attorney Scan",
         isOfficeVisibleToClient: true,
+        docHash: "7b41824a49db432ef1c1e05d0458b97d19a4e8fe27685d1e4e040dfb39d1b089",
       },
       {
         id: "doc-202",
@@ -840,7 +877,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Oct 4, 2026",
         size: "3.7 MB",
         status: "Validated",
+        category: "Pleading & Memorandum",
         isOfficeVisibleToClient: true,
+        docHash: "329a1b41e8c792198031d2ba7438e8fb851a7e284041b3bfa010e96041ecfa73",
       },
       {
         id: "doc-203",
@@ -849,7 +888,9 @@ export const INITIAL_CASES: CaseItem[] = [
         uploadDate: "Oct 5, 2026",
         size: "1.1 MB",
         status: "Validated",
+        category: "Commercial Register Extract",
         isOfficeVisibleToClient: true,
+        docHash: "e481b7a0f12c8230b910fc394d21e847c50a1bb2049e6fbc17e889241bca9104",
       },
     ],
     internalNotes: [
@@ -860,6 +901,7 @@ export const INITIAL_CASES: CaseItem[] = [
         date: "Oct 4, 2026 at 02:20 PM",
         content: "Tax advisor reviewed transfer pricing risk. Structure approved subject to Article 8 clause modification.",
         isPrivileged: true,
+        tag: "Case Strategy",
       },
     ],
     hearings: [
@@ -872,6 +914,7 @@ export const INITIAL_CASES: CaseItem[] = [
         remindersSent: true,
         reminderTimestamp: "WhatsApp scheduled 48h prior",
         status: "Upcoming",
+        sessionType: "Pre-Trial Conference",
       },
     ],
   },
@@ -888,16 +931,32 @@ export const INITIAL_CASES: CaseItem[] = [
     statusStage: "Discovery",
     lastActivity: "Discovery requests served 3 days ago",
     openedDate: "Aug 20, 2026",
-    courtChamber: "Amman Court of First Instance",
+    courtChamber: "Amman Court of First Instance - Chamber 5",
+    opposingParty: "Al-Quds General Contracting & Engineering Consortium",
+    presidingJudge: "Hon. Judge Mamdouh Al-Rawashdeh",
+    matterValue: "$720,000.00 (510,000 JOD)",
     documents: [
       {
         id: "doc-301",
-        title: "FIDIC Construction Contract Agreement",
+        title: "FIDIC Construction Contract Agreement (Red Book)",
         type: "Client Upload",
         uploadDate: "Aug 22, 2026",
         size: "5.4 MB",
         status: "Validated",
+        category: "Evidentiary Exhibits",
         isOfficeVisibleToClient: true,
+        docHash: "a9482bf03c19b22e185038cbb2d40954318c5040ab59218ff47169213bc01b54",
+      },
+      {
+        id: "doc-302",
+        title: "Architect Milestone Completion Audit & Delay Report",
+        type: "Office Upload",
+        uploadDate: "Sep 15, 2026",
+        size: "6.8 MB",
+        status: "Validated",
+        category: "Expert Financial Report",
+        isOfficeVisibleToClient: true,
+        docHash: "591d84a7e4b92040183ac2941094ba4430e281ab7612f01968d904bca28014e7",
       },
     ],
     internalNotes: [
@@ -906,8 +965,9 @@ export const INITIAL_CASES: CaseItem[] = [
         author: "Sara Al-Majali",
         role: "Partner",
         date: "Aug 25, 2026 at 11:00 AM",
-        content: "Critical delay penalty clause verified. Contractor exceeded baseline completion by 114 calendar days.",
+        content: "Critical delay penalty clause verified. Contractor exceeded baseline completion by 114 calendar days without force majeure notice.",
         isPrivileged: true,
+        tag: "Discovery Finding",
       },
     ],
     hearings: [
@@ -919,6 +979,203 @@ export const INITIAL_CASES: CaseItem[] = [
         judge: "Hon. Judge Mamdouh Al-Rawashdeh",
         remindersSent: false,
         status: "Upcoming",
+        sessionType: "Evidentiary Hearing",
+      },
+    ],
+  },
+  {
+    id: "case-4",
+    caseNumber: "MJL-2026-104",
+    title: "Dr. Fadi Haddad vs. Levant Pharma Patent & Trademark Infringement",
+    clientName: "Dr. Fadi Haddad",
+    clientId: "cl-4",
+    clientPhone: "+962 7 9333 7711",
+    clientEmail: "dr.fadi@haddad-health.jo",
+    assignedLawyer: "Kareem Masri",
+    practiceArea: "Patent & IP",
+    statusStage: "Settlement",
+    lastActivity: "Formal settlement agreement drafted for execution",
+    openedDate: "Jun 10, 2026",
+    courtChamber: "Industrial Property Protection Directorate (IPPD)",
+    opposingParty: "Levant Pharmaceutical Laboratories Co.",
+    presidingJudge: "Registrar of Patents & Trademarks",
+    matterValue: "$310,000.00 (220,000 JOD)",
+    documents: [
+      {
+        id: "doc-401",
+        title: "National Patent Registration Certificate #JO-2021-891",
+        type: "Client Upload",
+        uploadDate: "Jun 11, 2026",
+        size: "2.8 MB",
+        status: "Validated",
+        category: "Evidentiary Exhibits",
+        isOfficeVisibleToClient: true,
+        docHash: "bc721490214a4b8921cf039824ba984e721a941bf2804910ea5219482104812a",
+      },
+      {
+        id: "doc-402",
+        title: "Forensic Bio-Chemical Formulation Comparison Report",
+        type: "Office Upload",
+        uploadDate: "Jul 29, 2026",
+        size: "9.4 MB",
+        status: "Validated",
+        category: "Expert Financial Report",
+        isOfficeVisibleToClient: true,
+        docHash: "9218401bcf4091a27e891cfa30418921bf72804bca91048e718290481029481b",
+      },
+      {
+        id: "doc-403",
+        title: "Draft Global IP Settlement & Royalties Framework",
+        type: "Office Upload",
+        uploadDate: "Oct 01, 2026",
+        size: "3.1 MB",
+        status: "Pending",
+        category: "Pleading & Memorandum",
+        isOfficeVisibleToClient: false,
+        docHash: "40192841cfb82910ea71894bca2801948bca91048e718290481029481b72804b",
+      },
+    ],
+    internalNotes: [
+      {
+        id: "note-401",
+        author: "Kareem Masri",
+        role: "Senior Associate",
+        date: "Sep 28, 2026 at 03:15 PM",
+        content: "Levant Pharma agreed in principle to pay $180,000 lump sum plus 4.5% perpetual regional royalties. Drafting binding deed.",
+        isPrivileged: true,
+        tag: "Case Strategy",
+      },
+    ],
+    hearings: [
+      {
+        id: "h-401",
+        date: "Oct 29, 2026",
+        time: "12:00 PM",
+        chamber: "Jordan IP Directorate Tribunal",
+        judge: "Director of IP Dispute Board",
+        remindersSent: true,
+        status: "Upcoming",
+        sessionType: "Bench Judgment",
+      },
+    ],
+  },
+  {
+    id: "case-5",
+    caseNumber: "MJL-2026-118",
+    title: "Zara Investment Trust vs. Arab Commercial Bank Guarantee Execution",
+    clientName: "Zara Investment Trust",
+    clientId: "cl-5",
+    clientPhone: "+962 7 9771 8822",
+    clientEmail: "invest@zaratrust.com",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Commercial Litigation",
+    statusStage: "Intake",
+    lastActivity: "Matter initiated and court jurisdiction verified",
+    openedDate: "Oct 04, 2026",
+    courtChamber: "Amman Commercial Court of First Instance",
+    opposingParty: "Arab Commercial Bank — Corporate Facilities Dept.",
+    presidingJudge: "Commercial Division Registry Head",
+    matterValue: "$2,400,000.00 (1,700,000 JOD)",
+    documents: [
+      {
+        id: "doc-501",
+        title: "Irrevocable Bank Guarantee Letter #BG-992014",
+        type: "Client Upload",
+        uploadDate: "Oct 04, 2026",
+        size: "1.9 MB",
+        status: "Validated",
+        category: "Evidentiary Exhibits",
+        isOfficeVisibleToClient: true,
+        docHash: "81920481cfba9820ea7182904bca91048e718290481029481b72804b9218401b",
+      },
+      {
+        id: "doc-502",
+        title: "Preliminary Injunction Application against Unlawful Call",
+        type: "Office Upload",
+        uploadDate: "Oct 05, 2026",
+        size: "3.4 MB",
+        status: "Pending",
+        category: "Pleading & Memorandum",
+        isOfficeVisibleToClient: false,
+        docHash: "304918204bca718290481029481b72804b9218401bcfba9820ea7182904bca91",
+      },
+    ],
+    internalNotes: [
+      {
+        id: "note-501",
+        author: "Tariq Qudah",
+        role: "Senior Partner",
+        date: "Oct 04, 2026 at 05:00 PM",
+        content: "Urgent injunction petition drafted. Bank received conditional draw notice despite underlying delivery cert issued. Filing ex-parte petition tomorrow morning.",
+        isPrivileged: true,
+        tag: "Procedural Motion",
+      },
+    ],
+    hearings: [],
+  },
+  {
+    id: "case-6",
+    caseNumber: "MJL-2025-077",
+    title: "Petra Solar Technology 40MW Concession & Cross-Border Acquisition",
+    clientName: "Petra Solar Technology Ltd.",
+    clientId: "cl-6",
+    clientPhone: "+962 7 9660 5511",
+    clientEmail: "corp@petrasolar.jo",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Corporate & M&A",
+    statusStage: "Closed",
+    lastActivity: "Formal closing dossier archived and escrow release verified",
+    openedDate: "Nov 12, 2025",
+    courtChamber: "Court of Cassation & Ministry of Energy Special Committee",
+    opposingParty: "Middle East Renewables Consortium",
+    presidingJudge: "Bench of the Court of Cassation",
+    matterValue: "$8,500,000.00 (6,020,000 JOD)",
+    documents: [
+      {
+        id: "doc-601",
+        title: "Executed Share Purchase Agreement & Closing Protocol",
+        type: "Office Upload",
+        uploadDate: "Jan 18, 2026",
+        size: "14.2 MB",
+        status: "Validated",
+        category: "Evidentiary Exhibits",
+        isOfficeVisibleToClient: true,
+        docHash: "718290481029481b72804b9218401bcfba9820ea7182904bca91048e71829048",
+      },
+      {
+        id: "doc-602",
+        title: "Final Court of Cassation Ruling & Affirmation Certificate",
+        type: "Office Upload",
+        uploadDate: "Feb 10, 2026",
+        size: "4.2 MB",
+        status: "Validated",
+        category: "Court Decrees & Orders",
+        isOfficeVisibleToClient: true,
+        docHash: "1029481b72804b9218401bcfba9820ea7182904bca91048e7182904871829048",
+      },
+    ],
+    internalNotes: [
+      {
+        id: "note-601",
+        author: "Tariq Qudah",
+        role: "Senior Partner",
+        date: "Feb 11, 2026 at 02:00 PM",
+        content: "Matter successfully concluded. All regulatory conditions precedent satisfied. Escrow release completed.",
+        isPrivileged: true,
+        tag: "Hearing Debrief",
+      },
+    ],
+    hearings: [
+      {
+        id: "h-601",
+        date: "Feb 05, 2026",
+        time: "10:00 AM",
+        chamber: "Amman Court of Cassation - Chamber 1",
+        judge: "President of the Court of Cassation",
+        remindersSent: true,
+        outcome: "Cassation petition dismissed in favor of our client. Affirmation decree entered.",
+        status: "Completed",
+        sessionType: "Bench Judgment",
       },
     ],
   },
@@ -942,6 +1199,25 @@ export const INITIAL_CLIENTS: ClientProfile[] = [
     totalBilled: "$14,800.00",
     joinedDate: "Jan 12, 2025",
     status: "Retained",
+    entityType: "Corporate",
+    commercialReg: "2001948819",
+    taxNumber: "TAX-JO-881920",
+    chamberOfCommerce: "Amman Chamber of Commerce #41829",
+    poaNumber: "Amman Notary Public / POA-2025-1194",
+    poaType: "Litigation POA (وكالة خاصة بالخصومة)",
+    poaStatus: "Verified on File",
+    assignedPartner: "Tariq Qudah, Senior Partner",
+    retainerTier: "Tier 1 General Counsel Retainer",
+    internalNotes: [
+      {
+        id: "cn-1",
+        author: "Tariq Qudah",
+        role: "Senior Partner",
+        date: "Sep 28, 2026",
+        content: "Client requested expedited preparation for upcoming maritime tribunal session. Retainer deposit cleared.",
+        isPrivileged: true,
+      },
+    ],
     bookings: [
       INITIAL_BOOKINGS[0],
     ],
@@ -1029,6 +1305,25 @@ export const INITIAL_CLIENTS: ClientProfile[] = [
     totalBilled: "$24,500.00",
     joinedDate: "Mar 04, 2024",
     status: "Retained",
+    entityType: "Corporate",
+    commercialReg: "1098234412",
+    taxNumber: "TAX-JO-982103",
+    chamberOfCommerce: "Amman Chamber of Industry #12903",
+    poaNumber: "Amman Notary Public / POA-2024-8831",
+    poaType: "General Notarial POA (وكالة عامة)",
+    poaStatus: "Verified on File",
+    assignedPartner: "Tariq Qudah, Senior Partner",
+    retainerTier: "Tier 1 General Counsel Retainer",
+    internalNotes: [
+      {
+        id: "cn-2",
+        author: "Tariq Qudah",
+        role: "Senior Partner",
+        date: "Oct 6, 2026",
+        content: "Completed video review of restructuring bylaws. Shareholder agreement ready for signature.",
+        isPrivileged: true,
+      },
+    ],
     bookings: [
       INITIAL_BOOKINGS[2],
     ],
@@ -1099,6 +1394,25 @@ export const INITIAL_CLIENTS: ClientProfile[] = [
     totalBilled: "$8,650.00",
     joinedDate: "Jun 18, 2025",
     status: "Active",
+    entityType: "Corporate",
+    commercialReg: "3091182741",
+    taxNumber: "TAX-JO-978100",
+    chamberOfCommerce: "Amman Chamber of Commerce #88314",
+    poaNumber: "West Amman Notary / POA-2025-4421",
+    poaType: "Litigation POA (وكالة خاصة بالخصومة)",
+    poaStatus: "Verified on File",
+    assignedPartner: "Sara Al-Majali, Partner",
+    retainerTier: "Litigation Retainer",
+    internalNotes: [
+      {
+        id: "cn-3",
+        author: "Sara Al-Majali",
+        role: "Partner",
+        date: "Aug 20, 2026",
+        content: "FIDIC arbitration defense memo filed with Amman First Instance Court. Next hearing scheduled.",
+        isPrivileged: true,
+      },
+    ],
     bookings: [
       INITIAL_BOOKINGS[3],
     ],
@@ -1161,6 +1475,25 @@ export const INITIAL_CLIENTS: ClientProfile[] = [
     totalBilled: "$4,350.00",
     joinedDate: "Feb 10, 2026",
     status: "Prospective",
+    entityType: "Individual",
+    commercialReg: "Individual Representation",
+    taxNumber: "TAX-JO-991204",
+    chamberOfCommerce: "Amman Chamber of Commerce",
+    poaNumber: "Pending Notarization (Amman Notary)",
+    poaType: "General Notarial POA (وكالة عامة)",
+    poaStatus: "Pending Notarization",
+    assignedPartner: "Kareem Masri, Senior Associate",
+    retainerTier: "Advisory / Project Basis",
+    internalNotes: [
+      {
+        id: "cn-4",
+        author: "Kareem Masri",
+        role: "Senior Associate",
+        date: "Oct 5, 2026",
+        content: "Prospective corporate venture structuring. Awaiting notarized POA before formal retainer execution.",
+        isPrivileged: true,
+      },
+    ],
     bookings: [
       INITIAL_BOOKINGS[1],
     ],

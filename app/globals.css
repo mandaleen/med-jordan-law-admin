@@ -7,6 +7,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -51,13 +52,13 @@
 
   --color-gray-50: var(--gray-50);
   --color-gray-100: var(--gray-100);
-  --color-gray-200: var(--gray-100);
+  --color-gray-200: var(--gray-200);
   --color-gray-300: var(--gray-300);
-  --color-gray-400: var(--gray-300);
+  --color-gray-400: var(--gray-400);
   --color-gray-500: var(--gray-500);
-  --color-gray-600: var(--gray-500);
+  --color-gray-600: var(--gray-600);
   --color-gray-700: var(--gray-700);
-  --color-gray-800: var(--gray-700);
+  --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
 
   --color-success: var(--success);
@@ -67,44 +68,50 @@
 }
 
 :root {
-  --navy-50:#F3F5FA; --navy-100:#E3E8F3; --navy-200:#C9D3E8;
-  --navy-300:#A3B3D7; --navy-400:#7A8FC0; --navy-500:#526BA8;
-  --navy-600:#3D5390; --navy-700:#2F4070; --navy-800:#232F52;
-  --navy-900:#1A2744; --navy-950:#111A30;
+  /* Ink navy: the one brand hue. Slightly deeper and less saturated than before. */
+  --navy-50:#F2F4F9; --navy-100:#E1E6F1; --navy-200:#C6D0E4;
+  --navy-300:#9FAFD0; --navy-400:#7388B6; --navy-500:#4E66A0;
+  --navy-600:#3A4F88; --navy-700:#2C3C6A; --navy-800:#202C4E;
+  --navy-900:#16213B; --navy-950:#0E1629;
 
-  --gold-100:#FDF3DC; --gold-300:#F4CF84; --gold-500:#E8B04A; --gold-700:#B5821F;
+  /* Brass: the single accent. Used for emphasis, never for status. */
+  --gold-100:#F6EEDC; --gold-300:#E0C688; --gold-500:#B8893A; --gold-700:#85601F;
 
-  --gray-50:#F7F8FA; --gray-100:#EEF0F4; --gray-300:#CFD4DE;
-  --gray-500:#7B8499; --gray-700:#3F485C; --gray-900:#151A26;
+  /* One warm neutral family (paper and stone), no cool greys mixed in. */
+  --gray-50:#F6F4EF; --gray-100:#EFECE5; --gray-200:#E5E1D8; --gray-300:#D4CFC4;
+  --gray-400:#A9A497; --gray-500:#6B675D; --gray-600:#57544B; --gray-700:#433F38;
+  --gray-800:#2D2B26; --gray-900:#1B1A17;
 
-  --success:#2F9E6E; --warning:#E0A030; --error:#D64545; --info:#3B82C4;
+  --success:#2E7D5B; --warning:#B7791F; --error:#B5403A; --info:#3A6A9C;
 
-  /* Executive Legal Practice Semantic Tokens */
   --background: var(--gray-50);
-  --foreground: var(--gray-900);
+  --foreground: var(--navy-900);
   --card: #FFFFFF;
-  --card-foreground: var(--gray-900);
+  --card-foreground: var(--navy-900);
   --popover: #FFFFFF;
-  --popover-foreground: var(--gray-900);
+  --popover-foreground: var(--navy-900);
   --primary: var(--navy-900);
   --primary-foreground: #FFFFFF;
-  --secondary: var(--navy-50);
+  --secondary: var(--gray-100);
   --secondary-foreground: var(--navy-900);
   --muted: var(--gray-100);
   --muted-foreground: var(--gray-500);
-  --accent: var(--navy-100);
+  --accent: var(--gray-100);
   --accent-foreground: var(--navy-900);
   --destructive: var(--error);
-  --border: #E5E7EB;
-  --input: #E5E7EB;
+  --border: var(--gray-200);
+  --input: var(--gray-300);
   --ring: var(--navy-600);
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
   --apple-blue: var(--navy-600);
   --apple-blue-hover: var(--navy-700);
   --apple-navy: var(--navy-900);
   --apple-obsidian: var(--navy-950);
   --f-logo: var(--font-cinzel), "Cinzel", serif;
+
+  /* Elevation: one soft, ink-tinted shadow for floating layers only. */
+  --shadow-float: 0 12px 32px -8px rgba(22, 33, 59, 0.18), 0 2px 6px rgba(22, 33, 59, 0.06);
 }
 
 @layer base {
@@ -124,6 +131,22 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--gold-300); color: var(--navy-950); }
+  :focus-visible {
+    outline: 2px solid var(--navy-600);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -148,29 +171,32 @@
   letter-spacing: 0.02em;
 }
 
-/* Cards & Surfaces - Machined architectural geometry */
+/* Surfaces: flat, hairline-bordered, no drop shadow. Elevation is reserved for floating layers. */
 .apple-glass-card {
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
 
 .apple-table-card {
   background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
   overflow: hidden;
 }
 
 .apple-obsidian-card {
-  background: linear-gradient(145deg, var(--navy-950) 0%, var(--navy-900) 60%, var(--navy-800) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 24px -4px rgba(17, 26, 48, 0.35), 0 1px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 12px;
+  background: var(--navy-900);
+  border: 1px solid var(--navy-800);
+  border-radius: 10px;
 }
+
+.font-numeric {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum", "lnum";
+}
+
+[dir="rtl"] .font-display { font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; letter-spacing: 0; }
 
 .legal-serif {
   font-family: var(--font-cinzel), "Cinzel", "Times New Roman", serif;
@@ -178,8 +204,9 @@
 }
 
 /* Lightweight feedback */
+.apple-press { transition: transform 120ms ease, background-color 160ms ease, border-color 160ms ease; }
 .apple-press:active {
-  transform: scale(0.98);
+  transform: scale(0.985);
 }
 
 .apple-press-sm:active {
@@ -190,7 +217,7 @@
 .custom-scrollbar,
 .apple-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--navy-200) transparent;
+  scrollbar-color: var(--gray-300) transparent;
   scroll-behavior: auto !important;
 }
 
@@ -207,25 +234,24 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb,
 .apple-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--navy-200);
+  background: var(--gray-300);
   border-radius: 9999px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover,
 .apple-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--navy-300);
+  background: var(--gray-400);
 }
 
-/* Table Specific Enhancements */
+/* Tables: quiet header, hairline rows */
 .table-header-cell {
-  padding: 0.75rem 1rem;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  padding: 0.625rem 1rem;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--gray-500);
-  background-color: var(--navy-50);
-  border-bottom: 1px solid var(--gray-300);
+  background-color: transparent;
+  border-bottom: 1px solid var(--gray-200);
   white-space: nowrap;
 }
 
@@ -234,5 +260,5 @@
 }
 
 .table-row-hover:hover {
-  background-color: var(--navy-50);
+  background-color: var(--gray-50);
 }

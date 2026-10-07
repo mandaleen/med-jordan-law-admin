@@ -52,20 +52,25 @@ export function ScheduleHearingModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col gap-4"
+        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0A2342] flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-navy-50 text-navy-950 border border-navy-100 flex items-center justify-center font-bold">
               <Gavel className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#0A2342]">Schedule Court Hearing (جلسة محاكمة)</h3>
-              <p className="text-xs text-slate-400">Court calendar docket for matter {caseNumber} (Page 9)</p>
+              <h3 className="text-base font-bold text-navy-950">Schedule Court Hearing (جلسة محاكمة)</h3>
+              <p className="text-xs text-gray-500">Court calendar docket for matter {caseNumber} (Page 9)</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
+            aria-label="Close dialog"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -73,33 +78,33 @@ export function ScheduleHearingModal({
         <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-bold text-slate-700">Hearing Date:</label>
+              <label className="font-semibold text-gray-700">Hearing Date:</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800 font-medium"
+                className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 font-medium focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
               />
             </div>
             <div>
-              <label className="font-bold text-slate-700">Docket Time:</label>
+              <label className="font-semibold text-gray-700">Docket Time:</label>
               <input
                 type="text"
                 required
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800 font-medium"
+                className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 font-medium focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="font-bold text-slate-700">Presiding Court Chamber (المحكمة والغرفة):</label>
+            <label className="font-semibold text-gray-700">Presiding Court Chamber (المحكمة والغرفة):</label>
             <select
               value={chamber}
               onChange={(e) => setChamber(e.target.value)}
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800"
+              className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
             >
               <option value="Amman Court of Appeal - Commercial Chamber 3">Amman Court of Appeal - Commercial Chamber 3</option>
               <option value="Amman Court of First Instance - Chamber 5">Amman Court of First Instance - Chamber 5</option>
@@ -110,24 +115,24 @@ export function ScheduleHearingModal({
           </div>
 
           <div>
-            <label className="font-bold text-slate-700">Presiding Judge / Arbitrator:</label>
+            <label className="font-semibold text-gray-700">Presiding Judge / Arbitrator:</label>
             <input
               type="text"
               required
               placeholder="e.g. Hon. Judge Ziad Al-Khasawneh"
               value={judge}
               onChange={(e) => setJudge(e.target.value)}
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800"
+              className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
             />
           </div>
 
           {/* Automated Reminders */}
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-gray-50/70 border border-gray-200/80 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Bell className="w-4 h-4 text-blue-600 shrink-0" />
+              <Bell className="w-4 h-4 text-navy-800 shrink-0" />
               <div>
-                <span className="font-bold text-slate-800">Automated WhatsApp & SMS Reminders</span>
-                <p className="text-[11px] text-slate-400">
+                <span className="font-semibold text-gray-900">Automated WhatsApp & SMS Reminders</span>
+                <p className="text-[11px] text-gray-500">
                   Sends reminder notification to client and lead counsel 48 hours prior to hearing docket.
                 </p>
               </div>
@@ -140,22 +145,22 @@ export function ScheduleHearingModal({
                 onChange={(e) => setEnableReminders(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#0A2342]" />
+              <div className="w-10 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-navy-950" />
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-xs font-bold bg-[#0A2342] hover:bg-blue-900 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
             >
               <Gavel className="w-3.5 h-3.5" />
               Schedule Hearing Docket

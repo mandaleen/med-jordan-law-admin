@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { ClientProfile, InternalNoteItem } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 import { TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
 import { usePractice } from "@/lib/practice-context";
 
@@ -153,12 +154,13 @@ export function ClientDetail({
         {/* Identity & Legal Standing Strip */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="flex items-start gap-4">
-            <Avatar className="w-14 h-14 rounded-xl ring-1 ring-gray-200 shrink-0">
-              <AvatarImage src={client.avatar} alt={client.name} className="object-cover" />
-              <AvatarFallback className="bg-navy-950 text-gold-300 font-bold text-base rounded-xl">
-                {client.initials}
-              </AvatarFallback>
-            </Avatar>
+            <ClientAvatar
+              name={client.name}
+              src={client.avatar}
+              initials={client.initials}
+              className="w-14 h-14 rounded-xl ring-1 ring-black/10 shrink-0 shadow-xs"
+              fallbackClassName="text-base font-bold rounded-xl"
+            />
 
             <div className="flex flex-col min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">

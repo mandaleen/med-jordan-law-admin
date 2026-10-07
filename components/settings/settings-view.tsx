@@ -16,7 +16,6 @@ import {
   UserPlus,
   Camera,
   Upload,
-  Info,
 } from "lucide-react";
 import { OfficeSettings, INITIAL_SETTINGS, TeamMember, CURRENT_USER } from "@/lib/mock-data";
 import { InviteStaffModal } from "@/components/modals/invite-staff-modal";

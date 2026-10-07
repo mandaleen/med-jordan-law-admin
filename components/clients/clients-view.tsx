@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { ClientProfile, INITIAL_CLIENTS } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { TaxInvoiceModal, TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
@@ -479,12 +480,13 @@ export function ClientsView() {
                   <div>
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <Avatar className="w-11 h-11 rounded-xl ring-1 ring-gray-200 shrink-0">
-                          <AvatarImage src={client.avatar} alt={client.name} className="object-cover" />
-                          <AvatarFallback className="bg-navy-950 text-gold-300 font-bold text-xs rounded-xl">
-                            {client.initials}
-                          </AvatarFallback>
-                        </Avatar>
+                        <ClientAvatar
+                          name={client.name}
+                          src={client.avatar}
+                          initials={client.initials}
+                          className="w-11 h-11 rounded-xl ring-1 ring-black/10 shrink-0 shadow-2xs"
+                          fallbackClassName="text-sm font-bold rounded-xl"
+                        />
 
                         <div className="flex flex-col min-w-0">
                           <div className="flex items-center gap-2">
@@ -679,12 +681,13 @@ export function ClientsView() {
                       >
                         <td className="py-3.5 px-4 align-middle">
                           <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8 rounded-lg ring-1 ring-gray-200 shrink-0">
-                              <AvatarImage src={client.avatar} alt={client.name} />
-                              <AvatarFallback className="bg-navy-950 text-gold-300 font-bold text-xs rounded-lg">
-                                {client.initials}
-                              </AvatarFallback>
-                            </Avatar>
+                            <ClientAvatar
+                              name={client.name}
+                              src={client.avatar}
+                              initials={client.initials}
+                              className="w-8 h-8 rounded-lg ring-1 ring-black/10 shrink-0 shadow-2xs"
+                              fallbackClassName="text-xs font-bold rounded-lg"
+                            />
                             <div className="flex flex-col min-w-0">
                               <span className="font-semibold text-gray-900 group-hover:text-navy-900 transition-colors truncate leading-tight">
                                 {client.name}

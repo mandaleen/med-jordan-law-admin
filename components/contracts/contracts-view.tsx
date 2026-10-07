@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { FeeContractItem, INITIAL_CONTRACTS } from "@/lib/mock-data";
 import { SignedAgreementViewerModal } from "@/components/modals/signed-agreement-viewer-modal";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface ContractsViewProps {
   initialClientName?: string;

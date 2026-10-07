@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +31,7 @@ export function PageHeader({
             {eyebrow}
           </span>
         )}
-        <h1 className="text-xl md:text-2xl font-bold tracking-tight text-navy-950 font-display">
+        <h1 className="text-xl md:text-2xl font-bold tracking-tight text-navy-900">
           {title}
         </h1>
         {description && (

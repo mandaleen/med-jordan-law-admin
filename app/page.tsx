@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, Search, Plus, Bell, Languages } from "lucide-react";
+import { Menu, Search, Plus } from "lucide-react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 import { BookingsView } from "@/components/bookings/bookings-view";
@@ -16,13 +16,14 @@ import { AuditView } from "@/components/audit/audit-view";
 import { SpotlightModal } from "@/components/modals/spotlight-modal";
 import { NewBookingModal } from "@/components/modals/new-booking-modal";
 import { ExportSheetModal } from "@/components/modals/export-sheet-modal";
-import { NotificationsPopover } from "@/components/modals/notifications-popover";
 import { PracticeProvider, usePractice } from "@/lib/practice-context";
 
 function DashboardContent() {
   const {
     activeNav,
     setActiveNav,
+    activeCardId,
+    setActiveCardId,
     lang,
     toggleLang,
     setLang,
@@ -44,8 +45,6 @@ function DashboardContent() {
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isNewBookingOpen, setIsNewBookingOpen] = useState(false);
   const [isExportSheetOpen, setIsExportSheetOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const unreadCount = notifications.filter((n) => !n.read).length;
 
   // Global Keyboard Shortcuts (⌘K, ⌘F) for Spotlight
   useEffect(() => {
@@ -61,11 +60,12 @@ function DashboardContent() {
 
   return (
     <div className="h-screen w-full flex overflow-hidden bg-gray-50 text-navy-900 antialiased font-sans">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:start-3 focus:z-50 focus:bg-navy-900 focus:text-white focus:px-3 focus:py-2 focus:rounded-md">Skip to content</a>
       {/* Responsive Sidebar (Desktop sticky sidebar + Mobile off-canvas drawer) */}
       <Sidebar
         activeId={activeNav}
         onSelectNav={setActiveNav}
+        notifications={notifications}
+        onMarkNotificationsRead={markNotificationsRead}
         currentLang={lang}
         onToggleLang={toggleLang}
         onSelectLang={setLang}
@@ -78,84 +78,60 @@ function DashboardContent() {
       />
 
       {/* Main Content Area */}
-      <main id="main-content" className="flex-1 h-screen overflow-y-auto custom-scrollbar min-w-0 flex flex-col">
-        <header className="sticky top-0 z-20 flex items-center gap-3 h-14 px-4 lg:px-8 bg-gray-50/90 backdrop-blur-md border-b border-gray-200 shrink-0">
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2 -ms-2 rounded-md text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-            aria-label="Open navigation menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsSpotlightOpen(true)}
-            className="group flex items-center gap-2.5 h-9 flex-1 max-w-md px-3 rounded-md bg-white border border-gray-200 hover:border-gray-300 text-gray-500 text-sm transition-colors cursor-pointer text-start"
-            aria-label={t("topbar.search")}
-          >
-            <Search className="w-4 h-4 shrink-0" aria-hidden="true" />
-            <span className="flex-1 truncate">{t("topbar.search")}</span>
-            <kbd className="hidden sm:inline font-numeric text-xs text-gray-500 border border-gray-200 rounded px-1.5 py-0.5 bg-gray-50">Ctrl K</kbd>
-          </button>
-
-          <div className="ms-auto flex items-center gap-1">
+      <main className="flex-1 h-screen overflow-y-auto custom-scrollbar min-w-0 flex flex-col">
+        {/* Mobile Header Bar (lg:hidden) */}
+        <header className="lg:hidden sticky top-0 z-20 flex items-center justify-between px-4 py-3 bg-white/95 backdrop-blur-md border-b border-gray-200 shrink-0">
+          <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={toggleLang}
-              className="h-9 px-2.5 inline-flex items-center gap-1.5 rounded-md text-sm text-gray-700 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-              aria-label={lang === "en" ? "Switch to Arabic" : "Switch to English"}
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 -m-1 rounded-xl text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
+              aria-label="Open navigation menu"
             >
-              <Languages className="w-4 h-4" aria-hidden="true" />
-              <span className="hidden sm:inline">{lang === "en" ? "عربي" : "English"}</span>
+              <Menu className="w-5 h-5" />
             </button>
-
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsNotificationsOpen((v) => !v)}
-                className="relative h-9 w-9 inline-flex items-center justify-center rounded-md text-gray-700 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-                aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}
-                aria-expanded={isNotificationsOpen}
-              >
-                <Bell className="w-[18px] h-[18px]" strokeWidth={1.7} aria-hidden="true" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1 end-1 min-w-4 h-4 px-1 rounded-full bg-gold-700 text-white text-[10px] font-semibold font-numeric leading-4 text-center ring-2 ring-gray-50">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-              <NotificationsPopover
-                isOpen={isNotificationsOpen}
-                onClose={() => setIsNotificationsOpen(false)}
-                items={notifications}
-                onMarkAllRead={markNotificationsRead}
-                placement="top-bar"
-              />
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+                MJL
+              </div>
+              <div>
+                <h1 className="text-xs font-bold text-navy-900 leading-tight">Med Jordan Law</h1>
+                <span className="text-[10px] text-gray-500 font-medium capitalize block">{activeNav} Workspace</span>
+              </div>
             </div>
+          </div>
 
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setIsSpotlightOpen(true)}
+              className="p-2 rounded-xl text-gray-600 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
             <button
               type="button"
               onClick={() => setIsNewBookingOpen(true)}
-              className="ms-2 h-9 px-3.5 inline-flex items-center gap-1.5 rounded-md bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium transition-colors apple-press cursor-pointer"
+              className="px-2.5 py-1.5 rounded-xl bg-navy-900 text-white text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
             >
-              <Plus className="w-4 h-4" aria-hidden="true" />
-              <span className="hidden sm:inline">{t("action.new_consultation")}</span>
-              <span className="sm:hidden">{t("action.new")}</span>
+              <Plus className="w-3.5 h-3.5" />
+              <span>{t("action.new")}</span>
             </button>
           </div>
         </header>
 
         {/* Content Container */}
-        <div className="flex-1 px-4 sm:px-6 lg:px-8 pt-6 lg:pt-8 pb-12 flex flex-col min-w-0">
-          <div className="max-w-[1360px] w-full mx-auto flex-1 flex flex-col gap-3 min-h-0">
+        <div className="flex-1 p-3 sm:p-5 lg:p-6 flex flex-col min-w-0">
+          <div className="max-w-[1600px] w-full mx-auto flex-1 flex flex-col gap-3 min-h-0 pb-4">
             {/* DYNAMIC TAB WORKSPACES MAPPED TO CLIENT JOURNEY */}
             {activeNav === "dashboard" && (
               <DashboardView
                 stats={stats}
+                activeCardId={activeCardId}
+                onCardClick={setActiveCardId}
                 onNavigateTab={setActiveNav}
-                onExport={() => setIsExportSheetOpen(true)}
+                onNewBooking={() => setIsNewBookingOpen(true)}
               />
             )}
 
@@ -205,19 +181,22 @@ function DashboardContent() {
             )}
 
             {activeNav === "help" && (
-              <div className="max-w-xl mt-8 flex flex-col gap-4 animate-in fade-in duration-200">
-                <h2 className="font-display text-3xl font-medium tracking-tight text-navy-900">Counsel desk</h2>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
-                  The internal escalation line for partners, litigation leads and staff. For anything urgent on the docket,
-                  contact Senior Partner Tariq Qudah directly.
+              <div className="apple-glass-card p-8 rounded-[22px] flex flex-col items-center justify-center text-center gap-4 max-w-lg mx-auto mt-12 animate-in fade-in duration-200">
+                <div className="w-14 h-14 rounded-2xl bg-navy-900 text-white flex items-center justify-center font-bold text-xl shadow-md">
+                  MJL
+                </div>
+                <h2 className="text-xl font-bold text-navy-900">Senior Legal Advisory Desk & Support</h2>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Direct internal escalation channel for managing partners, litigation leads, and staff accounts.
+                  For urgent docket assistance, reach out to Senior Partner Tariq Qudah directly.
                 </p>
-                <div>
+                <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setActiveNav("dashboard")}
-                    className="h-9 px-4 bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium rounded-md cursor-pointer transition-colors apple-press"
+                    className="px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap shrink-0 transition-all"
                   >
-                    Back to today
+                    Return to Dashboard
                   </button>
                 </div>
               </div>
@@ -248,8 +227,8 @@ function DashboardContent() {
 
       {/* Global Action Toast Notification Banner */}
       {toastMessage && (
-        <div role="status" className="fixed bottom-5 end-5 z-50 bg-navy-900 text-white text-sm px-4 py-2.5 rounded-lg shadow-[var(--shadow-float)] flex items-center gap-2.5 animate-in slide-in-from-bottom-2 fade-in duration-200">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold-300 shrink-0" />
+        <div className="fixed bottom-5 end-5 z-50 bg-navy-950/95 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl border border-navy-700/60 backdrop-blur-md flex items-center gap-2.5 animate-in slide-in-from-bottom-3 duration-200">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}

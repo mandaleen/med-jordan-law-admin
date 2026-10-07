@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { FeeContractItem, INITIAL_CONTRACTS } from "@/lib/mock-data";
 import { SignedAgreementViewerModal } from "@/components/modals/signed-agreement-viewer-modal";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface ContractsViewProps {
   initialClientName?: string;
@@ -240,7 +241,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
     <div className="flex-1 flex flex-col gap-4 min-h-0">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="p-3 bg-[#0A2342] text-white rounded-xl shadow-lg flex items-center justify-between text-xs font-medium animate-in fade-in slide-in-from-top-2 shrink-0">
+        <div className="p-3 bg-navy-950 text-white rounded-xl shadow-lg flex items-center justify-between text-xs font-medium animate-in fade-in slide-in-from-top-2 shrink-0">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>{toastMessage}</span>
@@ -254,20 +255,20 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0A2342] to-[#123966] text-white flex items-center justify-center font-bold shadow-sm ring-1 ring-black/5">
-            <FileCheck className="w-5 h-5 text-blue-200" />
+          <div className="w-10 h-10 rounded-xl bg-navy-950 text-white flex items-center justify-center font-bold shadow-2xs border border-navy-800">
+            <FileCheck className="w-5 h-5 text-gray-200" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-[#0A2342] tracking-tight">
+              <h1 className="text-xl font-bold text-gray-900 tracking-tight">
                 Fee Agreements & E-Signature (عقود الأتعاب)
               </h1>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#007AFF] border border-blue-200/50">
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-navy-50 text-navy-800 border border-navy-100">
                 {contracts.length} Agreements
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Contract drafting from firm templates, secure SMS/Email dispatch, cryptographic IP proof & countersigning (Page 10)
+            <p className="text-xs text-gray-500 mt-0.5">
+              Contract drafting from firm templates, secure SMS/Email dispatch, cryptographic IP proof & countersigning
             </p>
           </div>
         </div>
@@ -275,7 +276,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
         <button
           type="button"
           onClick={() => setIsNewContractOpen(true)}
-          className="px-4 py-2 rounded-xl bg-[#0A2342] hover:bg-[#123966] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
+          className="px-4 py-2 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           Draft Fee Agreement

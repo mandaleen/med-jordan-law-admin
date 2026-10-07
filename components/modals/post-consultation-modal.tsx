@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Booking, UpcomingConsultationItem } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 
 interface PostConsultationModalProps {
   isOpen: boolean;
@@ -89,10 +90,19 @@ export function PostConsultationModal({
         <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-5">
           {/* Appointment Meta Strip */}
           <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
-            <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Client</span>
-              <span className="font-bold text-[#0A2342] text-sm block mt-0.5">{clientName}</span>
-              <span className="text-[11px] text-slate-500">{practiceArea}</span>
+            <div className="flex items-center gap-3">
+              <ClientAvatar
+                name={clientName}
+                src={booking?.clientAvatar}
+                initials={booking?.clientInitials}
+                className="w-10 h-10 rounded-xl ring-1 ring-black/10 shrink-0 shadow-2xs"
+                fallbackClassName="text-xs font-bold rounded-xl"
+              />
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Client</span>
+                <span className="font-bold text-[#0A2342] text-sm block mt-0.5">{clientName}</span>
+                <span className="text-[11px] text-slate-500">{practiceArea}</span>
+              </div>
             </div>
             <div className="text-right">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Counsel</span>

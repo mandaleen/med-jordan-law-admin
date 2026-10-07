@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Booking } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 
 interface ConflictReviewModalProps {
   booking: Booking | null;
@@ -78,16 +79,25 @@ export function ConflictReviewModal({
         <div className="p-6 flex flex-col gap-5">
           {/* Summary Strip */}
           <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
-            <div>
-              <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                Prospective Client
-              </span>
-              <span className="font-bold text-[#0A2342] text-sm block mt-0.5">
-                {booking.clientName}
-              </span>
-              <span className="text-[11px] text-slate-500">
-                {booking.practiceArea}
-              </span>
+            <div className="flex items-center gap-2.5">
+              <ClientAvatar
+                name={booking.clientName}
+                src={booking.clientAvatar}
+                initials={booking.clientInitials}
+                className="w-9 h-9 rounded-lg ring-1 ring-black/10 shrink-0"
+                fallbackClassName="text-xs font-bold rounded-lg"
+              />
+              <div className="min-w-0">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                  Prospective Client
+                </span>
+                <span className="font-bold text-[#0A2342] text-sm block truncate">
+                  {booking.clientName}
+                </span>
+                <span className="text-[11px] text-slate-500 block truncate">
+                  {booking.practiceArea}
+                </span>
+              </div>
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">

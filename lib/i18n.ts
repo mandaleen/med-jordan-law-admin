@@ -29,7 +29,7 @@ export const I18N_DICTIONARY: TranslationDictionary = {
   "sidebar.practice_dispatch": { en: "Practice Dispatch", ar: "بريد التنبيهات" },
   "sidebar.intake_updates": { en: "Intake & schedule updates", ar: "تحديثات المواعيد والملفات" },
   "sidebar.all_caught_up": { en: "All notices caught up", ar: "تمت مراجعة جميع الإشعارات" },
-  "sidebar.sign_out": { en: "Sign Out of Chambers Session", ar: "تسجيل الخروج من الجلسة" },
+  "sidebar.sign_out": { en: "Sign Out", ar: "تسجيل الخروج" },
 
   // Common UI actions
   "action.new": { en: "New", ar: "جديد" },
@@ -51,6 +51,31 @@ export const I18N_DICTIONARY: TranslationDictionary = {
   "status.retainer": { en: "Retainer", ar: "توكيل سنوي" },
   "status.corporate": { en: "Corporate", ar: "شركات" },
   "status.individual": { en: "Individual", ar: "أفراد" },
+
+  // Authentication & Security Enclave
+  "auth.portal_badge": { en: "Restricted Executive Enclave", ar: "بوابة الدخول المحمية للشركاء" },
+  "auth.portal_title": { en: "Chambers Portal Access", ar: "تسجيل الدخول إلى نظام المكتب" },
+  "auth.portal_subtitle": { en: "Authenticate with your partner credentials or authorized cryptographic key to access client vaults and judicial dockets.", ar: "يرجى تسجيل الدخول باستخدام بيانات الشريك المعتمدة أو مفتاح الأمان للوصول إلى ملفات الموكلين وجلسات المحاكم." },
+  "auth.credentials_tab": { en: "Counsel Credentials", ar: "بيانات المحامي" },
+  "auth.passkey_tab": { en: "FIDO2 / Hardware Token", ar: "مفتاح أمان مشفر" },
+  "auth.quick_fill": { en: "Quick-Fill Partner Profile", ar: "اختيار سريع لملف الشريك" },
+  "auth.email_label": { en: "Institutional Email", ar: "البريد الإلكتروني المهني" },
+  "auth.email_placeholder": { en: "t.qudah@medjordanlaw.com", ar: "t.qudah@medjordanlaw.com" },
+  "auth.password_label": { en: "Master Passphrase", ar: "كلمة المرور الرئيسية" },
+  "auth.password_placeholder": { en: "Enter secure passphrase", ar: "أدخل كلمة المرور" },
+  "auth.remember_device": { en: "Trust this workstation for 30 days", ar: "حفظ تسجيل الدخول لهذا الجهاز لمدة 30 يوماً" },
+  "auth.forgot_password": { en: "Lost Access / Reset Key", ar: "نسيت كلمة المرور؟" },
+  "auth.sign_in": { en: "Authenticate & Enter Chambers", ar: "توثيق والدخول إلى النظام" },
+  "auth.authenticating": { en: "Verifying Cryptographic Handshake...", ar: "جارٍ التحقق من التشفير والمصادقة..." },
+  "auth.caps_lock": { en: "Caps Lock is enabled", ar: "زر الحروف الكبيرة (Caps Lock) مفعّل" },
+  "auth.passkey_prompt": { en: "Touch your FIDO2 security token or biometrics scanner to authenticate.", ar: "المس مفتاح الأمان FIDO2 أو مسح البصمة للمتابعة." },
+  "auth.scan_passkey": { en: "Initiate Hardware Handshake", ar: "بدء مصادقة المفتاح المشفر" },
+  "auth.emergency_title": { en: "Chambers Dispatch & Recovery", ar: "المساعدة واستعادة الدخول" },
+  "auth.emergency_body": { en: "Access is strictly monitored under Jordan Bar Association cyber-compliance standards. If locked out, contact the Registrar immediately.", ar: "يخضع الدخول للرقابة الصارمة وفق معايير نقابة المحامين الأردنيين. في حال فقدان الوصول، يرجى التواصل فوراً مع أمانة السر." },
+  "auth.emergency_phone": { en: "Registrar Hotline: +962 6 560 8800", ar: "هاتف أمانة السر: 8800 560 6 962+" },
+  "auth.jurisdiction_tag": { en: "Amman · Dubai · London", ar: "عمان · دبي · لندن" },
+  "auth.court_sync": { en: "Court of Cassation Gateway Connected", ar: "بوابة محكمة التمييز متصلة" },
+  "auth.encryption_tier": { en: "AES-256 GCM Hardware Enclave", ar: "تشفير عسكري من الدرجة الأولى" },
 };
 
 export function getTranslation(key: string, lang: Language = "en"): string {

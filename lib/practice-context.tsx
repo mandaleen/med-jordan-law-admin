@@ -13,10 +13,17 @@ import {
   INITIAL_CASES,
   DASHBOARD_STAT_CARDS,
   NOTIFICATIONS,
+  UserProfile,
+  CURRENT_USER,
 } from "@/lib/mock-data";
 import { Language, getTranslation } from "@/lib/i18n";
 
-interface PracticeContextType {
+export interface PracticeContextType {
+  // Current user profile & avatar state
+  currentUser: UserProfile;
+  updateUserAvatar: (avatarUrl: string) => void;
+  resetUserAvatar: () => void;
+
   // Navigation & URL state
   activeNav: string;
   setActiveNav: (tab: string) => void;
@@ -83,6 +90,7 @@ const STORAGE_KEYS = {
   STATS: "mjl_practice_stats_v1",
   NAV: "mjl_practice_active_nav_v1",
   LANG: "mjl_practice_lang_v1",
+  CURRENT_USER_AVATAR: "mjl_practice_user_avatar_v1",
 };
 
 const emptySubscribe = () => () => {};
@@ -97,6 +105,37 @@ export function PracticeProvider({ children }: { children: React.ReactNode }) {
 
   const [activeNav, setActiveNavState] = useState<string>("dashboard");
   const [activeCardId, setActiveCardId] = useState<string | undefined>("bookings-today");
+
+  // User profile & avatar state
+  const [currentUser, setCurrentUser] = useState<UserProfile>(CURRENT_USER);
+
+  const updateUserAvatar = useCallback((newAvatar: string) => {
+    setCurrentUser((prev) => {
+      const updated = { ...prev, avatar: newAvatar };
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(STORAGE_KEYS.CURRENT_USER_AVATAR, newAvatar);
+        } catch {
+          // Fallback if localStorage quota is exceeded
+        }
+      }
+      return updated;
+    });
+  }, []);
+
+  const resetUserAvatar = useCallback(() => {
+    setCurrentUser((prev) => {
+      const updated = { ...prev, avatar: CURRENT_USER.avatar };
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem(STORAGE_KEYS.CURRENT_USER_AVATAR);
+        } catch {
+          // Fallback
+        }
+      }
+      return updated;
+    });
+  }, []);
 
   // Language & direction state
   const [lang, setLangState] = useState<Language>("en");
@@ -179,6 +218,11 @@ export function PracticeProvider({ children }: { children: React.ReactNode }) {
 
         const savedStats = localStorage.getItem(STORAGE_KEYS.STATS);
         if (savedStats) setStats(JSON.parse(savedStats));
+
+        const savedAvatar = localStorage.getItem(STORAGE_KEYS.CURRENT_USER_AVATAR);
+        if (savedAvatar && !savedAvatar.includes("photo-1534528741775-53994a69daeb")) {
+          setCurrentUser((prev) => ({ ...prev, avatar: savedAvatar }));
+        }
       } catch {
         // Fallback for storage errors
       }
@@ -617,12 +661,17 @@ export function PracticeProvider({ children }: { children: React.ReactNode }) {
         markNotificationsRead,
         toastMessage,
         showToast,
+        currentUser,
+        updateUserAvatar,
+        resetUserAvatar,
       }}
     >
       {children}
     </PracticeContext.Provider>
   );
 }
+
+export { PracticeContext };
 
 export function usePractice() {
   const context = useContext(PracticeContext);

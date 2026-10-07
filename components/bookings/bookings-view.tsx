@@ -91,10 +91,10 @@ function BookingRowActionMenu({
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className={`p-1.5 rounded-lg border transition-all cursor-pointer shadow-2xs ${
+        className={`p-1.5 rounded-md border transition-colors cursor-pointer ${
           isOpen
-            ? "bg-navy-900 text-white border-navy-900 ring-2 ring-navy-900/10"
-            : "border-gray-200 text-gray-500 hover:text-navy-900 hover:bg-gray-100 hover:border-gray-300"
+            ? "bg-gray-100 text-navy-950 border-gray-300"
+            : "border-gray-200/80 text-gray-400 hover:text-gray-700 hover:bg-gray-100 hover:border-gray-300"
         }`}
         title="More booking options"
         aria-label="More booking options"
@@ -105,7 +105,7 @@ function BookingRowActionMenu({
 
       {isOpen && (
         <div
-          className={`absolute right-0 w-52 bg-white/98 backdrop-blur-md rounded-xl shadow-xl border border-gray-200/90 py-1.5 z-40 text-xs animate-in fade-in duration-150 ${
+          className={`absolute right-0 w-52 bg-white rounded-xl shadow-lg border border-gray-200/90 py-1.5 z-40 text-xs animate-in fade-in duration-150 ${
             isNearBottom ? "bottom-full mb-1.5 origin-bottom-right" : "top-full mt-1.5 origin-top-right"
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -117,7 +117,7 @@ function BookingRowActionMenu({
                 setIsOpen(false);
                 onWrapUp();
               }}
-              className="w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-emerald-50 text-emerald-900 font-medium transition-colors cursor-pointer"
+              className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-emerald-50 text-gray-800 hover:text-emerald-950 font-medium transition-colors cursor-pointer"
             >
               <Gavel className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>Conclude & Wrap-up</span>
@@ -131,7 +131,7 @@ function BookingRowActionMenu({
                 setIsOpen(false);
                 onReschedule();
               }}
-              className="w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
+              className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
             >
               <Clock className="w-3.5 h-3.5 text-navy-600 shrink-0" />
               <span>Reschedule Consultation</span>
@@ -145,7 +145,7 @@ function BookingRowActionMenu({
                 setIsOpen(false);
                 onViewAgreement?.();
               }}
-              className="w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-blue-50/70 text-blue-900 font-medium transition-colors cursor-pointer"
+              className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-blue-50/70 text-gray-800 hover:text-blue-950 font-medium transition-colors cursor-pointer"
             >
               <FileCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
               <span>View Signed Agreement (PDF)</span>
@@ -159,7 +159,7 @@ function BookingRowActionMenu({
                 setIsOpen(false);
                 onViewClient();
               }}
-              className="w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
+              className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
             >
               <User className="w-3.5 h-3.5 text-gray-500 shrink-0" />
               <span>View Client Profile</span>
@@ -175,7 +175,7 @@ function BookingRowActionMenu({
                   setIsOpen(false);
                   onRefund();
                 }}
-                className="w-full text-left px-3 py-2 flex items-center gap-2.5 hover:bg-rose-50 text-rose-700 font-medium transition-colors cursor-pointer"
+                className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-rose-50 text-rose-700 font-medium transition-colors cursor-pointer"
               >
                 <DollarSign className="w-3.5 h-3.5 text-rose-600 shrink-0" />
                 <span>Cancel & Refund Retainer</span>
@@ -250,16 +250,16 @@ export function BookingsView({
   return (
     <div className="flex-1 flex flex-col min-h-0 w-full animate-in fade-in duration-200">
       {/* View Switcher, Filter & Search Control Header */}
-      <div className="apple-glass-card p-3.5 sm:p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 mb-3">
+      <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 mb-3 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <div className="flex items-center gap-3">
-          <div className="flex bg-gray-100 p-1 rounded-xl border border-gray-200">
+          <div className="flex bg-gray-100/80 p-0.5 rounded-lg border border-gray-200/60">
             <button
               type="button"
               onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs transition-all cursor-pointer ${
                 viewMode === "list"
-                  ? "bg-white text-navy-900 shadow-2xs"
-                  : "text-gray-500 hover:text-navy-900"
+                  ? "bg-white text-navy-950 font-semibold shadow-2xs"
+                  : "text-gray-500 hover:text-navy-900 font-medium"
               }`}
             >
               <List className="w-3.5 h-3.5" />
@@ -268,10 +268,10 @@ export function BookingsView({
             <button
               type="button"
               onClick={() => setViewMode("calendar")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs transition-all cursor-pointer ${
                 viewMode === "calendar"
-                  ? "bg-white text-navy-900 shadow-2xs"
-                  : "text-gray-500 hover:text-navy-900"
+                  ? "bg-white text-navy-950 font-semibold shadow-2xs"
+                  : "text-gray-500 hover:text-navy-900 font-medium"
               }`}
             >
               <CalendarIcon className="w-3.5 h-3.5" />
@@ -281,8 +281,9 @@ export function BookingsView({
 
           <div className="hidden sm:flex items-center gap-2">
             {awaitingCount > 0 && (
-              <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 animate-pulse">
-                {awaitingCount} Awaiting Intake
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-50 text-amber-900 border border-amber-200/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                <span>{awaitingCount} Awaiting Intake</span>
               </span>
             )}
           </div>
@@ -291,20 +292,20 @@ export function BookingsView({
         {/* Search & Select Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[200px] flex-1 sm:flex-none">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search client, email, lawyer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-gray-900 placeholder:text-gray-400 transition-all"
+              className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 font-medium cursor-pointer"
+            className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
             <option value="all">All Statuses</option>
             <option value="confirmed">Confirmed</option>
@@ -316,7 +317,7 @@ export function BookingsView({
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 font-medium cursor-pointer"
+            className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
             <option value="all">All Channels</option>
             <option value="video">Video (Encrypted)</option>
@@ -328,7 +329,7 @@ export function BookingsView({
             <button
               type="button"
               onClick={onNewBookingClick}
-              className="px-3.5 py-1.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer whitespace-nowrap shrink-0"
+              className="px-3.5 py-1.5 rounded-lg bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Consultation</span>
@@ -339,27 +340,27 @@ export function BookingsView({
 
       {/* VIEW 1: LIST VIEW */}
       {viewMode === "list" ? (
-        <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+        <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
           <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
-            <table className="w-full text-left border-collapse table-fixed min-w-[1000px]">
+            <table className="w-full text-left border-collapse table-fixed min-w-[1140px]">
               <colgroup>
                 <col className="w-[210px]" />
-                <col className="w-[190px]" />
+                <col className="w-[185px]" />
                 <col className="w-[145px]" />
                 <col className="w-[135px]" />
-                <col className="w-[145px]" />
-                <col className="w-[95px]" />
-                <col className="w-[125px]" />
+                <col className="w-[155px]" />
+                <col className="w-[110px]" />
+                <col className="w-[200px]" />
               </colgroup>
               <thead className="sticky top-0 z-10">
-                <tr className="bg-gray-50/95 backdrop-blur-xs border-b border-gray-200 shadow-2xs">
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Client / Contact</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Matter / Area</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Date & Slot</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Counsel Assigned</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Status & Conflict</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Retainer Fee</th>
-                  <th className="py-3 px-4 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500 text-right pr-5">Actions</th>
+                <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client / Contact</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Matter / Area</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Date & Slot</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Counsel Assigned</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Status & Conflict</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Retainer Fee</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-xs">
@@ -399,13 +400,13 @@ export function BookingsView({
                     const isNearBottom = idx >= Math.max(0, filteredBookings.length - 2);
 
                     return (
-                      <tr key={booking.id} className="hover:bg-gray-50/80 transition-colors group">
+                      <tr key={booking.id} className="hover:bg-gray-50/60 transition-colors group">
                         {/* 1. Client / Contact */}
-                        <td className="py-4.5 px-4 align-middle">
+                        <td className="py-3.5 px-4 align-middle">
                           <div className="flex items-center gap-3 min-w-0">
-                            <Avatar className="h-9 w-9 rounded-xl ring-1 ring-gray-200/80 shadow-2xs shrink-0">
+                            <Avatar className="h-8.5 w-8.5 rounded-lg ring-1 ring-gray-200/80 shrink-0">
                               <AvatarImage src={booking.clientAvatar} alt={booking.clientName} />
-                              <AvatarFallback className="bg-navy-900 text-white text-xs font-semibold rounded-xl">
+                              <AvatarFallback className="bg-navy-950 text-white text-[11px] font-medium rounded-lg">
                                 {booking.clientInitials}
                               </AvatarFallback>
                             </Avatar>
@@ -413,7 +414,7 @@ export function BookingsView({
                               <button
                                 type="button"
                                 onClick={() => onViewClient?.(booking.clientName)}
-                                className="font-bold text-navy-900 hover:text-navy-600 transition-colors text-xs text-left truncate block cursor-pointer max-w-full"
+                                className="font-semibold text-gray-900 hover:text-navy-700 transition-colors text-xs text-left truncate block cursor-pointer max-w-full"
                               >
                                 {booking.clientName}
                               </button>
@@ -425,12 +426,12 @@ export function BookingsView({
                         </td>
 
                         {/* 2. Practice Area & Channel */}
-                        <td className="py-4.5 px-4 align-middle">
-                          <span className="font-semibold text-gray-800 text-xs block truncate" title={booking.practiceArea}>
+                        <td className="py-3.5 px-4 align-middle">
+                          <span className="font-medium text-gray-900 text-xs block truncate" title={booking.practiceArea}>
                             {booking.practiceArea}
                           </span>
                           <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                            <span className="text-[10px] text-gray-500 inline-flex items-center gap-1 bg-gray-100/90 px-1.5 py-0.5 rounded border border-gray-200/60 font-medium">
+                            <span className="text-[10px] text-gray-600 inline-flex items-center gap-1 bg-gray-100/80 px-1.5 py-0.5 rounded border border-gray-200/50 font-medium">
                               <TypeIcon className="w-3 h-3 text-navy-600 shrink-0" />
                               <span>{booking.appointmentType}</span>
                             </span>
@@ -438,7 +439,7 @@ export function BookingsView({
                               <button
                                 type="button"
                                 onClick={() => setAgreementModalBooking(booking)}
-                                className="text-[10px] font-medium text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100/80 border border-blue-200/70 rounded px-1.5 py-0.5 inline-flex items-center gap-1 transition-colors cursor-pointer"
+                                className="text-[10px] font-medium text-blue-700 hover:text-blue-900 bg-blue-50/80 hover:bg-blue-100/60 border border-blue-200/60 rounded px-1.5 py-0.5 inline-flex items-center gap-1 transition-colors cursor-pointer"
                                 title="Inspect executed digital signature agreement"
                               >
                                 <FileCheck className="w-3 h-3 text-blue-600 shrink-0" />
@@ -449,8 +450,8 @@ export function BookingsView({
                         </td>
 
                         {/* 3. Date & Slot */}
-                        <td className="py-4.5 px-4 align-middle whitespace-nowrap">
-                          <span className="font-semibold text-gray-800 text-xs block">{booking.dateStr}</span>
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="font-medium text-gray-900 text-xs block">{booking.dateStr}</span>
                           <span className="font-mono text-[11px] text-gray-500 inline-flex items-center gap-1.5 mt-0.5">
                             <Clock className="w-3 h-3 text-gray-400 shrink-0" />
                             <span>{booking.timeSlot}</span>
@@ -458,23 +459,23 @@ export function BookingsView({
                         </td>
 
                         {/* 4. Assigned Lawyer */}
-                        <td className="py-4.5 px-4 align-middle whitespace-nowrap">
-                          <span className="font-semibold text-gray-800 text-xs block">{booking.lawyerName}</span>
-                          <span className="text-[10px] text-gray-400 block mt-0.5 font-normal">Senior Chambers</span>
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="font-medium text-gray-900 text-xs block">{booking.lawyerName}</span>
+                          <span className="text-[11px] text-gray-400 block mt-0.5 font-normal">Senior Chambers</span>
                         </td>
 
                         {/* 5. Status & Conflict */}
-                        <td className="py-4.5 px-4 align-middle whitespace-nowrap">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                           <div className="flex flex-col gap-1 items-start">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border shadow-2xs ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                                 booking.status === "Confirmed"
-                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  ? "bg-emerald-50/80 text-emerald-800 border-emerald-200/60"
                                   : booking.status === "Awaiting Acceptance"
-                                  ? "bg-amber-50 text-amber-800 border-amber-200"
+                                  ? "bg-amber-50/80 text-amber-900 border-amber-200/70"
                                   : booking.status === "Reschedule Requested"
-                                  ? "bg-blue-50 text-blue-800 border-blue-200"
-                                  : "bg-gray-100 text-gray-700 border-gray-200"
+                                  ? "bg-blue-50/80 text-blue-800 border-blue-200/60"
+                                  : "bg-gray-100/80 text-gray-700 border-gray-200/70"
                               }`}
                             >
                               <span
@@ -482,7 +483,7 @@ export function BookingsView({
                                   booking.status === "Confirmed"
                                     ? "bg-emerald-500"
                                     : booking.status === "Awaiting Acceptance"
-                                    ? "bg-amber-500 animate-pulse"
+                                    ? "bg-amber-500"
                                     : booking.status === "Reschedule Requested"
                                     ? "bg-blue-500"
                                     : "bg-gray-400"
@@ -495,12 +496,12 @@ export function BookingsView({
                               <button
                                 type="button"
                                 onClick={() => setConflictModalBooking(booking)}
-                                className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border inline-flex items-center gap-1 cursor-pointer transition-colors shadow-2xs ${
+                                className={`text-[10px] font-medium px-2 py-0.5 rounded border inline-flex items-center gap-1 cursor-pointer transition-colors ${
                                   booking.conflictCheck.status === "Potential Conflict"
-                                    ? "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"
+                                    ? "bg-rose-50/80 text-rose-700 border-rose-200/70 hover:bg-rose-100/70"
                                     : booking.conflictCheck.status === "Waived"
-                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                    : "bg-gray-50 text-gray-600 border-gray-200"
+                                    ? "bg-emerald-50/60 text-emerald-700 border-emerald-200/50"
+                                    : "bg-gray-50 text-gray-600 border-gray-200/70"
                                 }`}
                               >
                                 {booking.conflictCheck.status === "Potential Conflict" ? (
@@ -520,21 +521,31 @@ export function BookingsView({
                         </td>
 
                         {/* 6. Retainer Fee */}
-                        <td className="py-4.5 px-4 align-middle whitespace-nowrap">
-                          <span className="font-mono text-xs font-bold text-navy-900 block tracking-tight">{booking.fee}</span>
-                          <span className="text-[10.5px] text-emerald-700 font-semibold block mt-0.5">{booking.paymentStatus}</span>
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="font-mono text-xs font-semibold text-gray-900 block tabular-nums">{booking.fee}</span>
+                          <span
+                            className={`text-[10.5px] font-medium block mt-0.5 ${
+                              booking.paymentStatus === "Settled"
+                                ? "text-emerald-700"
+                                : booking.paymentStatus === "Refunded"
+                                ? "text-gray-500"
+                                : "text-amber-700"
+                            }`}
+                          >
+                            {booking.paymentStatus}
+                          </span>
                         </td>
 
                         {/* 7. Workflow Actions */}
-                        <td className="py-4.5 px-4 text-right align-middle whitespace-nowrap pr-5">
-                          <div className="flex items-center justify-end gap-1.5 shrink-0">
+                        <td className="py-3.5 px-4 text-right align-middle whitespace-nowrap pr-5">
+                          <div className="flex items-center justify-end gap-1.5">
                             {/* If Awaiting Acceptance */}
                             {booking.status === "Awaiting Acceptance" && (
                               <>
                                 <button
                                   type="button"
                                   onClick={() => setDeclineModalBooking(booking)}
-                                  className="px-2.5 py-1.5 rounded-lg bg-white border border-gray-200 hover:border-error/40 text-error hover:bg-error/10 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1 shrink-0"
+                                  className="px-2.5 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:text-rose-700 hover:bg-rose-50 border border-gray-200/80 hover:border-rose-200 transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0"
                                   title="Decline request (triggers refund & auto-notifies client)"
                                 >
                                   <X className="w-3.5 h-3.5" />
@@ -549,7 +560,7 @@ export function BookingsView({
                                       acceptBooking(booking.id);
                                     }
                                   }}
-                                  className="px-3 py-1.5 rounded-lg bg-navy-900 text-white hover:bg-navy-800 text-xs font-semibold cursor-pointer transition-all shadow-xs inline-flex items-center gap-1.5 shrink-0"
+                                  className="px-3 py-1.5 rounded-md bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium transition-colors inline-flex items-center gap-1.5 cursor-pointer shrink-0 shadow-2xs"
                                 >
                                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                                   <span>Accept</span>
@@ -563,7 +574,7 @@ export function BookingsView({
                                 <button
                                   type="button"
                                   onClick={() => setRescheduleModalBooking(booking)}
-                                  className="px-3 py-1.5 rounded-lg bg-navy-800 text-white hover:bg-navy-900 text-xs font-semibold cursor-pointer transition-all shadow-xs inline-flex items-center gap-1.5 shrink-0"
+                                  className="px-2.5 py-1.5 rounded-md bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
                                 >
                                   <RotateCcw className="w-3.5 h-3.5" />
                                   <span>Review Request</span>
@@ -585,10 +596,10 @@ export function BookingsView({
                                 <button
                                   type="button"
                                   onClick={() => setPostConsultModalBooking(booking)}
-                                  className="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
+                                  className="px-2.5 py-1.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/70 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5 shrink-0"
                                   title="Session outcome & 3-way decision workflow"
                                 >
-                                  <Gavel className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                  <Gavel className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
                                   <span>Wrap-up</span>
                                 </button>
                                 <BookingRowActionMenu
@@ -629,23 +640,23 @@ export function BookingsView({
           </div>
 
           {/* Table Footer Summary Strip */}
-          <div className="bg-gray-50 border-t border-gray-300/80 px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 mt-auto shrink-0">
+          <div className="bg-gray-50/70 border-t border-gray-200/80 px-5 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 mt-auto shrink-0">
             <div className="flex items-center gap-4">
               <span>
-                Showing <strong className="text-navy-900">{filteredBookings.length}</strong> of {bookings.length} bookings
+                Showing <strong className="text-gray-900 font-semibold">{filteredBookings.length}</strong> of {bookings.length} bookings
               </span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="hidden sm:inline">
-                Confirmed: <strong className="text-success">{confirmedCount}</strong>
+                Confirmed: <strong className="text-emerald-700 font-semibold">{confirmedCount}</strong>
               </span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="hidden sm:inline">
-                Awaiting: <strong className="text-warning">{awaitingCount}</strong>
+                Awaiting: <strong className="text-amber-700 font-semibold">{awaitingCount}</strong>
               </span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-gray-500">Total Settled Fees:</span>
-              <span className="font-mono font-bold text-navy-900 text-[13px]">
+              <span className="font-mono font-semibold text-gray-900 text-[13px] tabular-nums">
                 ${totalSettledRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>

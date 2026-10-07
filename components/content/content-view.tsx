@@ -115,19 +115,19 @@ export function ContentView() {
       {!editingArticle && !isCreatingNew ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Header & Filter Controls */}
-          <div className="apple-glass-card p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
+          <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
             <div className="flex items-center gap-3 w-full md:w-auto">
-              <div className="w-10 h-10 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold shadow-xs">
-                <FileText className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
+                <FileText className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-[17px] font-bold text-navy-900 tracking-tight">Legal Insights & Articles</h2>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-navy-50 text-navy-700 border border-navy-200">
+                  <h2 className="text-base font-semibold text-navy-900 tracking-tight">Legal Insights & Articles</h2>
+                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
                     {articles.length} Insights
                   </span>
                 </div>
-                <p className="text-[12px] text-slate-400">Firm thought leadership published directly to the public website</p>
+                <p className="text-xs text-slate-500">Firm thought leadership published directly to the public website</p>
               </div>
             </div>
 
@@ -141,7 +141,7 @@ export function ContentView() {
                   placeholder="Search title, practice area, counsel..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full ps-8 pe-7 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 text-start"
+                  className="w-full ps-8 pe-7 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 text-slate-900 text-start"
                 />
                 {searchQuery && (
                   <button
@@ -159,7 +159,7 @@ export function ContentView() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none text-navy-900 font-medium"
+                className="px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none text-slate-700 font-medium"
               >
                 <option value="all">All Statuses</option>
                 <option value="Published">Published</option>
@@ -171,7 +171,7 @@ export function ContentView() {
               <button
                 type="button"
                 onClick={() => handleOpenEditor()}
-                className="px-3.5 py-1.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap shrink-0 transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Draft Insight
@@ -180,29 +180,29 @@ export function ContentView() {
           </div>
 
           {/* Articles Table */}
-          <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex-1 flex flex-col min-h-[460px] overflow-hidden">
             <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar min-h-0">
               <table className="w-full text-start border-collapse table-fixed min-w-[1250px]">
                 <colgroup>
                   <col className="w-[300px]" />
-                  <col className="w-[170px]" />
+                  <col className="w-[160px]" />
                   <col className="w-[160px]" />
                   <col className="w-[130px]" />
-                  <col className="w-[150px]" />
+                  <col className="w-[140px]" />
                   <col className="w-[100px]" />
                   <col className="w-[120px]" />
-                  <col className="w-[120px]" />
+                  <col className="w-[140px]" />
                 </colgroup>
-                <thead className="sticky top-0 z-10 shadow-xs">
-                  <tr className="bg-gray-50 border-b border-slate-200/80">
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Article Title (EN / AR)</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Practice Area</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Author</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Status</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Languages</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Views</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Updated</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end pe-6">Action</th>
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-slate-50/80 border-b border-slate-200/80">
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Article Title (EN / AR)</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Practice Area</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Author</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Status</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Languages</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Views</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Updated</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end pe-5">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
@@ -227,13 +227,13 @@ export function ContentView() {
                       <tr
                         key={art.id}
                         onClick={() => handleOpenEditor(art)}
-                        className="hover:bg-slate-50/80 transition-colors duration-150 cursor-pointer group"
+                        className="hover:bg-slate-50/60 transition-colors duration-150 cursor-pointer group"
                       >
                         {/* 1. Title */}
-                        <td className="py-4 px-4.5 align-middle text-start">
+                        <td className="py-3.5 px-4 align-middle text-start">
                           <div className="flex flex-col min-w-0 pe-2">
                             <span
-                              className="font-semibold text-navy-900 text-[13px] group-hover:text-navy-600 transition-colors truncate block leading-snug"
+                              className="font-medium text-slate-900 text-xs group-hover:text-slate-600 transition-colors truncate block leading-snug"
                               title={art.title_en}
                             >
                               {art.title_en}
@@ -249,14 +249,14 @@ export function ContentView() {
                         </td>
 
                         {/* 2. Area */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
                           <span className="font-medium text-slate-700 text-xs">{art.practiceArea}</span>
                         </td>
 
                         {/* 3. Author */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
                           <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-full bg-slate-100 text-navy-900 font-bold text-[10px] flex items-center justify-center shrink-0 ring-1 ring-slate-200">
+                            <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-medium text-[10px] flex items-center justify-center shrink-0 ring-1 ring-slate-200">
                               {art.author.split(" ").map((n) => n[0]).join("")}
                             </div>
                             <span className="text-slate-700 font-medium text-xs">{art.author}</span>
@@ -264,14 +264,14 @@ export function ContentView() {
                         </td>
 
                         {/* 4. Status */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold border shadow-xs ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
                               art.status === "Published"
-                                ? "bg-emerald-50 text-emerald-800 border-emerald-200/80"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
                                 : art.status === "Draft"
-                                ? "bg-amber-50 text-amber-800 border-amber-200/80"
-                                : "bg-blue-50 text-blue-800 border-blue-200/80"
+                                ? "bg-amber-50 text-amber-700 border-amber-200/60"
+                                : "bg-blue-50 text-blue-700 border-blue-200/60"
                             }`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${
@@ -286,30 +286,30 @@ export function ContentView() {
                         </td>
 
                         {/* 5. AR/EN Indicator */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10.5px] font-medium border border-slate-200/60 shadow-2xs">
-                            <Globe className="w-3 h-3 text-blue-600 shrink-0" />
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[11px] font-medium border border-slate-200/70">
+                            <Globe className="w-3 h-3 text-slate-500 shrink-0" />
                             EN + AR Synced
                           </span>
                         </td>
 
                         {/* 6. Views */}
-                        <td className="py-4 px-4.5 font-mono font-semibold text-slate-700 text-xs whitespace-nowrap text-end align-middle tabular-nums">
+                        <td className="py-3.5 px-4 font-mono font-medium text-slate-700 text-xs whitespace-nowrap text-end align-middle tabular-nums">
                           {art.views.toLocaleString()}
                         </td>
 
                         {/* 7. Last Updated */}
-                        <td className="py-4 px-4.5 text-slate-400 text-[11px] whitespace-nowrap align-middle text-start">
+                        <td className="py-3.5 px-4 text-slate-400 text-[11px] whitespace-nowrap align-middle text-start">
                           {art.lastUpdated}
                         </td>
 
                         {/* 8. Edit Action */}
-                        <td className="py-4 px-4.5 text-end align-middle whitespace-nowrap pe-6">
+                        <td className="py-3.5 px-4 text-end align-middle whitespace-nowrap pe-5">
                           <button
                             type="button"
-                            className="px-3 py-1.5 rounded-lg bg-slate-100 group-hover:bg-navy-900 group-hover:text-white text-slate-700 text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ms-auto shadow-2xs"
+                            className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors inline-flex items-center gap-1.5 ms-auto cursor-pointer shadow-none"
                           >
-                            <Edit3 className="w-3.5 h-3.5" />
+                            <Edit3 className="w-3.5 h-3.5 text-slate-500" />
                             Edit
                           </button>
                         </td>
@@ -321,7 +321,7 @@ export function ContentView() {
             </div>
 
             {/* Table Footer Summary Strip */}
-            <div className="bg-gray-50 border-t border-slate-200/80 px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
+            <div className="bg-slate-50/80 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
               <div className="flex items-center gap-4">
                 <span>Showing <strong className="text-slate-800">{filteredArticles.length}</strong> of {articles.length} articles</span>
                 <span className="hidden sm:inline text-slate-300">•</span>

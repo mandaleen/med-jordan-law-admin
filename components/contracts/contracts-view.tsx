@@ -200,39 +200,36 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
     switch (status) {
       case "Draft":
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-gray-100/80 text-gray-700 border border-gray-200/60 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0" />
             <span>Draft</span>
           </span>
         );
       case "Sent for Signature":
         return (
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 shadow-2xs whitespace-nowrap">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
-            </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50/80 text-blue-800 border border-blue-200/60 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
             <span>Sent for Signature</span>
           </span>
         );
       case "Signed by Client":
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-900 border border-amber-300 shadow-2xs whitespace-nowrap">
-            <PenTool className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50/80 text-amber-900 border border-amber-200/70 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
             <span>Awaiting Countersign</span>
           </span>
         );
       case "Countersigned & Executed":
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs whitespace-nowrap">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50/80 text-emerald-800 border border-emerald-200/60 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
             <span>Fully Executed</span>
           </span>
         );
       case "Amendment Requested":
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200 shadow-2xs whitespace-nowrap">
-            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-rose-50/80 text-rose-800 border border-rose-200/60 whitespace-nowrap">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
             <span>Amendment Requested</span>
           </span>
         );
@@ -287,78 +284,78 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
       {/* 4 Metric Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 shrink-0">
-        <div className="apple-table-card p-3.5 flex items-center justify-between">
+        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Contract Value</span>
-            <div className="text-xl font-bold text-[#0A2342] mt-0.5 font-mono">
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Contract Value</span>
+            <div className="text-xl font-bold text-gray-900 mt-0.5 font-mono tabular-nums">
               ${totalValueSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </div>
-            <span className="text-[10px] text-slate-400">{contracts.length} total active matters</span>
+            <span className="text-[10px] text-gray-400">{contracts.length} total active matters</span>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0A2342] flex items-center justify-center">
+          <div className="w-8.5 h-8.5 rounded-lg bg-gray-100 text-gray-700 flex items-center justify-center">
             <DollarSign className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="apple-table-card p-3.5 flex items-center justify-between">
+        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Retainer Deposits</span>
-            <div className="text-xl font-bold text-emerald-700 mt-0.5 font-mono">
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Retainer Deposits</span>
+            <div className="text-xl font-bold text-emerald-700 mt-0.5 font-mono tabular-nums">
               ${retainerSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </div>
-            <span className="text-[10px] text-slate-400">Upfront engagement deposits</span>
+            <span className="text-[10px] text-gray-400">Upfront engagement deposits</span>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+          <div className="w-8.5 h-8.5 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <Briefcase className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="apple-table-card p-3.5 flex items-center justify-between">
+        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Awaiting Countersign</span>
-            <div className="text-xl font-bold text-amber-600 mt-0.5 font-mono">
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Awaiting Countersign</span>
+            <div className="text-xl font-bold text-amber-600 mt-0.5 font-mono tabular-nums">
               {awaitingCountersignCount}
             </div>
-            <span className="text-[10px] text-amber-600 font-medium">Signed by client · partner pending</span>
+            <span className="text-[10px] text-amber-700 font-medium">Signed by client · partner pending</span>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <div className="w-8.5 h-8.5 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
             <PenTool className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="apple-table-card p-3.5 flex items-center justify-between">
+        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
           <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Out for Signature</span>
-            <div className="text-xl font-bold text-blue-600 mt-0.5 font-mono">
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Out for Signature</span>
+            <div className="text-xl font-bold text-blue-600 mt-0.5 font-mono tabular-nums">
               {outForSignatureCount}
             </div>
             <span className="text-[10px] text-blue-600 font-medium">Dispatched via SMS / Email</span>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+          <div className="w-8.5 h-8.5 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <Send className="w-4 h-4" />
           </div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="apple-table-card p-3.5 sm:p-4 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
+      <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <div className="relative w-full md:w-80">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search contract #, client name, counsel..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#0A2342] text-[#0A2342] placeholder:text-slate-400 transition-all"
+            className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
           />
         </div>
 
         <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
-          <label className="text-[11px] font-semibold text-slate-500 whitespace-nowrap">Filter Status:</label>
+          <label className="text-[11px] font-semibold text-gray-500 whitespace-nowrap">Filter Status:</label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#0A2342] text-[#0A2342] font-medium cursor-pointer"
+            className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
             <option value="all">All Statuses ({contracts.length})</option>
             <option value="draft">Drafts ({contracts.filter((c) => c.status === "Draft").length})</option>
@@ -371,36 +368,36 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
       </div>
 
       {/* Main Table */}
-      <div className="apple-table-card flex-1 flex flex-col min-h-[480px]">
+      <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[480px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
-          <table className="w-full text-left border-collapse table-fixed min-w-[1020px]">
+          <table className="w-full text-left border-collapse table-fixed min-w-[1190px]">
             <colgroup>
-              <col className="w-[130px]" />
-              <col className="w-[220px]" />
-              <col className="w-[170px]" />
-              <col className="w-[150px]" />
-              <col className="w-[130px]" />
+              <col className="w-[140px]" />
+              <col className="w-[210px]" />
               <col className="w-[160px]" />
               <col className="w-[150px]" />
+              <col className="w-[130px]" />
+              <col className="w-[170px]" />
+              <col className="w-[230px]" />
             </colgroup>
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#F8FAFC] border-b border-slate-200/80 shadow-2xs">
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Contract #</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Client & Practice Area</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Template Type</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Fee Structure</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Lead Counsel</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500">Status</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-right pr-6">Actions</th>
+              <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Contract #</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client & Practice Area</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Template Type</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Fee Structure</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Lead Counsel</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Status</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-xs">
+            <tbody className="divide-y divide-gray-100 text-xs">
               {filteredContracts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
-                    <FileCheck className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-                    <p className="font-semibold text-slate-600">No fee contracts found matching criteria</p>
-                    <p className="text-xs text-slate-400">Click &ldquo;Draft Fee Agreement&rdquo; to issue a new contract.</p>
+                  <td colSpan={7} className="py-16 text-center text-gray-400">
+                    <FileCheck className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <p className="font-semibold text-gray-600">No fee contracts found matching criteria</p>
+                    <p className="text-xs text-gray-400">Click &ldquo;Draft Fee Agreement&rdquo; to issue a new contract.</p>
                   </td>
                 </tr>
               ) : (
@@ -408,17 +405,17 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                   <tr
                     key={c.id}
                     onClick={() => setSelectedContract(c)}
-                    className="hover:bg-slate-50/90 transition-colors cursor-pointer group"
+                    className="hover:bg-gray-50/60 transition-colors cursor-pointer group"
                   >
                     {/* Contract Number */}
-                    <td className="py-4 px-4.5 align-middle font-mono font-bold text-[#0A2342] whitespace-nowrap">
-                      <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors inline-block text-xs">
+                    <td className="py-3.5 px-4 align-middle font-mono font-medium text-gray-900 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded-md bg-gray-100 border border-gray-200/70 group-hover:bg-blue-50/70 group-hover:border-blue-200/70 transition-colors inline-block text-xs">
                         {c.contractNumber}
                       </span>
                     </td>
 
                     {/* Client & Area */}
-                    <td className="py-4 px-4.5 align-middle">
+                    <td className="py-3.5 px-4 align-middle">
                       <div className="flex flex-col min-w-0 pr-2">
                         {onViewClient ? (
                           <button
@@ -427,58 +424,58 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                               e.stopPropagation();
                               onViewClient(c.clientName);
                             }}
-                            className="font-semibold text-[#0A2342] hover:underline text-[13px] truncate text-start cursor-pointer block leading-tight"
+                            className="font-semibold text-gray-900 hover:text-navy-700 hover:underline text-xs truncate text-start cursor-pointer block leading-tight"
                           >
                             {c.clientName}
                           </button>
                         ) : (
-                          <span className="font-semibold text-[#0A2342] text-[13px] truncate block leading-tight">
+                          <span className="font-semibold text-gray-900 text-xs truncate block leading-tight">
                             {c.clientName}
                           </span>
                         )}
-                        <span className="text-[11px] text-slate-500 truncate mt-1">
+                        <span className="text-[11px] text-gray-500 truncate mt-0.5">
                           {c.practiceArea}
                         </span>
                       </div>
                     </td>
 
                     {/* Template */}
-                    <td className="py-4 px-4.5 align-middle whitespace-nowrap">
-                      <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 text-[11px] font-medium border border-blue-200/60 inline-block shadow-2xs">
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded-md bg-blue-50/70 text-blue-800 text-[11px] font-medium border border-blue-200/50 inline-block">
                         {c.templateType}
                       </span>
                     </td>
 
                     {/* Fee */}
-                    <td className="py-4 px-4.5 align-middle whitespace-nowrap">
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                       <div className="flex flex-col font-mono">
-                        <span className="font-bold text-[#0A2342] text-[13px]">{c.totalFee} Total</span>
-                        <span className="text-[11px] text-slate-500 mt-0.5">Deposit: {c.retainerDeposit}</span>
+                        <span className="font-semibold text-gray-900 text-xs tabular-nums">{c.totalFee} Total</span>
+                        <span className="text-[11px] text-gray-500 mt-0.5 tabular-nums">Deposit: {c.retainerDeposit}</span>
                       </div>
                     </td>
 
                     {/* Counsel */}
-                    <td className="py-4 px-4.5 align-middle whitespace-nowrap text-slate-700 font-medium text-xs">
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap text-gray-700 font-medium text-xs">
                       {c.assignedLawyer}
                     </td>
 
                     {/* Status */}
-                    <td className="py-4 px-4.5 align-middle whitespace-nowrap">
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                       {getStatusBadge(c.status)}
                     </td>
 
                     {/* Actions */}
                     <td
-                      className="py-4 px-4.5 text-right align-middle whitespace-nowrap pr-6"
+                      className="py-3.5 px-4 text-right align-middle whitespace-nowrap pr-5"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="flex items-center justify-end gap-2 shrink-0">
+                      <div className="flex items-center justify-end gap-1.5">
                         {/* Draft State Action */}
                         {c.status === "Draft" && (
                           <button
                             type="button"
                             onClick={() => handleDispatchContract(c.id)}
-                            className="px-3 py-1.5 rounded-lg bg-[#0A2342] text-white hover:bg-blue-900 text-xs font-semibold cursor-pointer transition-all shadow-xs inline-flex items-center gap-1.5 shrink-0"
+                            className="px-2.5 py-1 rounded-md bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0 shadow-2xs"
                           >
                             <Send className="w-3.5 h-3.5" />
                             Dispatch
@@ -490,7 +487,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           <button
                             type="button"
                             onClick={() => showToast(`Signing link resent to ${c.clientPhone}.`)}
-                            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1.5 shrink-0"
+                            className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0"
                           >
                             Resend SMS
                           </button>
@@ -501,7 +498,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           <button
                             type="button"
                             onClick={() => handleCountersign(c.id)}
-                            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer transition-all shadow-xs inline-flex items-center gap-1.5 shrink-0"
+                            className="px-2.5 py-1 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0 shadow-2xs"
                           >
                             <PenTool className="w-3.5 h-3.5" />
                             Countersign
@@ -513,7 +510,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           <button
                             type="button"
                             onClick={() => setCertificateContract(c)}
-                            className="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold cursor-pointer transition-all inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
+                            className="px-2 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/70 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0"
                             title="Inspect forensic audit signature certificate (SHA-256 / IP proof)"
                           >
                             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -525,10 +522,10 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                         <button
                           type="button"
                           onClick={() => setSelectedContract(c)}
-                          className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 text-xs font-medium cursor-pointer transition-all inline-flex items-center justify-center shrink-0 shadow-2xs"
+                          className="p-1 rounded-md bg-white hover:bg-gray-100 text-gray-500 hover:text-gray-900 border border-gray-200/80 text-xs font-medium cursor-pointer transition-colors inline-flex items-center justify-center shrink-0"
                           title="View contract details and milestones"
                         >
-                          <Eye className="w-3.5 h-3.5 text-slate-500" />
+                          <Eye className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -540,9 +537,9 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
         </div>
 
         {/* Table Footer */}
-        <div className="bg-[#F8FAFC] border-t border-slate-200/80 px-5 py-3.5 flex items-center justify-between text-xs text-slate-500 mt-auto">
-          <span>Showing <strong className="text-slate-800">{filteredContracts.length}</strong> of {contracts.length} legal fee agreements</span>
-          <span className="font-semibold text-[#0A2342]">Med Jordan Law Practice Management (Page 10)</span>
+        <div className="bg-gray-50/70 border-t border-gray-200/80 px-5 py-3 flex items-center justify-between text-xs text-gray-500 mt-auto">
+          <span>Showing <strong className="text-gray-900 font-semibold">{filteredContracts.length}</strong> of {contracts.length} legal fee agreements</span>
+          <span className="font-semibold text-gray-700">Med Jordan Law Practice Management (Page 10)</span>
         </div>
       </div>
 
@@ -621,26 +618,26 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
               {/* Payment Milestones Table */}
               <div className="space-y-2">
-                <span className="text-[11px] font-bold text-[#0A2342] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-[11px] font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                  Scheduled Fee Payment Milestones (Page 10)
+                  Scheduled Fee Payment Milestones
                 </span>
-                <div className="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+                <div className="border border-slate-200/80 rounded-xl overflow-hidden">
                   <table className="w-full text-left border-collapse">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-[10.5px] font-bold text-slate-500 uppercase">
+                    <thead className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                       <tr>
-                        <th className="py-2 px-3">#</th>
-                        <th className="py-2 px-3">Milestone Deliverable</th>
-                        <th className="py-2 px-3 text-right">Amount</th>
-                        <th className="py-2 px-3">Due Condition / Trigger</th>
+                        <th className="py-2.5 px-3">#</th>
+                        <th className="py-2.5 px-3">Milestone Deliverable</th>
+                        <th className="py-2.5 px-3 text-right">Amount</th>
+                        <th className="py-2.5 px-3">Due Condition / Trigger</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-xs">
                       {selectedContract.paymentMilestones.map((m, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50/60">
-                          <td className="py-2.5 px-3 font-mono text-slate-400 font-bold">{idx + 1}</td>
+                        <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-2.5 px-3 font-mono text-slate-400 font-medium">{idx + 1}</td>
                           <td className="py-2.5 px-3 font-medium text-slate-800">{m.description}</td>
-                          <td className="py-2.5 px-3 text-right font-mono font-bold text-[#0A2342]">{m.amount}</td>
+                          <td className="py-2.5 px-3 text-right font-mono font-semibold text-slate-900">{m.amount}</td>
                           <td className="py-2.5 px-3 text-slate-500 text-[11px]">{m.dueTrigger}</td>
                         </tr>
                       ))}

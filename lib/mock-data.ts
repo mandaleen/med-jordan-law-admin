@@ -390,11 +390,18 @@ export const NAV_GENERAL_ITEMS: NavItem[] = [
   { id: "logout", label: "Logout", icon: "LogOut", href: "#" },
 ];
 
-export const CURRENT_USER = {
+export interface UserProfile {
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+}
+
+export const CURRENT_USER: UserProfile = {
   name: "Tariq Qudah",
   email: "t.qudah@medjordanlaw.com",
   role: "Senior Partner",
-  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256&h=256",
+  avatar: "/avatars/tariq-qudah.jpg",
 };
 
 // ==========================================
@@ -1349,7 +1356,7 @@ export const INITIAL_SETTINGS: OfficeSettings = {
       name: "Tariq Qudah",
       role: "Senior Partner",
       email: "t.qudah@medjordanlaw.com",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256&h=256",
+      avatar: "/avatars/tariq-qudah.jpg",
       twoFactorEnabled: true,
       activeCases: 14,
     },

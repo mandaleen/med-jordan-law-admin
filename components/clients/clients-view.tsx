@@ -58,37 +58,37 @@ export function ClientsView() {
       {!selectedClient ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Header */}
-          <div className="apple-table-card p-4 flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
-            <div className="flex items-center gap-3.5 w-full md:w-auto">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-navy-900 to-navy-950 text-white flex items-center justify-center font-bold shadow-sm ring-1 ring-black/5">
-                <Users className="w-5 h-5 text-navy-200" />
+          <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="w-9 h-9 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold shrink-0">
+                <Users className="w-4 h-4 text-navy-900" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-[17px] font-bold text-navy-900 tracking-tight">Clients Directory</h2>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-navy-50 text-navy-600 border border-navy-200/50">
+                  <h2 className="text-sm font-semibold text-gray-900 tracking-tight">Clients Directory</h2>
+                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 border border-gray-200/60">
                     {clients.length} Accounts
                   </span>
                 </div>
-                <p className="text-[12px] text-slate-500">Account layer connecting bookings, active cases & signed agreements</p>
+                <p className="text-xs text-gray-500">Account layer connecting bookings, active cases & signed agreements</p>
               </div>
             </div>
 
             {/* Search Box */}
             <div className="relative min-w-[280px] w-full md:w-auto">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-3.5 h-3.5 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search by name, company, national ID, phone..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full ps-8 pe-7 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 placeholder:text-slate-400 transition-all text-start"
+                className="w-full ps-8 pe-7 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-900 placeholder:text-gray-400 transition-colors text-start"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute end-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  className="absolute end-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                   aria-label="Clear search"
                 >
                   <X className="w-3 h-3" />
@@ -98,32 +98,32 @@ export function ClientsView() {
           </div>
 
           {/* Directory Table */}
-          <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+          <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
             <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar min-h-0">
-              <table className="w-full text-start border-collapse table-fixed min-w-[1240px]">
+              <table className="w-full text-start border-collapse table-fixed min-w-[1250px]">
                 <colgroup>
-                  <col className="w-[240px]" />
+                  <col className="w-[230px]" />
                   <col className="w-[200px]" />
-                  <col className="w-[150px]" />
+                  <col className="w-[145px]" />
                   <col className="w-[130px]" />
+                  <col className="w-[135px]" />
                   <col className="w-[130px]" />
-                  <col className="w-[130px]" />
-                  <col className="w-[130px]" />
-                  <col className="w-[130px]" />
+                  <col className="w-[135px]" />
+                  <col className="w-[145px]" />
                 </colgroup>
-                <thead className="sticky top-0 z-10 shadow-xs">
-                  <tr className="bg-gray-50 border-b border-slate-200/80">
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Client / Entity</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Contact Details</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">National ID / Reg</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Active Matters</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Bookings</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Total Billed</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Status</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end pe-6">Action</th>
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Client / Entity</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Contact Details</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">National ID / Reg</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Active Matters</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Bookings</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Total Billed</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-start">Status</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-end pe-5">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-xs">
+                <tbody className="divide-y divide-gray-100 text-xs">
                   {filteredClients.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="py-14 text-center">
@@ -145,83 +145,83 @@ export function ClientsView() {
                       <tr
                         key={client.id}
                         onClick={() => setSelectedClientId(client.id)}
-                        className="hover:bg-slate-50/80 transition-colors duration-150 cursor-pointer group"
+                        className="hover:bg-gray-50/60 transition-colors cursor-pointer group"
                       >
                         {/* 1. Client / Entity */}
-                        <td className="py-4 px-4.5 align-middle text-start">
+                        <td className="py-3.5 px-4 align-middle text-start">
                           <div className="flex items-center gap-3">
-                            <Avatar className="w-8.5 h-8.5 rounded-full ring-2 ring-slate-100 shadow-xs shrink-0">
+                            <Avatar className="w-8 h-8 rounded-lg ring-1 ring-gray-200/80 shrink-0">
                               <AvatarImage src={client.avatar} alt={client.name} />
-                              <AvatarFallback className="bg-gradient-to-br from-navy-900 to-navy-800 text-white font-bold text-xs">
+                              <AvatarFallback className="bg-navy-950 text-white font-medium text-xs rounded-lg">
                                 {client.initials}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col min-w-0 pe-2">
-                              <span className="font-semibold text-navy-900 text-[13px] group-hover:text-navy-600 transition-colors truncate block leading-tight">
+                              <span className="font-semibold text-gray-900 text-xs group-hover:text-navy-700 transition-colors truncate block leading-tight">
                                 {client.name}
                               </span>
                               {client.company ? (
-                                <span className="text-[11px] text-slate-400 truncate block mt-0.5">
+                                <span className="text-[11px] text-gray-400 truncate block mt-0.5">
                                   {client.company}
                                 </span>
                               ) : (
-                                <span className="text-[11px] text-slate-400">Individual Client</span>
+                                <span className="text-[11px] text-gray-400">Individual Client</span>
                               )}
                             </div>
                           </div>
                         </td>
 
                         {/* 2. Contact Info */}
-                        <td className="py-4 px-4.5 align-middle text-start">
+                        <td className="py-3.5 px-4 align-middle text-start">
                           <div className="flex flex-col min-w-0">
-                            <span className="font-mono text-slate-700 font-medium text-[11.5px] truncate">
+                            <span className="font-mono text-gray-700 font-medium text-[11px] truncate">
                               {client.phone}
                             </span>
-                            <span className="text-[11px] text-slate-400 truncate mt-0.5">
+                            <span className="text-[11px] text-gray-400 truncate mt-0.5">
                               {client.email}
                             </span>
                           </div>
                         </td>
 
                         {/* 3. National ID */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
-                          <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100/90 text-slate-700 border border-slate-200/60 inline-block shadow-2xs">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
+                          <span className="font-mono text-xs font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-800 border border-gray-200/60 inline-block">
                             {client.nationalId}
                           </span>
                         </td>
 
                         {/* 4. Active Cases */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-800 font-semibold text-xs border border-blue-200/70 shadow-2xs">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50/70 text-blue-800 font-medium text-xs border border-blue-200/50">
                             <Briefcase className="w-3 h-3 text-blue-600" />
                             {client.activeCasesCount} Cases
                           </span>
                         </td>
 
                         {/* 5. Bookings */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
-                          <span className="text-slate-600 font-medium inline-flex items-center gap-1">
-                            <Calendar className="w-3 h-3 text-slate-400" />
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
+                          <span className="text-gray-600 font-medium inline-flex items-center gap-1">
+                            <Calendar className="w-3 h-3 text-gray-400" />
                             {client.lifetimeBookingsCount} Consultations
                           </span>
                         </td>
 
                         {/* 6. Total Billed */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
-                          <span className="font-mono font-bold text-navy-900 text-[13px] tabular-nums">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
+                          <span className="font-mono font-semibold text-gray-900 text-xs tabular-nums">
                             {client.totalBilled}
                           </span>
                         </td>
 
                         {/* 7. Status */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap text-start">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border shadow-xs ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                               client.status === "Retained"
-                                ? "bg-emerald-50 text-emerald-800 border-emerald-200/80"
+                                ? "bg-emerald-50/80 text-emerald-800 border-emerald-200/60"
                                 : client.status === "Active"
-                                ? "bg-blue-50 text-blue-800 border-blue-200/80"
-                                : "bg-slate-100 text-slate-600 border-slate-200"
+                                ? "bg-blue-50/80 text-blue-800 border-blue-200/60"
+                                : "bg-gray-100/80 text-gray-600 border-gray-200/60"
                             }`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${
@@ -229,19 +229,19 @@ export function ClientsView() {
                                 ? "bg-emerald-500"
                                 : client.status === "Active"
                                 ? "bg-blue-500"
-                                : "bg-slate-400"
+                                : "bg-gray-400"
                             }`} />
                             {client.status}
                           </span>
                         </td>
 
                         {/* 8. Profile Action */}
-                        <td className="py-4 px-4.5 text-end align-middle whitespace-nowrap pe-6">
+                        <td className="py-3.5 px-4 text-end align-middle whitespace-nowrap pe-5">
                           <button
                             type="button"
-                            className="px-3 py-1.5 rounded-lg bg-slate-100 group-hover:bg-navy-900 group-hover:text-white text-slate-700 text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5 ms-auto shadow-2xs"
+                            className="px-2.5 py-1 rounded-md bg-gray-100 group-hover:bg-navy-950 group-hover:text-white text-gray-700 text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1 ms-auto"
                           >
-                            Profile 360
+                            <span>Profile 360</span>
                             <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform" />
                           </button>
                         </td>
@@ -253,7 +253,7 @@ export function ClientsView() {
             </div>
 
             {/* Table Footer Summary Strip */}
-            <div className="bg-gray-50 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
+            <div className="bg-gray-50/70 border-t border-gray-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 mt-auto shrink-0">
               <div className="flex items-center gap-4">
                 <span>Showing <strong className="text-slate-800">{filteredClients.length}</strong> of {clients.length} client accounts</span>
                 <span className="hidden sm:inline text-slate-300">•</span>

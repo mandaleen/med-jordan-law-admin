@@ -250,9 +250,16 @@ export function CaseDetail({
 
           {/* Documents Table */}
           <div className="overflow-x-auto custom-scrollbar">
-            <table className="w-full text-left border-collapse text-xs min-w-[780px]">
+            <table className="w-full text-left border-collapse table-fixed text-xs min-w-[860px]">
+              <colgroup>
+                <col className="w-[260px]" />
+                <col className="w-[140px]" />
+                <col className="w-[90px]" />
+                <col className="w-[210px]" />
+                <col className="w-[160px]" />
+              </colgroup>
               <thead>
-                <tr className="border-b border-gray-200 text-[11px] font-bold uppercase text-gray-400 bg-gray-50/50">
+                <tr className="border-b border-slate-200/80 text-[11px] font-semibold uppercase tracking-wider text-slate-500 bg-slate-50/80">
                   <th className="py-3 px-4">Document Title</th>
                   <th className="py-3 px-4">Source Origin</th>
                   <th className="py-3 px-4">File Size</th>
@@ -260,70 +267,70 @@ export function CaseDetail({
                   <th className="py-3 px-4 text-right pr-5">Forensic Logs</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-100">
                 {filteredDocs.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-12 text-center text-gray-400">
+                    <td colSpan={5} className="py-12 text-center text-slate-400">
                       No documents found in this category.
                     </td>
                   </tr>
                 ) : (
                   filteredDocs.map((doc) => (
-                    <tr key={doc.id} className="hover:bg-gray-50/70 transition-colors">
+                    <tr key={doc.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8.5 h-8.5 rounded-lg bg-gray-100 flex items-center justify-center text-navy-900 shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
                             <FileText className="w-4 h-4" />
                           </div>
-                          <div>
-                            <span className="font-bold text-navy-900 block">{doc.title}</span>
-                            <span className="text-[10px] text-gray-400 mt-0.5 block">Uploaded {doc.uploadDate}</span>
+                          <div className="min-w-0">
+                            <span className="font-medium text-slate-900 block truncate">{doc.title}</span>
+                            <span className="text-[11px] text-slate-400 mt-0.5 block">Uploaded {doc.uploadDate}</span>
                           </div>
                         </div>
                       </td>
 
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold border ${
+                          className={`inline-block px-2 py-0.5 rounded-md text-[11px] font-medium border ${
                             doc.type === "Client Upload"
-                              ? "bg-purple-50 text-purple-800 border-purple-200"
-                              : "bg-navy-50 text-navy-900 border-navy-200"
+                              ? "bg-purple-50 text-purple-700 border-purple-200/60"
+                              : "bg-slate-50 text-slate-700 border-slate-200/70"
                           }`}
                         >
                           {doc.type}
                         </span>
                       </td>
 
-                      <td className="py-3.5 px-4 font-mono text-gray-600">{doc.size}</td>
+                      <td className="py-3.5 px-4 font-mono text-slate-600">{doc.size}</td>
 
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 whitespace-nowrap">
                         {doc.status === "Validated" && (
-                          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
                             <FileCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                             Security Validated
                           </span>
                         )}
                         {doc.status === "Pending" && (
-                          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-700 bg-amber-50 border border-amber-200/60 px-2.5 py-0.5 rounded-full">
                             <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                             Pending Counsel Audit
                           </span>
                         )}
                         {doc.status === "Rejected" && (
-                          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-700 bg-rose-50 border border-rose-200/60 px-2.5 py-0.5 rounded-full">
                             <FileX className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                            Rejected (Re-upload requested)
+                            Rejected (Re-upload)
                           </span>
                         )}
                       </td>
 
-                      <td className="py-3.5 px-4 text-right pr-5">
+                      <td className="py-3.5 px-4 text-right pr-5 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => onAuditDocClick(doc)}
-                          className="px-3 py-1.5 text-xs font-semibold text-navy-900 hover:bg-navy-50 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 border border-slate-200 shadow-2xs"
+                          className="px-2.5 py-1 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 rounded-md transition-colors cursor-pointer inline-flex items-center gap-1.5 border border-slate-200 shadow-none"
                         >
-                          <ShieldAlert className="w-3.5 h-3.5 text-navy-600 shrink-0" />
+                          <ShieldAlert className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                           View Audit Trail
                         </button>
                       </td>

@@ -173,41 +173,47 @@ export function FinanceView() {
       {/* REVENUE SUMMARY METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Gross Volume */}
-        <div className="apple-obsidian-card p-5 text-white rounded-xl flex flex-col justify-between min-h-[140px]">
-          <div className="flex items-center justify-between text-xs text-white/70">
-            <span className="font-semibold uppercase tracking-wider">Gross Volume</span>
-            <DollarSign className="w-4 h-4 text-blue-300" />
+        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
+          <div className="flex items-center justify-between text-xs text-slate-500">
+            <span className="font-semibold uppercase tracking-wider text-[11px]">Gross Volume</span>
+            <span className="p-2 rounded-lg bg-slate-50 text-slate-600">
+              <DollarSign className="w-4 h-4" />
+            </span>
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight my-2">
+          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2">
             ${totalGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-blue-200 font-medium whitespace-nowrap">
+          <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium whitespace-nowrap">
             <TrendingUp className="w-3.5 h-3.5 shrink-0" />
             <span className="whitespace-nowrap truncate">+24.6% vs previous period</span>
           </div>
         </div>
 
         {/* Net Settled Payouts */}
-        <div className="apple-glass-card p-5 rounded-xl flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider">Net Office Payout</span>
-            <ArrowDownLeft className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span className="font-semibold uppercase tracking-wider text-[11px]">Net Office Payout</span>
+            <span className="p-2 rounded-lg bg-slate-50 text-emerald-600">
+              <ArrowDownLeft className="w-4 h-4" />
+            </span>
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
+          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
             ${totalNet.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
-          <span className="text-[11px] text-emerald-700 font-semibold whitespace-nowrap truncate">
+          <span className="text-[11px] text-emerald-600 font-medium whitespace-nowrap truncate">
             ✓ Available for firm distribution
           </span>
         </div>
 
         {/* Gateway Processing Fees */}
-        <div className="apple-glass-card p-5 rounded-xl flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider">Gateway Fees (2.5%)</span>
-            <CreditCard className="w-4 h-4 text-blue-600 shrink-0" />
+            <span className="font-semibold uppercase tracking-wider text-[11px]">Gateway Fees (2.5%)</span>
+            <span className="p-2 rounded-lg bg-slate-50 text-slate-600">
+              <CreditCard className="w-4 h-4" />
+            </span>
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
+          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
             ${totalGatewayFees.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
           <span className="text-[11px] text-slate-400 whitespace-nowrap truncate">
@@ -216,12 +222,14 @@ export function FinanceView() {
         </div>
 
         {/* Total Refunded */}
-        <div className="apple-glass-card p-5 rounded-xl flex flex-col justify-between min-h-[140px]">
+        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider">Total Refunded</span>
-            <RotateCcw className="w-4 h-4 text-rose-600 shrink-0" />
+            <span className="font-semibold uppercase tracking-wider text-[11px]">Total Refunded</span>
+            <span className="p-2 rounded-lg bg-rose-50 text-rose-600">
+              <RotateCcw className="w-4 h-4" />
+            </span>
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight text-rose-600 my-2 whitespace-nowrap">
+          <div className="text-2xl font-bold font-mono tracking-tight text-slate-700 my-2 whitespace-nowrap">
             ${totalRefunded.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
           <span className="text-[11px] text-slate-400 whitespace-nowrap truncate">
@@ -234,16 +242,16 @@ export function FinanceView() {
       <FinanceCharts dateRange={dateRange} lawyerAttribution={lawyerAttribution} />
 
       {/* TRANSACTIONS TABLE */}
-      <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex-1 flex flex-col min-h-[460px] overflow-hidden">
         <div className="p-4 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white shrink-0">
           <div>
-            <h3 className="text-sm font-bold text-navy-900">Gateway Transactions Ledger</h3>
+            <h3 className="text-sm font-semibold text-navy-900">Gateway Transactions Ledger</h3>
             <p className="text-xs text-slate-500">Every gateway transaction auto-logged with per-row refund actions</p>
           </div>
           <button
             type="button"
             onClick={() => showToast("Exporting transactions CSV...")}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs self-start sm:self-auto"
+            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors shadow-none self-start sm:self-auto"
           >
             <Download className="w-3.5 h-3.5" />
             Export Statement
@@ -251,31 +259,31 @@ export function FinanceView() {
         </div>
 
         <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar min-h-0">
-          <table className="w-full text-start border-collapse table-fixed min-w-[1420px]">
+          <table className="w-full text-start border-collapse table-fixed min-w-[1400px]">
             <colgroup>
               <col className="w-[130px]" />
-              <col className="w-[180px]" />
-              <col className="w-[220px]" />
+              <col className="w-[170px]" />
+              <col className="w-[210px]" />
               <col className="w-[130px]" />
-              <col className="w-[110px]" />
-              <col className="w-[110px]" />
-              <col className="w-[120px]" />
-              <col className="w-[110px]" />
+              <col className="w-[100px]" />
+              <col className="w-[105px]" />
+              <col className="w-[115px]" />
+              <col className="w-[100px]" />
               <col className="w-[130px]" />
-              <col className="w-[180px]" />
+              <col className="w-[210px]" />
             </colgroup>
-            <thead className="sticky top-0 z-10 shadow-xs">
-              <tr className="bg-gray-50 border-b border-slate-200/80">
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Transaction ID</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Client</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Service & Counsel</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Date & Time</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Gross</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Gateway Fee</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Net Payout</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Method</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Status</th>
-                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end pe-6">Actions</th>
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-slate-50/80 border-b border-slate-200/80">
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Transaction ID</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Client</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Service & Counsel</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Date & Time</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Gross</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Gateway Fee</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Net Payout</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Method</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Status</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end pe-5">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
@@ -297,37 +305,37 @@ export function FinanceView() {
                 </tr>
               ) : (
                 filteredTransactions.map((txn) => (
-                  <tr key={txn.id} className="hover:bg-slate-50/80 transition-colors duration-150">
+                  <tr key={txn.id} className="hover:bg-slate-50/60 transition-colors duration-150">
                     {/* 1. Txn ID */}
-                    <td className="py-4 px-4.5 font-mono font-semibold text-navy-900 text-xs whitespace-nowrap align-middle text-start">
-                      <span className="px-2 py-0.5 rounded-md bg-slate-100/90 border border-slate-200/60 inline-block shadow-2xs">
+                    <td className="py-3.5 px-4 font-mono font-medium text-navy-900 text-xs whitespace-nowrap align-middle text-start">
+                      <span className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/70 inline-block">
                         {txn.txnRef}
                       </span>
                     </td>
 
                     {/* 2. Client */}
-                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle text-start">
                       <div className="flex items-center gap-2.5">
-                        <Avatar className="w-7 h-7 rounded-full ring-2 ring-slate-100 shadow-xs shrink-0">
+                        <Avatar className="w-7 h-7 rounded-full ring-1 ring-slate-200 shrink-0">
                           <AvatarImage src={txn.clientAvatar} alt={txn.clientName} />
-                          <AvatarFallback className="bg-gradient-to-br from-navy-900 to-navy-800 text-white font-bold text-[10px]">
+                          <AvatarFallback className="bg-slate-800 text-white font-medium text-[10px]">
                             {txn.clientInitials}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-semibold text-slate-800 text-xs truncate max-w-[130px]">{txn.clientName}</span>
+                        <span className="font-medium text-slate-900 text-xs truncate max-w-[120px]">{txn.clientName}</span>
                       </div>
                     </td>
 
                     {/* 3. Service */}
-                    <td className="py-4 px-4.5 align-middle text-start">
+                    <td className="py-3.5 px-4 align-middle text-start">
                       <div className="flex flex-col min-w-0 pe-2">
-                        <span className="font-semibold text-navy-900 text-[12.5px] truncate leading-tight">{txn.service}</span>
-                        <span className="text-[10.5px] text-slate-400 truncate mt-0.5">Counsel: {txn.lawyerName}</span>
+                        <span className="font-medium text-slate-900 text-xs truncate leading-tight">{txn.service}</span>
+                        <span className="text-[11px] text-slate-400 truncate mt-0.5">Counsel: {txn.lawyerName}</span>
                       </div>
                     </td>
 
                     {/* 4. Date & Time */}
-                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle text-start">
                       <div className="flex flex-col font-mono">
                         <span className="font-medium text-slate-700 text-xs">{txn.date}</span>
                         <span className="text-[10px] text-slate-400">{txn.time}</span>
@@ -335,36 +343,36 @@ export function FinanceView() {
                     </td>
 
                     {/* 5. Gross */}
-                    <td className="py-4 px-4.5 font-mono font-semibold text-slate-800 whitespace-nowrap text-end align-middle text-xs tabular-nums">
+                    <td className="py-3.5 px-4 font-mono font-medium text-slate-800 whitespace-nowrap text-end align-middle text-xs tabular-nums">
                       ${txn.grossAmount.toFixed(2)}
                     </td>
 
                     {/* 6. Gateway Fee */}
-                    <td className="py-4 px-4.5 text-slate-500 font-mono text-xs whitespace-nowrap text-end align-middle tabular-nums">
+                    <td className="py-3.5 px-4 text-slate-500 font-mono text-xs whitespace-nowrap text-end align-middle tabular-nums">
                       -${txn.gatewayFee.toFixed(2)}
                     </td>
 
                     {/* 7. Net Payout */}
-                    <td className="py-4 px-4.5 font-bold text-emerald-700 font-mono whitespace-nowrap text-end align-middle text-[12.5px] tabular-nums">
+                    <td className="py-3.5 px-4 font-semibold text-emerald-600 font-mono whitespace-nowrap text-end align-middle text-xs tabular-nums">
                       ${txn.netAmount.toFixed(2)}
                     </td>
 
                     {/* 8. Method */}
-                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
-                      <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10.5px] font-medium border border-slate-200/60 inline-block shadow-2xs">
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle text-start">
+                      <span className="px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[11px] font-medium border border-slate-200/70 inline-block">
                         {txn.paymentMethod}
                       </span>
                     </td>
 
                     {/* 9. Status */}
-                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle text-start">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold border shadow-xs ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
                           txn.status === "Settled"
-                            ? "bg-emerald-50 text-emerald-800 border-emerald-200/80"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200/60"
                             : txn.status === "Refunded"
-                            ? "bg-rose-50 text-rose-800 border-rose-200/80"
-                            : "bg-amber-50 text-amber-800 border-amber-200/80"
+                            ? "bg-rose-50 text-rose-700 border-rose-200/60"
+                            : "bg-amber-50 text-amber-700 border-amber-200/60"
                         }`}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${
@@ -379,8 +387,8 @@ export function FinanceView() {
                     </td>
 
                     {/* 10. Actions per row */}
-                    <td className="py-4 px-4.5 text-end whitespace-nowrap align-middle pe-6">
-                      <div className="flex items-center justify-end gap-2 shrink-0">
+                    <td className="py-3.5 px-4 text-end whitespace-nowrap align-middle pe-5">
+                      <div className="flex items-center justify-end gap-1.5 shrink-0 flex-nowrap">
                         <button
                           type="button"
                           onClick={() =>
@@ -399,9 +407,9 @@ export function FinanceView() {
                               status: txn.status === "Settled" ? "Settled" : "Refunded",
                             })
                           }
-                          className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-navy-900 hover:text-white text-slate-700 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1.5 shrink-0"
+                          className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors inline-flex items-center gap-1.5 shrink-0 cursor-pointer shadow-none"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-3.5 h-3.5 text-slate-500" />
                           Invoice
                         </button>
 
@@ -409,13 +417,13 @@ export function FinanceView() {
                           <button
                             type="button"
                             onClick={() => setRefundTxn(txn)}
-                            className="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1.5 shrink-0"
+                            className="px-2.5 py-1 rounded-md bg-white border border-slate-200 text-rose-600 text-xs font-medium hover:bg-rose-50 hover:border-rose-300 transition-colors inline-flex items-center gap-1.5 shrink-0 cursor-pointer shadow-none"
                           >
                             <RotateCcw className="w-3.5 h-3.5 text-rose-500" />
                             Refund
                           </button>
                         ) : (
-                          <span className="text-[11px] text-slate-400 font-mono inline-flex items-center gap-1 shrink-0">
+                          <span className="text-xs text-slate-400 font-mono inline-flex items-center gap-1 shrink-0 px-1">
                             <CheckCircle2 className="w-3 h-3 text-slate-300" />
                             {txn.status === "Refunded" ? "Reversed" : "Processed"}
                           </span>
@@ -430,7 +438,7 @@ export function FinanceView() {
         </div>
 
         {/* Table Footer Summary Strip */}
-        <div className="bg-gray-50 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
+        <div className="bg-slate-50/80 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
           <div className="flex items-center gap-4">
             <span>Showing <strong className="text-slate-800">{filteredTransactions.length}</strong> transactions</span>
             <span className="hidden sm:inline text-slate-300">•</span>

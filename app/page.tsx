@@ -26,12 +26,17 @@ function DashboardContent() {
     setActiveCardId,
     lang,
     toggleLang,
+    setLang,
     t,
     stats,
     notifications,
     markNotificationsRead,
     addBooking,
     toastMessage,
+    currentUser,
+    updateUserAvatar,
+    resetUserAvatar,
+    showToast,
   } = usePractice();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -63,8 +68,13 @@ function DashboardContent() {
         onMarkNotificationsRead={markNotificationsRead}
         currentLang={lang}
         onToggleLang={toggleLang}
+        onSelectLang={setLang}
         isOpenMobile={isMobileMenuOpen}
         onCloseMobile={() => setIsMobileMenuOpen(false)}
+        currentUser={currentUser}
+        onUpdateAvatar={updateUserAvatar}
+        onResetAvatar={resetUserAvatar}
+        showToast={showToast}
       />
 
       {/* Main Content Area */}

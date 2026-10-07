@@ -63,13 +63,13 @@ export function CasesView() {
         /* LIST VIEW: CASheader & Table Directory */
         <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Header & Filter Bar */}
-          <div className="apple-glass-card p-3.5 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+          <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-navy-50 text-navy-900 border border-navy-200 flex items-center justify-center font-bold shadow-2xs shrink-0">
-                <Briefcase className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold shrink-0">
+                <Briefcase className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-navy-900 tracking-tight">Active Litigation & Matter Files</h2>
+                <h2 className="text-sm font-semibold text-gray-900 tracking-tight">Active Litigation & Matter Files</h2>
                 <p className="text-xs text-gray-500">
                   Comprehensive court docket tracking, encrypted vaults, and judicial hearings
                 </p>
@@ -79,20 +79,20 @@ export function CasesView() {
             {/* Actions & Filters */}
             <div className="flex flex-wrap items-center gap-2">
               <div className="relative min-w-[200px] flex-1 sm:flex-none">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search docket, client or lawyer..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-gray-900 placeholder:text-gray-400 transition-all"
+                  className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
                 />
               </div>
 
               <select
                 value={stageFilter}
                 onChange={(e) => setStageFilter(e.target.value)}
-                className="px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 font-medium cursor-pointer"
+                className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
               >
                 <option value="all">All Stages</option>
                 <option value="intake">Intake</option>
@@ -106,16 +106,16 @@ export function CasesView() {
               <button
                 type="button"
                 onClick={() => setIsNewCaseModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer whitespace-nowrap shrink-0"
+                className="px-3.5 py-1.5 rounded-lg bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
-                Open Case Matter
+                <span>Open Case Matter</span>
               </button>
             </div>
           </div>
 
           {/* Cases Table */}
-          <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+          <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
             <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
               <table className="w-full text-left border-collapse table-fixed min-w-[1220px]">
                 <colgroup>
@@ -128,14 +128,14 @@ export function CasesView() {
                   <col className="w-[115px]" />
                 </colgroup>
                 <thead className="sticky top-0 z-10">
-                  <tr className="bg-gray-50 border-b border-gray-300/80 shadow-2xs">
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Case Number</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Matter Title & Client</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Lead Counsel</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Stage / Status</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Vault Documents</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500">Last Activity</th>
-                    <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-gray-500 text-right pr-6">Action</th>
+                  <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Case Number</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Matter Title & Client</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Lead Counsel</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Stage / Status</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Vault Documents</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Last Activity</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-xs">
@@ -167,64 +167,77 @@ export function CasesView() {
                       <tr
                         key={c.id}
                         onClick={() => setSelectedCaseId(c.id)}
-                        className="hover:bg-gray-50/80 transition-colors duration-150 cursor-pointer group"
+                        className="hover:bg-gray-50/60 transition-colors cursor-pointer group"
                       >
                         {/* 1. Case Number */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap">
-                          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-gray-100 text-navy-900 border border-gray-300 inline-block shadow-2xs">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="font-mono text-xs font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-900 border border-gray-200/60 inline-block">
                             {c.caseNumber}
                           </span>
                         </td>
 
                         {/* 2. Matter Title & Client */}
-                        <td className="py-4 px-4.5 align-middle">
+                        <td className="py-3.5 px-4 align-middle">
                           <div className="flex flex-col min-w-0 pr-2">
-                            <span className="font-bold text-navy-900 group-hover:text-navy-600 transition-colors text-xs line-clamp-1">
+                            <span className="font-semibold text-gray-900 group-hover:text-navy-700 transition-colors text-xs line-clamp-1">
                               {c.title}
                             </span>
                             <span className="text-[11px] text-gray-500 truncate mt-0.5">
-                              Client: <strong className="text-gray-700">{c.clientName}</strong> · {c.practiceArea}
+                              Client: <strong className="text-gray-700 font-medium">{c.clientName}</strong> · {c.practiceArea}
                             </span>
                           </div>
                         </td>
 
                         {/* 3. Lead Counsel */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap">
-                          <span className="text-xs font-semibold text-gray-800">{c.assignedLawyer}</span>
-                          <span className="block text-[10px] text-gray-400">Senior Chambers</span>
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="text-xs font-medium text-gray-900">{c.assignedLawyer}</span>
+                          <span className="block text-[11px] text-gray-400 mt-0.5">Senior Chambers</span>
                         </td>
 
                         {/* 4. Stage / Status */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider ${
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                               c.statusStage === "Intake"
-                                ? "bg-purple-100 text-purple-800 border border-purple-200"
+                                ? "bg-purple-50/80 text-purple-800 border-purple-200/60"
                                 : c.statusStage === "Discovery"
-                                ? "bg-blue-100 text-blue-800 border border-blue-200"
+                                ? "bg-blue-50/80 text-blue-800 border-blue-200/60"
                                 : c.statusStage === "Pleadings"
-                                ? "bg-amber-100 text-amber-800 border border-amber-200"
+                                ? "bg-amber-50/80 text-amber-900 border-amber-200/70"
                                 : c.statusStage === "Hearings"
-                                ? "bg-rose-100 text-rose-800 border border-rose-200"
-                                : "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                ? "bg-rose-50/80 text-rose-800 border-rose-200/60"
+                                : "bg-emerald-50/80 text-emerald-800 border-emerald-200/60"
                             }`}
                           >
-                            {c.statusStage}
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                c.statusStage === "Intake"
+                                  ? "bg-purple-500"
+                                  : c.statusStage === "Discovery"
+                                  ? "bg-blue-500"
+                                  : c.statusStage === "Pleadings"
+                                  ? "bg-amber-500"
+                                  : c.statusStage === "Hearings"
+                                  ? "bg-rose-500"
+                                  : "bg-emerald-500"
+                              }`}
+                            />
+                            <span>{c.statusStage}</span>
                           </span>
                         </td>
 
                         {/* 5. Vault Documents */}
-                        <td className="py-4 px-4.5 align-middle whitespace-nowrap">
-                          <span className="text-xs font-medium text-gray-700">
+                        <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                          <span className="text-xs font-medium text-gray-800">
                             <strong>{c.documents.length}</strong> authenticated files
                           </span>
-                          <span className="block text-[10px] text-gray-400">
+                          <span className="block text-[10.5px] text-gray-400 mt-0.5">
                             {c.documents.filter((d) => d.status === "Validated").length} validated
                           </span>
                         </td>
 
                         {/* 6. Last Activity */}
-                        <td className="py-4 px-4.5 align-middle">
+                        <td className="py-3.5 px-4 align-middle">
                           <div className="flex items-center gap-1.5 text-gray-500 text-[11px]">
                             <Clock className="w-3.5 h-3.5 shrink-0 text-gray-400" />
                             <span className="truncate">{c.lastActivity}</span>
@@ -232,17 +245,17 @@ export function CasesView() {
                         </td>
 
                         {/* 7. Action Button */}
-                        <td className="py-4 px-4.5 align-middle text-right whitespace-nowrap pr-6">
+                        <td className="py-3.5 px-4 align-middle text-right whitespace-nowrap pr-5">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedCaseId(c.id);
                             }}
-                            className="p-1.5 rounded-lg bg-gray-100 hover:bg-navy-900 hover:text-white text-gray-600 transition-colors inline-flex items-center gap-1 cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-navy-950 hover:text-white text-gray-600 transition-colors inline-flex items-center gap-1 cursor-pointer text-xs font-medium"
                             title="Open Full Case Dossier"
                           >
-                            <span className="text-[11px] font-semibold hidden sm:inline px-1">View</span>
+                            <span>View</span>
                             <ChevronRight className="w-3.5 h-3.5" />
                           </button>
                         </td>
@@ -254,10 +267,10 @@ export function CasesView() {
             </div>
 
             {/* Table Footer Summary Strip */}
-            <div className="bg-gray-50 border-t border-gray-300/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 mt-auto shrink-0">
+            <div className="bg-gray-50/70 border-t border-gray-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 mt-auto shrink-0">
               <div className="flex items-center gap-4">
                 <span>
-                  Showing <strong className="text-navy-900">{filteredCases.length}</strong> of {cases.length} litigation matters
+                  Showing <strong className="text-gray-900 font-semibold">{filteredCases.length}</strong> of {cases.length} litigation matters
                 </span>
                 <span className="hidden sm:inline text-gray-300">•</span>
                 <span className="hidden sm:inline">

@@ -19,21 +19,21 @@ export function BookingsCalendar({ bookings, onSelectBooking }: BookingsCalendar
   ];
 
   return (
-    <div className="apple-glass-card p-5 rounded-xl flex flex-col gap-4 animate-in fade-in duration-200">
+    <div className="bg-white border border-gray-200/90 rounded-xl p-4 sm:p-5 flex flex-col gap-4 animate-in fade-in duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
         <div>
-          <h3 className="text-sm font-bold text-navy-900 whitespace-nowrap">Week of October 5 – October 11, 2026</h3>
+          <h3 className="text-sm font-semibold text-gray-900 whitespace-nowrap">Week of October 5 – October 11, 2026</h3>
           <p className="text-xs text-gray-500">Interactive consultation schedule across counsel roster</p>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="flex items-center gap-1 text-navy-700 font-medium whitespace-nowrap shrink-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-navy-600 shrink-0" /> Video Consultations
+          <span className="flex items-center gap-1.5 text-gray-600 font-medium whitespace-nowrap shrink-0">
+            <span className="w-2 h-2 rounded-full bg-navy-600 shrink-0" /> Video Consultations
           </span>
-          <span className="flex items-center gap-1 text-warning font-medium ml-2 whitespace-nowrap shrink-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-warning shrink-0" /> In-Person Sessions
+          <span className="flex items-center gap-1.5 text-gray-600 font-medium ml-2 whitespace-nowrap shrink-0">
+            <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> In-Person Sessions
           </span>
-          <span className="flex items-center gap-1 text-success font-medium ml-2 whitespace-nowrap shrink-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-success shrink-0" /> Phone Reviews
+          <span className="flex items-center gap-1.5 text-gray-600 font-medium ml-2 whitespace-nowrap shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> Phone Reviews
           </span>
         </div>
       </div>
@@ -49,17 +49,17 @@ export function BookingsCalendar({ bookings, onSelectBooking }: BookingsCalendar
                 key={col.dayKey}
                 className={`flex flex-col rounded-xl border p-3 min-h-[380px] ${
                   col.isToday
-                    ? "bg-navy-50/40 border-navy-300/80 shadow-xs"
-                    : "bg-white/80 border-gray-200"
+                    ? "bg-navy-50/30 border-navy-200/90 shadow-2xs"
+                    : "bg-white border-gray-200/80"
                 }`}
               >
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-200/80">
-                  <span className={`text-xs font-bold ${col.isToday ? "text-navy-900" : "text-gray-700"}`}>
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100">
+                  <span className={`text-xs font-semibold ${col.isToday ? "text-navy-950 font-bold" : "text-gray-700"}`}>
                     {col.dayName}
                   </span>
                   <span
                     className={`text-[11px] font-mono px-2 py-0.5 rounded-md ${
-                      col.isToday ? "bg-navy-900 text-white font-bold" : "text-gray-400 bg-gray-100"
+                      col.isToday ? "bg-navy-950 text-white font-medium" : "text-gray-400 bg-gray-100"
                     }`}
                   >
                     {col.dateStr}
@@ -84,19 +84,19 @@ export function BookingsCalendar({ bookings, onSelectBooking }: BookingsCalendar
                         <div
                           key={b.id}
                           onClick={() => onSelectBooking(b)}
-                          className="p-2.5 rounded-lg border bg-white border-gray-200 hover:border-navy-400 hover:shadow-xs transition-all cursor-pointer flex flex-col gap-1.5 text-xs group"
+                          className="p-2.5 rounded-lg border bg-white border-gray-200/80 hover:border-gray-400 hover:shadow-2xs transition-all cursor-pointer flex flex-col gap-1.5 text-xs group"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-navy-900 truncate group-hover:text-navy-600">
+                            <span className="font-semibold text-gray-900 truncate group-hover:text-navy-700">
                               {b.clientName}
                             </span>
                             <span
-                              className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase ${
+                              className={`text-[9px] font-medium px-1.5 py-0.2 rounded-full uppercase border ${
                                 b.status === "Confirmed"
-                                  ? "bg-emerald-100 text-emerald-800"
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200/60"
                                   : b.status === "Awaiting Acceptance"
-                                  ? "bg-amber-100 text-amber-800"
-                                  : "bg-gray-100 text-gray-600"
+                                  ? "bg-amber-50 text-amber-900 border-amber-200/70"
+                                  : "bg-gray-100 text-gray-600 border-gray-200/60"
                               }`}
                             >
                               {b.status === "Awaiting Acceptance" ? "Awaiting" : b.status}
@@ -113,7 +113,7 @@ export function BookingsCalendar({ bookings, onSelectBooking }: BookingsCalendar
                               <TypeIcon className="w-3 h-3 text-navy-600 shrink-0" />
                               <span className="truncate">{b.appointmentType}</span>
                             </span>
-                            <span className="font-mono font-bold text-navy-900 shrink-0">{b.fee}</span>
+                            <span className="font-mono font-semibold text-gray-900 shrink-0">{b.fee}</span>
                           </div>
                         </div>
                       );

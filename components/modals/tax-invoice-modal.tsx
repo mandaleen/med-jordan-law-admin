@@ -136,8 +136,8 @@ export function TaxInvoiceModal({ isOpen, onClose, invoice }: TaxInvoiceModalPro
                 Gateway Ref: <span className="font-mono text-gray-900">{invoice.gatewayRef}</span>
               </div>
               <div className="mt-1">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                   {invoice.status}
                 </span>
               </div>
@@ -145,9 +145,9 @@ export function TaxInvoiceModal({ isOpen, onClose, invoice }: TaxInvoiceModalPro
           </div>
 
           {/* Line Items Table */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden text-xs">
+          <div className="border border-slate-200/80 rounded-xl overflow-hidden text-xs">
             <table className="w-full text-left">
-              <thead className="bg-gray-100 text-gray-700 font-bold border-b border-gray-200">
+              <thead className="bg-slate-50/80 text-slate-500 font-semibold uppercase tracking-wider text-[11px] border-b border-slate-200/80">
                 <tr>
                   <th className="py-2.5 px-4">Item & Legal Service Description</th>
                   <th className="py-2.5 px-4 text-center">Assigned Counsel</th>
@@ -155,11 +155,11 @@ export function TaxInvoiceModal({ isOpen, onClose, invoice }: TaxInvoiceModalPro
                   <th className="py-2.5 px-4 text-right">Subtotal</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-100">
                 <tr>
                   <td className="py-3 px-4">
-                    <div className="font-semibold text-navy-900">{invoice.serviceDescription}</div>
-                    <div className="text-[10px] text-gray-500">
+                    <div className="font-medium text-slate-900">{invoice.serviceDescription}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
                       Standard consultation / legal advisory session retainer
                     </div>
                   </td>

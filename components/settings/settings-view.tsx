@@ -413,13 +413,13 @@ export function SettingsView() {
         <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
           <label className="text-xs font-bold text-slate-700">Counsel Consultation Fee Schedules:</label>
           <div className="overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[920px] text-left text-xs border-collapse table-fixed">
+            <table className="w-full min-w-[960px] text-left text-xs border-collapse table-fixed">
               <colgroup>
-                <col className="w-[210px]" />
-                <col className="w-[140px]" />
-                <col className="w-[210px]" />
-                <col className="w-[200px]" />
-                <col className="w-[160px]" />
+                <col className="w-[320px]" />
+                <col className="w-[130px]" />
+                <col className="w-[185px]" />
+                <col className="w-[175px]" />
+                <col className="w-[150px]" />
               </colgroup>
               <thead>
                 <tr className="border-b border-slate-200/80 text-slate-500 uppercase text-[11px] font-semibold tracking-wider bg-slate-50/80">
@@ -433,10 +433,10 @@ export function SettingsView() {
               <tbody className="divide-y divide-slate-100">
                 {lawyerProfiles.map((lawyer) => (
                   <tr key={lawyer.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <div className="flex flex-col whitespace-nowrap">
-                        <span className="font-medium text-slate-900">{lawyer.name}</span>
-                        <span className="text-[11px] text-slate-400 mt-0.5">{lawyer.title}</span>
+                    <td className="py-3.5 px-4">
+                      <div className="flex flex-col pr-2">
+                        <span className="font-semibold text-slate-900">{lawyer.name}</span>
+                        <span className="text-[11px] text-slate-500 mt-0.5 leading-normal">{lawyer.title}</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4 font-mono font-medium text-slate-600 whitespace-nowrap">{lawyer.licenseNo}</td>

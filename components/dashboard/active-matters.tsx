@@ -43,10 +43,10 @@ export function ActiveMatters({
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-[#0A2342] tracking-tight whitespace-nowrap">
+            <h3 className="text-base font-semibold text-navy-900 tracking-tight whitespace-nowrap">
               Active Matters
             </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap shrink-0">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 border border-gray-300 whitespace-nowrap shrink-0">
               {matters.filter((m) => !m.isCompleted).length}
             </span>
           </div>
@@ -54,7 +54,7 @@ export function ActiveMatters({
           <button
             type="button"
             onClick={() => onNewMatter?.()}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-[#0A2342] text-xs font-semibold transition-all border border-slate-200 apple-press cursor-pointer whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-gray-100 hover:bg-navy-100 text-navy-900 text-xs font-semibold transition-all border border-gray-300 apple-press cursor-pointer whitespace-nowrap shrink-0"
           >
             <Plus className="w-3.5 h-3.5 shrink-0" />
             <span>New</span>
@@ -72,8 +72,8 @@ export function ActiveMatters({
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all shrink-0 cursor-pointer ${
                   isSelected
-                    ? "bg-[#0A2342] text-white font-semibold shadow-xs"
-                    : "bg-slate-100 text-slate-600 hover:text-[#0A2342]"
+                    ? "bg-navy-900 text-white font-semibold shadow-xs"
+                    : "bg-gray-100 text-gray-500 hover:text-navy-900"
                 }`}
               >
                 {cat}
@@ -84,13 +84,13 @@ export function ActiveMatters({
       </div>
 
       {/* Inset Grouped Matters List */}
-      <div className="flex-1 overflow-y-auto apple-scrollbar divide-y divide-slate-100 my-1 pr-1">
+      <div className="flex-1 overflow-y-auto apple-scrollbar divide-y divide-gray-100 my-1 pr-1">
         {filteredMatters.map((item) => {
           const Icon = categoryIcons[item.category] || Briefcase;
           return (
             <div
               key={item.id}
-              className={`flex items-center justify-between py-2.5 px-2 rounded-lg transition-all group hover:bg-slate-50 ${
+              className={`flex items-center justify-between py-2.5 px-2 rounded-lg transition-all group hover:bg-gray-50 ${
                 item.isCompleted ? "opacity-45" : ""
               }`}
             >
@@ -101,8 +101,8 @@ export function ActiveMatters({
                   onClick={() => toggleComplete(item.id)}
                   className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all apple-press-sm cursor-pointer ${
                     item.isCompleted
-                      ? "bg-[#34C759] border-[#34C759] text-white"
-                      : "border-slate-300 hover:border-slate-400 bg-white"
+                      ? "bg-success border-success text-white"
+                      : "border-gray-300 hover:border-navy-300 bg-white"
                   }`}
                   title={item.isCompleted ? "Mark incomplete" : "Mark complete"}
                 >
@@ -113,8 +113,8 @@ export function ActiveMatters({
                   <span
                     className={`text-xs font-semibold tracking-tight truncate leading-tight ${
                       item.isCompleted
-                        ? "line-through text-slate-400"
-                        : "text-[#0A2342] group-hover:text-[#1D4ED8]"
+                        ? "line-through text-gray-400"
+                        : "text-navy-900 group-hover:text-navy-600"
                     }`}
                   >
                     {item.title}
@@ -130,7 +130,7 @@ export function ActiveMatters({
                       <Icon className="w-2.5 h-2.5 mr-1" />
                       {item.category}
                     </span>
-                    <span className="text-[10px] text-slate-400 whitespace-nowrap shrink-0">
+                    <span className="text-[10px] text-gray-500 whitespace-nowrap shrink-0">
                       {item.dueDate}
                     </span>
                   </div>
@@ -139,10 +139,10 @@ export function ActiveMatters({
 
               {/* Progress Mini Capsule */}
               <div className="hidden sm:flex flex-col items-end shrink-0 pl-2">
-                <span className="text-[10px] font-mono text-slate-500">
+                <span className="text-[10px] font-mono text-gray-500">
                   {item.progress}%
                 </span>
-                <div className="w-12 h-1.5 bg-slate-100 rounded-sm overflow-hidden mt-1 border border-slate-200/50">
+                <div className="w-12 h-1.5 bg-gray-100 rounded-sm overflow-hidden mt-1 border border-gray-300">
                   <div
                     className="h-full rounded-sm"
                     style={{
@@ -158,7 +158,7 @@ export function ActiveMatters({
       </div>
 
       <div className="pt-2 text-center border-t border-black/[0.04]">
-        <span className="text-[11px] text-[#86868B] whitespace-nowrap truncate block">
+        <span className="text-[11px] text-gray-500 whitespace-nowrap truncate block">
           Court docket synchronized with Ministry of Justice
         </span>
       </div>

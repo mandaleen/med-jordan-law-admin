@@ -4,21 +4,22 @@ import React, { useState } from "react";
 import {
   Wallet,
   ArrowDownLeft,
-  ArrowUpRight,
   RotateCcw,
   Search,
-  Filter,
   DollarSign,
   CreditCard,
   CheckCircle2,
-  AlertTriangle,
   Download,
-  Calendar,
-  User,
-  ShieldCheck,
   TrendingUp,
+  FileText,
+  X,
 } from "lucide-react";
 import { FinanceTransaction, INITIAL_TRANSACTIONS } from "@/lib/mock-data";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { EmptyState } from "@/components/ui/empty-state";
+import { TaxInvoiceModal, TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
+import { FinanceRefundModal } from "./finance-refund-modal";
+import { FinanceCharts } from "./finance-charts";
 
 export function FinanceView() {
   const [transactions, setTransactions] = useState<FinanceTransaction[]>(INITIAL_TRANSACTIONS);
@@ -26,11 +27,11 @@ export function FinanceView() {
   const [dateRange, setDateRange] = useState<"today" | "week" | "month" | "year">("month");
   const [selectedLawyer, setSelectedLawyer] = useState<string>("all");
 
+  // Tax Invoice Modal State
+  const [taxInvoiceModalData, setTaxInvoiceModalData] = useState<TaxInvoiceData | null>(null);
+
   // Refund Modal State
   const [refundTxn, setRefundTxn] = useState<FinanceTransaction | null>(null);
-  const [refundAmountType, setRefundAmountType] = useState<"full" | "partial">("full");
-  const [partialAmount, setPartialAmount] = useState("");
-  const [refundReason, setRefundReason] = useState("Client requested cancellation >48h prior");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -38,14 +39,15 @@ export function FinanceView() {
     setTimeout(() => setToastMessage(null), 4000);
   };
 
-  const handleExecuteRefund = () => {
-    if (!refundTxn) return;
-    const isPartial = refundAmountType === "partial" && parseFloat(partialAmount) > 0;
-    const amountToRefund = isPartial ? parseFloat(partialAmount) : refundTxn.grossAmount;
-
+  const handleConfirmRefund = (
+    txnId: string,
+    amountToRefund: number,
+    refundReason: string,
+    isPartial: boolean
+  ) => {
     setTransactions((prev) =>
       prev.map((t) =>
-        t.id === refundTxn.id
+        t.id === txnId
           ? {
               ...t,
               status: isPartial ? "Partially Refunded" : "Refunded",
@@ -57,9 +59,8 @@ export function FinanceView() {
       )
     );
 
-    showToast(`✓ Gateway refund of $${amountToRefund.toFixed(2)} processed for ${refundTxn.clientName} (Ref: ${refundTxn.txnRef}).`);
-    setRefundTxn(null);
-    setPartialAmount("");
+    const client = transactions.find((t) => t.id === txnId)?.clientName || "Client";
+    showToast(`✓ Gateway refund of $${amountToRefund.toFixed(2)} processed for ${client}.`);
   };
 
   // Filter transactions
@@ -88,10 +89,10 @@ export function FinanceView() {
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex-1 flex flex-col gap-3 min-h-0">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="p-3 bg-[#0A2342] text-white rounded-xl shadow-lg flex items-center justify-between text-xs font-medium animate-in fade-in slide-in-from-top-2">
+        <div className="p-3 bg-navy-950 text-white rounded-xl shadow-lg flex items-center justify-between text-xs font-medium animate-in fade-in slide-in-from-top-2 shrink-0">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span>{toastMessage}</span>
@@ -100,14 +101,14 @@ export function FinanceView() {
       )}
 
       {/* Header & Filter Controls */}
-      <div className="apple-glass-card p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="apple-glass-card p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="w-10 h-10 rounded-xl bg-[#0A2342] text-white flex items-center justify-center font-bold shadow-xs">
+          <div className="w-10 h-10 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold shadow-xs">
             <Wallet className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-[17px] font-bold text-[#0A2342] tracking-tight">Finance & Gateway Settlement</h2>
+              <h2 className="text-[17px] font-bold text-navy-900 tracking-tight">Finance & Gateway Settlement</h2>
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Gateway Connected
               </span>
@@ -120,49 +121,46 @@ export function FinanceView() {
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
           {/* Search Box */}
           <div className="relative min-w-[200px]">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search txn ID, client..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#0A2342] text-[#0A2342]"
+              className="w-full ps-8 pe-7 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-navy-900 text-navy-900 text-start"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute end-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
           {/* Date Range Picker */}
           <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-medium">
-            <button
-              onClick={() => setDateRange("today")}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${dateRange === "today" ? "bg-white text-[#0A2342] font-bold shadow-xs" : "text-slate-500"}`}
-            >
-              Today
-            </button>
-            <button
-              onClick={() => setDateRange("week")}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${dateRange === "week" ? "bg-white text-[#0A2342] font-bold shadow-xs" : "text-slate-500"}`}
-            >
-              Week
-            </button>
-            <button
-              onClick={() => setDateRange("month")}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${dateRange === "month" ? "bg-white text-[#0A2342] font-bold shadow-xs" : "text-slate-500"}`}
-            >
-              Month
-            </button>
-            <button
-              onClick={() => setDateRange("year")}
-              className={`px-2.5 py-1 rounded-lg cursor-pointer ${dateRange === "year" ? "bg-white text-[#0A2342] font-bold shadow-xs" : "text-slate-500"}`}
-            >
-              YTD
-            </button>
+            {(["today", "week", "month", "year"] as const).map((range) => (
+              <button
+                key={range}
+                onClick={() => setDateRange(range)}
+                className={`px-2.5 py-1 rounded-lg cursor-pointer capitalize ${
+                  dateRange === range ? "bg-white text-navy-900 font-bold shadow-xs" : "text-slate-500"
+                }`}
+              >
+                {range === "year" ? "YTD" : range}
+              </button>
+            ))}
           </div>
 
           {/* Lawyer Filter */}
           <select
             value={selectedLawyer}
             onChange={(e) => setSelectedLawyer(e.target.value)}
-            className="px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none text-[#0A2342] font-medium"
+            className="px-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none text-navy-900 font-medium"
           >
             <option value="all">All Counsel</option>
             <option value="Tariq Qudah">Tariq Qudah</option>
@@ -195,7 +193,7 @@ export function FinanceView() {
             <span className="font-semibold uppercase tracking-wider">Net Office Payout</span>
             <ArrowDownLeft className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight text-[#0A2342] my-2 whitespace-nowrap">
+          <div className="text-3xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
             ${totalNet.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
           <span className="text-[11px] text-emerald-700 font-semibold whitespace-nowrap truncate">
@@ -209,7 +207,7 @@ export function FinanceView() {
             <span className="font-semibold uppercase tracking-wider">Gateway Fees (2.5%)</span>
             <CreditCard className="w-4 h-4 text-blue-600 shrink-0" />
           </div>
-          <div className="text-3xl font-bold font-mono tracking-tight text-[#0A2342] my-2 whitespace-nowrap">
+          <div className="text-3xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
             ${totalGatewayFees.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </div>
           <span className="text-[11px] text-slate-400 whitespace-nowrap truncate">
@@ -233,338 +231,236 @@ export function FinanceView() {
       </div>
 
       {/* REVENUE CHARTS & LAWYER ATTRIBUTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Left: Monthly Trend Visualizer */}
-        <div className="lg:col-span-2 apple-glass-card p-5 rounded-xl flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div>
-              <h3 className="text-sm font-bold text-[#0A2342]">Revenue Trajectory & Gateway Settlement</h3>
-              <p className="text-xs text-slate-400">Gross intake volume vs net cleared deposits</p>
-            </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800">
-              Filtered: {dateRange.toUpperCase()}
-            </span>
-          </div>
-
-          {/* Simple Clean Bar Chart Representation */}
-          <div className="pt-6 pb-2">
-            <div className="flex items-end justify-between gap-4 h-44 px-2">
-              {[
-                { label: "W1", gross: 3200, net: 3120 },
-                { label: "W2", gross: 4800, net: 4680 },
-                { label: "W3", gross: 2900, net: 2827 },
-                { label: "W4 (Current)", gross: 5600, net: 5460, isCurrent: true },
-              ].map((bar, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                  <div className="w-full max-w-[54px] flex items-end justify-center gap-1.5 h-full">
-                    {/* Gross Bar */}
-                    <div
-                      className="w-1/2 bg-[#0A2342] rounded-t-lg transition-all hover:bg-blue-900 cursor-pointer"
-                      style={{ height: `${(bar.gross / 6000) * 100}%` }}
-                      title={`Gross: $${bar.gross}`}
-                    />
-                    {/* Net Bar */}
-                    <div
-                      className="w-1/2 bg-blue-500 rounded-t-lg transition-all hover:bg-blue-400 cursor-pointer"
-                      style={{ height: `${(bar.net / 6000) * 100}%` }}
-                      title={`Net: $${bar.net}`}
-                    />
-                  </div>
-                  <span className={`text-[11px] font-semibold ${bar.isCurrent ? "text-blue-600 font-bold" : "text-slate-400"}`}>
-                    {bar.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-center gap-6 pt-4 border-t border-slate-100 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-md bg-[#0A2342]" />
-                <span className="text-slate-600 font-medium">Gross Gateway Intake</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-md bg-blue-500" />
-                <span className="text-slate-600 font-medium">Net Payout Received</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Revenue by Lawyer Attribution */}
-        <div className="apple-glass-card p-5 rounded-xl flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div>
-                <h3 className="text-sm font-bold text-[#0A2342]">Counsel Attribution</h3>
-                <p className="text-xs text-slate-400">Revenue realization by lawyer</p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3.5 pt-4">
-              {lawyerAttribution.map((lawyer, i) => (
-                <div key={i} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#0A2342]">{lawyer.name}</span>
-                    <span className="font-mono font-bold text-slate-700">${lawyer.gross.toLocaleString()}</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                    <div
-                      className="h-full bg-[#0A2342] rounded-full"
-                      style={{ width: `${lawyer.percent}%` }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] text-slate-400">
-                    <span>{lawyer.cases} matters settled</span>
-                    <span>{lawyer.percent}% share</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] text-slate-500 mt-4">
-            Consultation fee distribution is audited and reconciled with monthly partner disbursements.
-          </div>
-        </div>
-      </div>
+      <FinanceCharts dateRange={dateRange} lawyerAttribution={lawyerAttribution} />
 
       {/* TRANSACTIONS TABLE */}
-      <div className="apple-glass-card rounded-xl overflow-hidden">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+      <div className="apple-table-card flex-1 flex flex-col min-h-[460px]">
+        <div className="p-4 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white shrink-0">
           <div>
-            <h3 className="text-sm font-bold text-[#0A2342]">Gateway Transactions Ledger</h3>
-            <p className="text-xs text-slate-400">Every gateway transaction auto-logged with per-row refund actions</p>
+            <h3 className="text-sm font-bold text-navy-900">Gateway Transactions Ledger</h3>
+            <p className="text-xs text-slate-500">Every gateway transaction auto-logged with per-row refund actions</p>
           </div>
           <button
             type="button"
             onClick={() => showToast("Exporting transactions CSV...")}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs self-start sm:self-auto"
           >
             <Download className="w-3.5 h-3.5" />
             Export Statement
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1020px] text-left border-collapse">
-            <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                <th className="py-3 px-4 whitespace-nowrap">Transaction ID</th>
-                <th className="py-3 px-4 whitespace-nowrap">Client</th>
-                <th className="py-3 px-4 whitespace-nowrap">Service & Counsel</th>
-                <th className="py-3 px-4 whitespace-nowrap">Date & Time</th>
-                <th className="py-3 px-4 whitespace-nowrap">Gross</th>
-                <th className="py-3 px-4 whitespace-nowrap">Gateway Fee</th>
-                <th className="py-3 px-4 whitespace-nowrap">Net Payout</th>
-                <th className="py-3 px-4 whitespace-nowrap">Method</th>
-                <th className="py-3 px-4 whitespace-nowrap">Status</th>
-                <th className="py-3 px-4 text-right whitespace-nowrap">Refund Action</th>
+        <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar min-h-0">
+          <table className="w-full text-start border-collapse table-fixed min-w-[1420px]">
+            <colgroup>
+              <col className="w-[130px]" />
+              <col className="w-[180px]" />
+              <col className="w-[220px]" />
+              <col className="w-[130px]" />
+              <col className="w-[110px]" />
+              <col className="w-[110px]" />
+              <col className="w-[120px]" />
+              <col className="w-[110px]" />
+              <col className="w-[130px]" />
+              <col className="w-[180px]" />
+            </colgroup>
+            <thead className="sticky top-0 z-10 shadow-xs">
+              <tr className="bg-gray-50 border-b border-slate-200/80">
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Transaction ID</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Client</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Service & Counsel</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Date & Time</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Gross</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Gateway Fee</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end">Net Payout</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Method</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-start">Status</th>
+                <th className="py-3.5 px-4.5 text-[11px] font-bold uppercase tracking-[0.06em] text-slate-500 text-end pe-6">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
-              {filteredTransactions.map((txn) => (
-                <tr key={txn.id} className="hover:bg-slate-50/60 transition-colors">
-                  {/* Txn ID */}
-                  <td className="py-3.5 px-4 font-mono font-bold text-[#0A2342] whitespace-nowrap">
-                    {txn.txnRef}
-                  </td>
-
-                  {/* Client */}
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      {txn.clientAvatar ? (
-                        <img
-                          src={txn.clientAvatar}
-                          alt={txn.clientName}
-                          className="w-6 h-6 rounded-full object-cover ring-1 ring-slate-200 shrink-0"
-                        />
-                      ) : (
-                        <div className="w-6 h-6 rounded-full bg-slate-100 text-[#0A2342] font-bold text-[10px] flex items-center justify-center shrink-0">
-                          {txn.clientInitials}
-                        </div>
-                      )}
-                      <span className="font-semibold text-slate-800">{txn.clientName}</span>
-                    </div>
-                  </td>
-
-                  {/* Service */}
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    <div className="flex flex-col whitespace-nowrap">
-                      <span className="font-medium text-[#0A2342]">{txn.service}</span>
-                      <span className="text-[10px] text-slate-400">Counsel: {txn.lawyerName}</span>
-                    </div>
-                  </td>
-
-                  {/* Date */}
-                  <td className="py-3.5 px-4 text-slate-500 text-[11px] whitespace-nowrap">
-                    <div>{txn.date}</div>
-                    <div className="text-[10px] text-slate-400">{txn.time}</div>
-                  </td>
-
-                  {/* Gross */}
-                  <td className="py-3.5 px-4 font-bold text-slate-900 font-mono whitespace-nowrap">
-                    ${txn.grossAmount.toFixed(2)}
-                  </td>
-
-                  {/* Gateway Fee */}
-                  <td className="py-3.5 px-4 text-slate-500 font-mono text-[11px] whitespace-nowrap">
-                    ${txn.gatewayFee.toFixed(2)}
-                  </td>
-
-                  {/* Net */}
-                  <td className="py-3.5 px-4 font-bold text-emerald-700 font-mono whitespace-nowrap">
-                    ${txn.netAmount.toFixed(2)}
-                  </td>
-
-                  {/* Method */}
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-medium whitespace-nowrap shrink-0 inline-block">
-                      {txn.paymentMethod}
-                    </span>
-                  </td>
-
-                  {/* Status */}
-                  <td className="py-3.5 px-4 whitespace-nowrap">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap shrink-0 inline-block ${
-                        txn.status === "Settled"
-                          ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                          : txn.status === "Refunded"
-                          ? "bg-rose-50 text-rose-800 border border-rose-200"
-                          : "bg-amber-50 text-amber-800 border border-amber-200"
-                      }`}
-                    >
-                      {txn.status}
-                    </span>
-                  </td>
-
-                  {/* Refund Action per row */}
-                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                    {txn.status === "Settled" ? (
-                      <button
-                        type="button"
-                        onClick={() => setRefundTxn(txn)}
-                        className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs font-semibold cursor-pointer transition-colors shadow-2xs whitespace-nowrap shrink-0"
-                      >
-                        Issue Refund
-                      </button>
-                    ) : (
-                      <span className="text-[11px] text-slate-400 font-mono whitespace-nowrap">
-                        {txn.status === "Refunded" ? "Reversed" : "Processed"}
-                      </span>
-                    )}
+              {filteredTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan={10} className="py-14 text-center">
+                    <EmptyState
+                      icon={Wallet}
+                      title="No transactions found"
+                      description={
+                        searchQuery
+                          ? `No transactions match "${searchQuery}". Check the transaction reference or client name.`
+                          : "No financial entries registered for the selected period."
+                      }
+                      actionLabel={searchQuery ? "Clear Search" : undefined}
+                      onAction={searchQuery ? () => setSearchQuery("") : undefined}
+                    />
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredTransactions.map((txn) => (
+                  <tr key={txn.id} className="hover:bg-slate-50/80 transition-colors duration-150">
+                    {/* 1. Txn ID */}
+                    <td className="py-4 px-4.5 font-mono font-semibold text-navy-900 text-xs whitespace-nowrap align-middle text-start">
+                      <span className="px-2 py-0.5 rounded-md bg-slate-100/90 border border-slate-200/60 inline-block shadow-2xs">
+                        {txn.txnRef}
+                      </span>
+                    </td>
+
+                    {/* 2. Client */}
+                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                      <div className="flex items-center gap-2.5">
+                        <Avatar className="w-7 h-7 rounded-full ring-2 ring-slate-100 shadow-xs shrink-0">
+                          <AvatarImage src={txn.clientAvatar} alt={txn.clientName} />
+                          <AvatarFallback className="bg-gradient-to-br from-navy-900 to-navy-800 text-white font-bold text-[10px]">
+                            {txn.clientInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="font-semibold text-slate-800 text-xs truncate max-w-[130px]">{txn.clientName}</span>
+                      </div>
+                    </td>
+
+                    {/* 3. Service */}
+                    <td className="py-4 px-4.5 align-middle text-start">
+                      <div className="flex flex-col min-w-0 pe-2">
+                        <span className="font-semibold text-navy-900 text-[12.5px] truncate leading-tight">{txn.service}</span>
+                        <span className="text-[10.5px] text-slate-400 truncate mt-0.5">Counsel: {txn.lawyerName}</span>
+                      </div>
+                    </td>
+
+                    {/* 4. Date & Time */}
+                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                      <div className="flex flex-col font-mono">
+                        <span className="font-medium text-slate-700 text-xs">{txn.date}</span>
+                        <span className="text-[10px] text-slate-400">{txn.time}</span>
+                      </div>
+                    </td>
+
+                    {/* 5. Gross */}
+                    <td className="py-4 px-4.5 font-mono font-semibold text-slate-800 whitespace-nowrap text-end align-middle text-xs tabular-nums">
+                      ${txn.grossAmount.toFixed(2)}
+                    </td>
+
+                    {/* 6. Gateway Fee */}
+                    <td className="py-4 px-4.5 text-slate-500 font-mono text-xs whitespace-nowrap text-end align-middle tabular-nums">
+                      -${txn.gatewayFee.toFixed(2)}
+                    </td>
+
+                    {/* 7. Net Payout */}
+                    <td className="py-4 px-4.5 font-bold text-emerald-700 font-mono whitespace-nowrap text-end align-middle text-[12.5px] tabular-nums">
+                      ${txn.netAmount.toFixed(2)}
+                    </td>
+
+                    {/* 8. Method */}
+                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                      <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10.5px] font-medium border border-slate-200/60 inline-block shadow-2xs">
+                        {txn.paymentMethod}
+                      </span>
+                    </td>
+
+                    {/* 9. Status */}
+                    <td className="py-4 px-4.5 whitespace-nowrap align-middle text-start">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold border shadow-xs ${
+                          txn.status === "Settled"
+                            ? "bg-emerald-50 text-emerald-800 border-emerald-200/80"
+                            : txn.status === "Refunded"
+                            ? "bg-rose-50 text-rose-800 border-rose-200/80"
+                            : "bg-amber-50 text-amber-800 border-amber-200/80"
+                        }`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                          txn.status === "Settled"
+                            ? "bg-emerald-500"
+                            : txn.status === "Refunded"
+                            ? "bg-rose-500"
+                            : "bg-amber-500"
+                        }`} />
+                        {txn.status}
+                      </span>
+                    </td>
+
+                    {/* 10. Actions per row */}
+                    <td className="py-4 px-4.5 text-end whitespace-nowrap align-middle pe-6">
+                      <div className="flex items-center justify-end gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setTaxInvoiceModalData({
+                              invoiceNumber: `INV-${txn.txnRef.replace(/[^0-9]/g, "").slice(-5) || "88120"}`,
+                              issueDate: `${txn.date}, ${txn.time}`,
+                              clientName: txn.clientName,
+                              clientPhone: "+962 7 9000 0000",
+                              clientEmail: `${txn.clientName.toLowerCase().replace(/\s+/g, ".")}@example.jo`,
+                              serviceDescription: txn.service,
+                              lawyerName: txn.lawyerName,
+                              grossAmount: txn.grossAmount,
+                              taxRatePercent: 16,
+                              paymentMethod: txn.paymentMethod,
+                              gatewayRef: txn.txnRef,
+                              status: txn.status === "Settled" ? "Settled" : "Refunded",
+                            })
+                          }
+                          className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-navy-900 hover:text-white text-slate-700 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1.5 shrink-0"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          Invoice
+                        </button>
+
+                        {txn.status === "Settled" ? (
+                          <button
+                            type="button"
+                            onClick={() => setRefundTxn(txn)}
+                            className="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-xs font-semibold cursor-pointer transition-all shadow-2xs inline-flex items-center gap-1.5 shrink-0"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5 text-rose-500" />
+                            Refund
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-slate-400 font-mono inline-flex items-center gap-1 shrink-0">
+                            <CheckCircle2 className="w-3 h-3 text-slate-300" />
+                            {txn.status === "Refunded" ? "Reversed" : "Processed"}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* MODAL: ROW-SPECIFIC REFUND MODAL */}
-      {refundTxn && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-                <RotateCcw className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-[#0A2342]">Issue Gateway Refund</h3>
-                <p className="text-xs text-slate-400">Ref: {refundTxn.txnRef} · {refundTxn.clientName}</p>
-              </div>
-            </div>
-
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500">Service:</span>
-                <span className="font-semibold text-slate-800">{refundTxn.service}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500">Original Gross Amount:</span>
-                <span className="font-bold text-slate-900">${refundTxn.grossAmount.toFixed(2)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500">Gateway Method:</span>
-                <span className="text-slate-700">{refundTxn.paymentMethod}</span>
-              </div>
-            </div>
-
-            {/* Refund Type */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-700">Refund Type:</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRefundAmountType("full")}
-                  className={`p-2 rounded-xl text-xs font-bold border cursor-pointer ${
-                    refundAmountType === "full"
-                      ? "bg-[#0A2342] text-white border-[#0A2342]"
-                      : "bg-slate-50 text-slate-700 border-slate-200"
-                  }`}
-                >
-                  Full (${refundTxn.grossAmount.toFixed(2)})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRefundAmountType("partial")}
-                  className={`p-2 rounded-xl text-xs font-bold border cursor-pointer ${
-                    refundAmountType === "partial"
-                      ? "bg-[#0A2342] text-white border-[#0A2342]"
-                      : "bg-slate-50 text-slate-700 border-slate-200"
-                  }`}
-                >
-                  Partial Refund
-                </button>
-              </div>
-            </div>
-
-            {refundAmountType === "partial" && (
-              <div>
-                <label className="text-xs font-bold text-slate-700">Partial Amount ($):</label>
-                <input
-                  type="number"
-                  placeholder="e.g. 50.00"
-                  value={partialAmount}
-                  onChange={(e) => setPartialAmount(e.target.value)}
-                  className="w-full p-2 text-xs border border-slate-200 rounded-xl bg-slate-50 mt-1"
-                />
-              </div>
-            )}
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-700">Reason for Refund:</label>
-              <select
-                value={refundReason}
-                onChange={(e) => setRefundReason(e.target.value)}
-                className="w-full p-2 text-xs border border-slate-200 rounded-xl bg-slate-50 text-slate-800"
-              >
-                <option value="Client requested cancellation &gt;48h prior">Client requested cancellation &gt;48h prior</option>
-                <option value="Mutual agreement / emergency postponement">Mutual agreement / emergency postponement</option>
-                <option value="Lawyer emergency unavailability">Lawyer emergency unavailability</option>
-                <option value="Billing discrepancy correction">Billing discrepancy correction</option>
-              </select>
-            </div>
-
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => setRefundTxn(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer whitespace-nowrap shrink-0"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleExecuteRefund}
-                className="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs cursor-pointer whitespace-nowrap shrink-0"
-              >
-                Execute Refund
-              </button>
-            </div>
+        {/* Table Footer Summary Strip */}
+        <div className="bg-gray-50 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
+          <div className="flex items-center gap-4">
+            <span>Showing <strong className="text-slate-800">{filteredTransactions.length}</strong> transactions</span>
+            <span className="hidden sm:inline text-slate-300">•</span>
+            <span className="hidden sm:inline">Gross Volume: <strong className="font-mono text-slate-800">${totalGross.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
+            <span className="hidden sm:inline text-slate-300">•</span>
+            <span className="hidden sm:inline">Fees: <strong className="font-mono text-slate-600">-${totalGatewayFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-slate-400">Total Net Settlements:</span>
+            <span className="font-mono font-bold text-emerald-700 text-[13px]">
+              ${totalNet.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* MODAL: Accessible Dialog-based Refund Modal */}
+      <FinanceRefundModal
+        isOpen={!!refundTxn}
+        onClose={() => setRefundTxn(null)}
+        transaction={refundTxn}
+        onConfirmRefund={handleConfirmRefund}
+      />
+
+      {/* Official Jordan Tax Invoice Modal */}
+      <TaxInvoiceModal
+        isOpen={!!taxInvoiceModalData}
+        onClose={() => setTaxInvoiceModalData(null)}
+        invoice={taxInvoiceModalData}
+      />
     </div>
   );
 }

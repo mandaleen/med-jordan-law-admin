@@ -69,7 +69,7 @@ export interface NeedsAttentionItem {
   timestamp: string;
   urgency: "high" | "medium" | "low";
   relatedId?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface UpcomingConsultationItem {
@@ -84,6 +84,26 @@ export interface UpcomingConsultationItem {
   practiceArea: string;
   meetingLink?: string;
   location?: string;
+}
+
+export interface ConflictCheckItem {
+  status: "Clean" | "Potential Conflict" | "Waived" | "Declined Apology";
+  opposingParty?: string;
+  conflictType?: "Adverse Representation" | "Prior Client in Same Matter" | "Industry Competitor" | "None";
+  matchedEntity?: string;
+  riskSeverity?: "High" | "Medium" | "Low" | "None";
+  notes?: string;
+  waivedBy?: string;
+  waivedAt?: string;
+}
+
+export interface ConsultationOutcome {
+  conductedAt?: string;
+  lawyerNotes?: string;
+  clientObjectives?: string;
+  nextStepDecision?: "Open Case" | "Fee Contract" | "Concluded";
+  generatedCaseId?: string;
+  generatedContractId?: string;
 }
 
 export interface Booking {
@@ -103,6 +123,9 @@ export interface Booking {
   fee: string;
   status: "Awaiting Acceptance" | "Confirmed" | "Reschedule Requested" | "Declined" | "Cancelled & Refunded";
   notes?: string;
+  signedAgreementName?: string;
+  conflictCheck?: ConflictCheckItem;
+  consultationOutcome?: ConsultationOutcome;
   rescheduleDetails?: {
     initiatedBy: "client" | "office";
     requestedDate: string;
@@ -192,6 +215,64 @@ export interface MessageLogItem {
   type: "Booking Confirmation" | "Reschedule Notice" | "Signed PDF Delivery" | "Hearing Reminder" | "Payment Receipt";
   message: string;
   status: "Delivered" | "Read" | "Sent";
+}
+
+export interface FeeContractItem {
+  id: string;
+  contractNumber: string;
+  clientName: string;
+  clientId: string;
+  clientPhone: string;
+  clientEmail: string;
+  assignedLawyer: string;
+  practiceArea: string;
+  templateType: "Litigation Retainer" | "Corporate General Counsel" | "Arbitration Agreement" | "Custom Upload";
+  totalFee: string;
+  retainerDeposit: string;
+  paymentMilestones: {
+    description: string;
+    amount: string;
+    dueTrigger: string;
+  }[];
+  status: "Draft" | "Sent for Signature" | "Viewed by Client" | "Amendment Requested" | "Signed by Client" | "Countersigned & Executed";
+  sentDate?: string;
+  signedDate?: string;
+  clientSignature?: {
+    signatoryName: string;
+    signatureType: "drawn" | "typed";
+    ipAddress: string;
+    timestamp: string;
+    docHashSha256: string;
+  };
+  countersignedBy?: string;
+  countersignedAt?: string;
+  pdfUrl?: string;
+  amendmentNotes?: string;
+}
+
+export interface ContactLeadItem {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  practiceArea: string;
+  message: string;
+  submittedAt: string;
+  status: "New" | "Contacted" | "Consultation Scheduled" | "Archived";
+  turnstileVerified: boolean;
+  notes?: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  actorName: string;
+  actorRole: string;
+  action: "VIEW_DOCUMENT" | "DOWNLOAD_DOCUMENT" | "UPLOAD_DOCUMENT" | "ISSUE_REFUND" | "RESCHEDULE_BOOKING" | "CLEAR_CONFLICT" | "EXECUTE_CONTRACT" | "MODIFY_SETTINGS";
+  resourceType: "Document" | "Booking" | "Case" | "Finance" | "Settings" | "Contract";
+  resourceId: string;
+  resourceDetails: string;
+  ipAddress: string;
 }
 
 export interface ClientProfile {
@@ -296,12 +377,15 @@ export const NAV_MENU_ITEMS: NavItem[] = [
   { id: "bookings", label: "Bookings", icon: "Calendar", badge: "2 New", href: "#" },
   { id: "cases", label: "Cases & documents", icon: "Briefcase", badge: "28", href: "#" },
   { id: "clients", label: "Clients", icon: "Users", href: "#" },
+  { id: "contracts", label: "Fee Contracts", icon: "FileCheck", badge: "8 Active", href: "#" },
+  { id: "leads", label: "Inquiries & Leads", icon: "Mail", badge: "3 New", href: "#" },
   { id: "finance", label: "Finance", icon: "Wallet", href: "#" },
   { id: "content", label: "Content", icon: "FileText", href: "#" },
 ];
 
 export const NAV_GENERAL_ITEMS: NavItem[] = [
   { id: "settings", label: "Settings", icon: "Settings", href: "#" },
+  { id: "audit", label: "Audit Trail", icon: "ShieldAlert", href: "#" },
   { id: "help", label: "Help", icon: "HelpCircle", href: "#" },
   { id: "logout", label: "Logout", icon: "LogOut", href: "#" },
 ];
@@ -334,7 +418,7 @@ export const DASHBOARD_STAT_CARDS: StatItem[] = [
     trendText: "this month",
     trendValue: "+14",
     isAccentDark: false,
-    accentColor: "#007AFF",
+    accentColor: "#3D5390",
     subMetric: "92 corporate groups",
   },
   {
@@ -344,7 +428,7 @@ export const DASHBOARD_STAT_CARDS: StatItem[] = [
     trendText: "this week",
     trendValue: "4 Hearings",
     isAccentDark: false,
-    accentColor: "#34C759",
+    accentColor: "#2F9E6E",
     subMetric: "3 in pleading stage",
   },
   {
@@ -354,7 +438,7 @@ export const DASHBOARD_STAT_CARDS: StatItem[] = [
     trendText: "requires review",
     trendValue: "Urgent",
     isAccentDark: false,
-    accentColor: "#FF9500",
+    accentColor: "#E0A030",
     subMetric: "2 bookings · 2 rejected docs",
   },
 ];
@@ -468,6 +552,15 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Settled",
     fee: "$180.00",
     status: "Awaiting Acceptance",
+    signedAgreementName: "MJL_Consultation_Agreement_ZaidNabulsi.pdf",
+    conflictCheck: {
+      status: "Potential Conflict",
+      opposingParty: "Al-Manar Logistics Ltd.",
+      conflictType: "Adverse Representation",
+      matchedEntity: "Al-Manar Logistics (Active Matter MJL-2026-089)",
+      riskSeverity: "High",
+      notes: "Opposing party in ongoing Amman Court of Appeal concession dispute. Ethical wall or formal waiver required before triage.",
+    },
     notes: "Review of proposed share purchase agreement for new logistics acquisition.",
     transactionId: "TXN-90214-HP",
   },
@@ -486,6 +579,13 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Settled",
     fee: "$150.00",
     status: "Reschedule Requested",
+    signedAgreementName: "MJL_Consultation_Agreement_LaylaHusseini.pdf",
+    conflictCheck: {
+      status: "Clean",
+      opposingParty: "None / Internal Shareholder Restructuring",
+      conflictType: "None",
+      riskSeverity: "None",
+    },
     notes: "Client requested moving date due to board meeting conflict.",
     rescheduleDetails: {
       initiatedBy: "client",
@@ -512,6 +612,17 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Settled",
     fee: "$250.00",
     status: "Confirmed",
+    signedAgreementName: "MJL_Consultation_Agreement_SaraOdeh.pdf",
+    conflictCheck: {
+      status: "Waived",
+      opposingParty: "Odeh Family Holding Trust",
+      conflictType: "Prior Client in Same Matter",
+      matchedEntity: "Sara Odeh (Matter MJL-2026-042)",
+      riskSeverity: "Low",
+      waivedBy: "Tariq Qudah",
+      waivedAt: "Oct 5, 2026",
+      notes: "Dual corporate representation permitted under JBA Ethics Code Art. 24.",
+    },
     notes: "Annual legal audit and retainer expansion across 3 subsidiaries.",
     transactionId: "TXN-88102-HP",
   },
@@ -530,6 +641,13 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Settled",
     fee: "$150.00",
     status: "Confirmed",
+    signedAgreementName: "MJL_Consultation_Agreement_OmarMasri.pdf",
+    conflictCheck: {
+      status: "Clean",
+      opposingParty: "Amman Land Registry Directorate",
+      conflictType: "None",
+      riskSeverity: "None",
+    },
     notes: "Review title deed restrictions on Abdoun Commercial Parcel.",
     transactionId: "TXN-87654-HP",
   },
@@ -548,6 +666,13 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Settled",
     fee: "$120.00",
     status: "Confirmed",
+    signedAgreementName: "MJL_Consultation_Agreement_FadiHaddad.pdf",
+    conflictCheck: {
+      status: "Clean",
+      opposingParty: "None / WIPO Regional Filing",
+      conflictType: "None",
+      riskSeverity: "None",
+    },
     notes: "GCC trademark expansion strategy for pharmaceuticals.",
     transactionId: "TXN-86921-HP",
   },
@@ -566,6 +691,13 @@ export const INITIAL_BOOKINGS: Booking[] = [
     paymentStatus: "Refunded",
     fee: "$180.00",
     status: "Cancelled & Refunded",
+    signedAgreementName: "MJL_Consultation_Agreement_TariqBarakat.pdf",
+    conflictCheck: {
+      status: "Clean",
+      opposingParty: "None",
+      conflictType: "None",
+      riskSeverity: "None",
+    },
     notes: "Client cancelled >48h before scheduled session. Full refund processed via gateway.",
     transactionId: "TXN-85110-HP",
   },
@@ -1352,7 +1484,7 @@ export const RECENT_BOOKINGS: RecentBookingItem[] = [
     id: "1",
     name: "Layla Al-Husseini",
     caseType: "Corporate & Commercial Law",
-    avatarBg: "bg-[#007AFF]/10 text-[#007AFF]",
+    avatarBg: "bg-navy-600/10 text-navy-600",
     initials: "LH",
     timeAgo: "10 mins ago",
     status: "Completed",
@@ -1362,7 +1494,7 @@ export const RECENT_BOOKINGS: RecentBookingItem[] = [
     id: "2",
     name: "Omar Masri",
     caseType: "Real Estate Acquisition Review",
-    avatarBg: "bg-[#FF9500]/10 text-[#FF9500]",
+    avatarBg: "bg-gold-500/15 text-gold-700",
     initials: "OM",
     timeAgo: "45 mins ago",
     status: "In Progress",
@@ -1372,7 +1504,7 @@ export const RECENT_BOOKINGS: RecentBookingItem[] = [
     id: "3",
     name: "Dr. Fadi Haddad",
     caseType: "IP & Trademark Portfolio",
-    avatarBg: "bg-[#AF52DE]/10 text-[#AF52DE]",
+    avatarBg: "bg-navy-500/10 text-navy-500",
     initials: "FH",
     timeAgo: "2 hours ago",
     status: "Pending",
@@ -1382,7 +1514,7 @@ export const RECENT_BOOKINGS: RecentBookingItem[] = [
     id: "4",
     name: "Nour Abbadi",
     caseType: "Labor Contract Settlement",
-    avatarBg: "bg-[#30B0C7]/10 text-[#30B0C7]",
+    avatarBg: "bg-info/10 text-info",
     initials: "NA",
     timeAgo: "Yesterday",
     status: "In Progress",
@@ -1396,7 +1528,7 @@ export const ACTIVE_MATTERS: MatterItem[] = [
     title: "Draft Retainer Agreements",
     dueDate: "Due Nov 26, 2026",
     category: "Commercial",
-    color: "#007AFF",
+    color: "#3D5390",
     progress: 85,
     isCompleted: false,
   },
@@ -1405,7 +1537,7 @@ export const ACTIVE_MATTERS: MatterItem[] = [
     title: "Amman Land Title Deeds",
     dueDate: "Due Nov 28, 2026",
     category: "Real Estate",
-    color: "#30B0C7",
+    color: "#3B82C4",
     progress: 60,
     isCompleted: false,
   },
@@ -1414,7 +1546,7 @@ export const ACTIVE_MATTERS: MatterItem[] = [
     title: "IP Trademark Registration",
     dueDate: "Due Nov 30, 2026",
     category: "Patent & IP",
-    color: "#AF52DE",
+    color: "#526BA8",
     progress: 40,
     isCompleted: false,
   },
@@ -1423,7 +1555,7 @@ export const ACTIVE_MATTERS: MatterItem[] = [
     title: "Labor Contract Settlement",
     dueDate: "Due Dec 5, 2026",
     category: "Employment",
-    color: "#FF9500",
+    color: "#E8B04A",
     progress: 25,
     isCompleted: false,
   },
@@ -1432,9 +1564,369 @@ export const ACTIVE_MATTERS: MatterItem[] = [
     title: "Arbitration Chamber Filing",
     dueDate: "Due Dec 6, 2026",
     category: "Arbitration",
-    color: "#5856D6",
+    color: "#2F4070",
     progress: 90,
     isCompleted: false,
   },
 ];
+
+// ==========================================
+// FEE AGREEMENT CONTRACTS (PAGE 10 E-SIGNATURE)
+// ==========================================
+
+export const INITIAL_CONTRACTS: FeeContractItem[] = [
+  {
+    id: "fc-1",
+    contractNumber: "MJL-FEE-2026-014",
+    clientName: "Sara Odeh (Odeh Industrial Group)",
+    clientId: "cl-2",
+    clientPhone: "+962 7 9123 4567",
+    clientEmail: "sara@odehgroup.com",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Corporate & M&A",
+    templateType: "Corporate General Counsel",
+    totalFee: "$24,000.00",
+    retainerDeposit: "$8,000.00",
+    paymentMilestones: [
+      { description: "Execution Retainer Deposit", amount: "$8,000.00", dueTrigger: "Upon digital signature execution" },
+      { description: "Articles of Association & Restructuring Closing", amount: "$8,000.00", dueTrigger: "Filing with Companies Controller" },
+      { description: "Final Regulatory Transfer Approval", amount: "$8,000.00", dueTrigger: "Ministry gazette issuance" },
+    ],
+    status: "Countersigned & Executed",
+    sentDate: "Sep 01, 2026 at 10:00",
+    signedDate: "Sep 01, 2026 at 11:05",
+    clientSignature: {
+      signatoryName: "Sara Odeh",
+      signatureType: "drawn",
+      ipAddress: "82.212.94.18",
+      timestamp: "2026-09-01T11:05:42Z",
+      docHashSha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    },
+    countersignedBy: "Tariq Qudah (Senior Partner)",
+    countersignedAt: "Sep 01, 2026 at 11:30",
+    pdfUrl: "MJL_Agreement_OdehGroup_Signed.pdf",
+  },
+  {
+    id: "fc-2",
+    contractNumber: "MJL-FEE-2026-022",
+    clientName: "Al-Manar Logistics Ltd.",
+    clientId: "cl-1",
+    clientPhone: "+962 7 9554 1122",
+    clientEmail: "legal@almanar-logistics.jo",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Commercial Litigation & Arbitration",
+    templateType: "Litigation Retainer",
+    totalFee: "$35,000.00",
+    retainerDeposit: "$10,000.00",
+    paymentMilestones: [
+      { description: "Initial Litigation Retainer Deposit", amount: "$10,000.00", dueTrigger: "Upon formal engagement" },
+      { description: "Court of Appeal Statement of Claim", amount: "$15,000.00", dueTrigger: "Amman Court filing receipt" },
+      { description: "Expert Testimony & Final Bench Ruling", amount: "$10,000.00", dueTrigger: "Judgment rendering" },
+    ],
+    status: "Countersigned & Executed",
+    sentDate: "Aug 14, 2026 at 12:00",
+    signedDate: "Aug 14, 2026 at 14:22",
+    clientSignature: {
+      signatoryName: "Zaid Nabulsi (Managing Director)",
+      signatureType: "drawn",
+      ipAddress: "82.212.101.44",
+      timestamp: "2026-08-14T14:22:10Z",
+      docHashSha256: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
+    },
+    countersignedBy: "Tariq Qudah (Senior Partner)",
+    countersignedAt: "Aug 14, 2026 at 15:00",
+    pdfUrl: "MJL_Agreement_AlManar_Signed.pdf",
+  },
+  {
+    id: "fc-3",
+    contractNumber: "MJL-FEE-2026-031",
+    clientName: "Omar Masri",
+    clientId: "cl-3",
+    clientPhone: "+962 7 9444 8899",
+    clientEmail: "omar@masri-invest.jo",
+    assignedLawyer: "Sara Al-Majali",
+    practiceArea: "Real Estate & Construction",
+    templateType: "Litigation Retainer",
+    totalFee: "$18,500.00",
+    retainerDeposit: "$5,000.00",
+    paymentMilestones: [
+      { description: "FIDIC Dispute Intake Deposit", amount: "$5,000.00", dueTrigger: "Digital signing" },
+      { description: "Engineering Expert Review & Pleading", amount: "$8,500.00", dueTrigger: "First court hearing" },
+      { description: "Final Settlement or Judgment Award", amount: "$5,000.00", dueTrigger: "Matter closure" },
+    ],
+    status: "Sent for Signature",
+    sentDate: "Oct 6, 2026 at 16:30",
+  },
+  {
+    id: "fc-4",
+    contractNumber: "MJL-FEE-2026-039",
+    clientName: "Khaled Al-Talhouni (Talhouni Pharma)",
+    clientId: "cl-5",
+    clientPhone: "+962 7 9771 2233",
+    clientEmail: "k.talhouni@talhouni-pharma.com",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Corporate & M&A",
+    templateType: "Corporate General Counsel",
+    totalFee: "$32,000.00",
+    retainerDeposit: "$12,000.00",
+    paymentMilestones: [
+      { description: "Cross-Border Acquisition Retainer", amount: "$12,000.00", dueTrigger: "Digital signing" },
+      { description: "Due Diligence & Antitrust Clearance", amount: "$10,000.00", dueTrigger: "Regulatory review submission" },
+      { description: "Closing & Share Transfer Execution", amount: "$10,000.00", dueTrigger: "Closing escrow release" },
+    ],
+    status: "Signed by Client",
+    sentDate: "Oct 5, 2026 at 09:15",
+    signedDate: "Oct 6, 2026 at 18:40",
+    clientSignature: {
+      signatoryName: "Khaled Al-Talhouni",
+      signatureType: "drawn",
+      ipAddress: "82.212.88.92",
+      timestamp: "2026-10-06T18:40:15Z",
+      docHashSha256: "b10a8db164e0754105b7a99be72e3fe5a99ceb37ddbb58e388d79047f6cfb014",
+    },
+    pdfUrl: "MJL_Agreement_Talhouni_Signed.pdf",
+  },
+  {
+    id: "fc-5",
+    contractNumber: "MJL-FEE-2026-044",
+    clientName: "Dr. Rawan Al-Kurd (Kurd Ventures)",
+    clientId: "cl-6",
+    clientPhone: "+962 7 9883 4455",
+    clientEmail: "rawan@kurd-ventures.jo",
+    assignedLawyer: "Kareem Masri",
+    practiceArea: "Patent & IP",
+    templateType: "Corporate General Counsel",
+    totalFee: "$14,000.00",
+    retainerDeposit: "$4,500.00",
+    paymentMilestones: [
+      { description: "IP Portfolio Strategy & Brand Audit", amount: "$4,500.00", dueTrigger: "Upon engagement" },
+      { description: "Cease-and-Desist Defense & Settlement", amount: "$5,500.00", dueTrigger: "Defense filing" },
+      { description: "International Trademark Registration", amount: "$4,000.00", dueTrigger: "WIPO gazette filing" },
+    ],
+    status: "Draft",
+  },
+  {
+    id: "fc-6",
+    contractNumber: "MJL-FEE-2026-048",
+    clientName: "Reem Al-Khatib (Amman Maritime)",
+    clientId: "cl-7",
+    clientPhone: "+962 7 9331 4455",
+    clientEmail: "reem@amman-maritime.jo",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Commercial Arbitration",
+    templateType: "Arbitration Agreement",
+    totalFee: "$42,000.00",
+    retainerDeposit: "$15,000.00",
+    paymentMilestones: [
+      { description: "Arbitral Tribunal Filing Deposit", amount: "$15,000.00", dueTrigger: "Upon tribunal constitution" },
+      { description: "Hearing Pleadings & Expert Witnesses", amount: "$15,000.00", dueTrigger: "Tribunal hearing commencement" },
+      { description: "Final Enforcement Decree in Amman Court", amount: "$12,000.00", dueTrigger: "Award enforcement" },
+    ],
+    status: "Draft",
+  },
+  {
+    id: "fc-7",
+    contractNumber: "MJL-FEE-2026-052",
+    clientName: "Zaid Nabulsi (Nabulsi Trading Co.)",
+    clientId: "cl-8",
+    clientPhone: "+962 7 9554 1122",
+    clientEmail: "z.nabulsi@nabulsitrading.jo",
+    assignedLawyer: "Tariq Qudah",
+    practiceArea: "Commercial Contracts",
+    templateType: "Litigation Retainer",
+    totalFee: "$16,500.00",
+    retainerDeposit: "$5,500.00",
+    paymentMilestones: [
+      { description: "Contract Review & Pre-Trial Notice", amount: "$5,500.00", dueTrigger: "Upon digital signing" },
+      { description: "First Instance Commercial Court Defense", amount: "$6,000.00", dueTrigger: "Statement of claim docket" },
+      { description: "Settlement Accord Execution", amount: "$5,000.00", dueTrigger: "Settlement closing" },
+    ],
+    status: "Sent for Signature",
+    sentDate: "Today at 09:30",
+  },
+  {
+    id: "fc-8",
+    contractNumber: "MJL-FEE-2026-055",
+    clientName: "Eng. Tareq Toukan (Toukan Construction)",
+    clientId: "cl-9",
+    clientPhone: "+962 7 9665 8899",
+    clientEmail: "tareq@toukan-build.jo",
+    assignedLawyer: "Sara Al-Majali",
+    practiceArea: "Real Estate & Construction",
+    templateType: "Litigation Retainer",
+    totalFee: "$26,000.00",
+    retainerDeposit: "$8,000.00",
+    paymentMilestones: [
+      { description: "FIDIC Dispute Adjudication Board Deposit", amount: "$8,000.00", dueTrigger: "DAB submission" },
+      { description: "Evidentiary Review & Quantum Report", amount: "$10,000.00", dueTrigger: "Engineer assessment" },
+      { description: "Court of Appeal Registration", amount: "$8,000.00", dueTrigger: "Appeal ruling" },
+    ],
+    status: "Amendment Requested",
+    sentDate: "Oct 4, 2026 at 14:00",
+    amendmentNotes: "Client requested amending Milestone 2 trigger from court pleading to DAB engineering expert findings.",
+  },
+];
+
+// ==========================================
+// WEBSITE INQUIRIES & CONTACT LEADS (PAGE 3)
+// ==========================================
+
+export const INITIAL_LEADS: ContactLeadItem[] = [
+  {
+    id: "lead-1",
+    name: "Khaled Al-Talhouni",
+    phone: "+962 7 9771 2233",
+    email: "k.talhouni@talhouni-pharma.com",
+    practiceArea: "Corporate & M&A",
+    message: "Seeking lead counsel for a proposed acquisition of an Egyptian pharmaceutical distributor. Need initial conflict clearance and NDA review.",
+    submittedAt: "15 mins ago",
+    status: "New",
+    turnstileVerified: true,
+  },
+  {
+    id: "lead-2",
+    name: "Dr. Rawan Al-Kurd",
+    phone: "+962 7 9883 4455",
+    email: "rawan@kurd-ventures.jo",
+    practiceArea: "Patent & IP",
+    message: "Received an urgent trademark cease-and-desist letter from a Dubai firm regarding our healthtech mobile platform branding.",
+    submittedAt: "2 hours ago",
+    status: "New",
+    turnstileVerified: true,
+  },
+  {
+    id: "lead-3",
+    name: "Hassan Qasrawi",
+    phone: "+962 7 9222 9988",
+    email: "hassan@qasrawi-trading.com",
+    practiceArea: "Commercial Arbitration",
+    message: "Foreign supplier defaulted on shipping industrial transformers to Aqaba Port. Contract has an Amman arbitration clause.",
+    submittedAt: "Yesterday at 16:20",
+    status: "Contacted",
+    turnstileVerified: true,
+    notes: "Spoke with client. Proposed a video consultation with Tariq Qudah for Thursday.",
+  },
+  {
+    id: "lead-4",
+    name: "Shireen Dajani",
+    phone: "+962 7 9345 6789",
+    email: "shireen@dajani-hospitality.jo",
+    practiceArea: "Real Estate & Leases",
+    message: "Landlord issued arbitrary termination notice for our boutique Dead Sea resort property. We have a valid 10-year registered commercial lease.",
+    submittedAt: "35 mins ago",
+    status: "New",
+    turnstileVerified: true,
+  },
+  {
+    id: "lead-5",
+    name: "Eng. Tareq Toukan",
+    phone: "+962 7 9665 8899",
+    email: "tareq@toukan-build.jo",
+    practiceArea: "Construction & FIDIC",
+    message: "Government employer deducted liquidated damages exceeding statutory 15% cap on a Ministry of Public Works hospital contract.",
+    submittedAt: "3 hours ago",
+    status: "Contacted",
+    turnstileVerified: true,
+    notes: "Telephone intake conducted with Sara Al-Majali. Case documentation requested.",
+  },
+  {
+    id: "lead-6",
+    name: "Noor Halasa",
+    phone: "+962 7 9112 3344",
+    email: "noor@halasa-logistics.jo",
+    practiceArea: "Customs & Concessions",
+    message: "Customs Department imposed retroactive tariff reclassification fines on solar equipment shipments through Queen Alia International Airport.",
+    submittedAt: "Oct 5, 2026",
+    status: "Consultation Scheduled",
+    turnstileVerified: true,
+    notes: "Converted to scheduled consultation session with Tariq Qudah for Thursday at 11:00 AM.",
+  },
+  {
+    id: "lead-7",
+    name: "Mohammad Al-Faouri",
+    phone: "+962 7 9887 6543",
+    email: "faouri@amman-retail.com",
+    practiceArea: "Corporate Dispute",
+    message: "Dispute between partners in a limited liability company regarding capital decrease without general assembly unanimous consent.",
+    submittedAt: "Oct 4, 2026",
+    status: "Consultation Scheduled",
+    turnstileVerified: true,
+    notes: "Booked 60-minute in-person strategy session at Amman HQ.",
+  },
+  {
+    id: "lead-8",
+    name: "Zeid Al-Khasawneh",
+    phone: "+962 7 9445 1122",
+    email: "zeid@khasawneh-group.jo",
+    practiceArea: "Labor & Employment",
+    message: "Executive separation agreement drafting for departing regional VP with restrictive covenant and non-solicitation clauses.",
+    submittedAt: "Oct 3, 2026",
+    status: "Archived",
+    turnstileVerified: true,
+    notes: "Standard statutory severance advisory dispatched. Matter concluded.",
+  },
+];
+
+// ==========================================
+// CENTRAL SYSTEM AUDIT LOG (PAGES 9 & 11)
+// ==========================================
+
+export const INITIAL_AUDIT_LOGS: AuditLogEntry[] = [
+  {
+    id: "aud-1",
+    timestamp: "Oct 7, 2026 at 02:45 AM",
+    actorName: "Tariq Qudah",
+    actorRole: "Senior Partner",
+    action: "VIEW_DOCUMENT",
+    resourceType: "Document",
+    resourceId: "doc-1",
+    resourceDetails: "Opened Signed Consultation Retainer Agreement (Matter MJL-2026-089)",
+    ipAddress: "192.168.1.104",
+  },
+  {
+    id: "aud-2",
+    timestamp: "Oct 7, 2026 at 01:20 AM",
+    actorName: "Sara Al-Majali",
+    actorRole: "Partner",
+    action: "CLEAR_CONFLICT",
+    resourceType: "Booking",
+    resourceId: "b-103",
+    resourceDetails: "Conflict check cleared for Sara Odeh (Corporate Restructuring)",
+    ipAddress: "192.168.1.112",
+  },
+  {
+    id: "aud-3",
+    timestamp: "Oct 6, 2026 at 05:10 PM",
+    actorName: "Tariq Qudah",
+    actorRole: "Senior Partner",
+    action: "EXECUTE_CONTRACT",
+    resourceType: "Contract",
+    resourceId: "fc-1",
+    resourceDetails: "Countersigned Fee Agreement MJL-FEE-2026-014 with Odeh Industrial Group",
+    ipAddress: "192.168.1.104",
+  },
+  {
+    id: "aud-4",
+    timestamp: "Oct 6, 2026 at 03:40 PM",
+    actorName: "Layla Haddad",
+    actorRole: "Paralegal",
+    action: "DOWNLOAD_DOCUMENT",
+    resourceType: "Document",
+    resourceId: "doc-301",
+    resourceDetails: "Downloaded FIDIC Construction Contract Agreement (Matter MJL-2026-061)",
+    ipAddress: "192.168.1.118",
+  },
+  {
+    id: "aud-5",
+    timestamp: "Oct 5, 2026 at 10:15 AM",
+    actorName: "Billing Officer",
+    actorRole: "Accountant",
+    action: "ISSUE_REFUND",
+    resourceType: "Finance",
+    resourceId: "TXN-85110-HP",
+    resourceDetails: "Gateway refund of $180.00 executed for Tariq Barakat (Cancelled booking)",
+    ipAddress: "192.168.1.120",
+  },
+];
+
 

@@ -7,34 +7,47 @@ import {
   Lock,
   Eye,
   X,
+  ShieldCheck,
 } from "lucide-react";
-import { DocumentItem } from "@/lib/mock-data";
+import { DocumentItem, CaseItem } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface UploadDocumentModalProps {
   isOpen: boolean;
   onClose: () => void;
   caseNumber?: string;
-  onUpload: (newDoc: DocumentItem) => void;
+  availableCases?: CaseItem[];
+  selectedCaseId?: string | null;
+  onUpload: (newDoc: DocumentItem, targetCaseId?: string) => void;
 }
 
 export function UploadDocumentModal({
   isOpen,
   onClose,
   caseNumber = "MJL-2026-089",
+  availableCases = [],
+  selectedCaseId,
   onUpload,
 }: UploadDocumentModalProps) {
   const [docTitle, setDocTitle] = useState("");
-  const [docCategory, setDocCategory] = useState("Pleading & Memorandum");
+  const [docCategory, setDocCategory] = useState("Pleading & Court Memorandum");
   const [isVisibleToClient, setIsVisibleToClient] = useState(true);
-  const [fileName, setFileName] = useState("Statement_of_Claim_AmmanCourt.pdf");
-  const [fileSize, setFileSize] = useState("2.4 MB");
+  const [fileName, setFileName] = useState("Amman_Court_Evidentiary_Exhibit.pdf");
+  const [fileSize, setFileSize] = useState("3.4 MB");
+  const [chosenCaseId, setChosenCaseId] = useState(selectedCaseId || availableCases[0]?.id || "");
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!docTitle.trim()) return;
+
+    // Generate random realistic SHA-256 hash
+    const hexChars = "0123456789abcdef";
+    let hash = "";
+    for (let i = 0; i < 64; i++) {
+      hash += hexChars[Math.floor(Math.random() * hexChars.length)];
+    }
 
     const newDoc: DocumentItem = {
       id: `doc-${Date.now()}`,
@@ -43,10 +56,12 @@ export function UploadDocumentModal({
       uploadDate: "Today",
       size: fileSize,
       status: "Validated",
+      category: docCategory,
       isOfficeVisibleToClient: isVisibleToClient,
+      docHash: hash,
     };
 
-    onUpload(newDoc);
+    onUpload(newDoc, chosenCaseId);
     setDocTitle("");
     onClose();
   };
@@ -55,27 +70,56 @@ export function UploadDocumentModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col gap-4"
+        className="max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4 animate-in fade-in duration-200"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0A2342] flex items-center justify-center font-bold">
-              <Upload className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold shrink-0">
+              <Upload className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#0A2342]">Upload Legal Document</h3>
-              <p className="text-xs text-slate-400">Vault upload for matter {caseNumber} (Page 9)</p>
+              <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
+                Upload & Seal Legal Document
+              </h3>
+              <p className="text-xs text-gray-500">
+                Encrypted vault ingest with SHA-256 forensic certificate
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            aria-label="Close"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-xs">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
+          {/* Target Case Selector (if cases available and not already restricted) */}
+          {availableCases.length > 0 && !caseNumber && (
+            <div>
+              <label className="font-semibold text-gray-700 block mb-1">
+                Assign to Litigation Matter:
+              </label>
+              <select
+                value={chosenCaseId}
+                onChange={(e) => setChosenCaseId(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-50 hover:bg-gray-100/60 border border-gray-200 rounded-lg text-xs text-gray-900 font-medium focus:bg-white focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
+              >
+                {availableCases.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.caseNumber} — {c.title} ({c.clientName})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* File Drag Box */}
-          <label className="p-6 rounded-2xl border-2 border-dashed border-slate-200 hover:border-[#0A2342] bg-slate-50/60 flex flex-col items-center justify-center text-center gap-2 transition-colors cursor-pointer">
+          <label className="p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-navy-900 bg-gray-50/70 hover:bg-white flex flex-col items-center justify-center text-center gap-2 transition-all cursor-pointer group">
             <input
               type="file"
               className="sr-only"
@@ -88,58 +132,69 @@ export function UploadDocumentModal({
                 }
               }}
             />
-            <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-navy-50 text-gray-700 group-hover:text-navy-900 flex items-center justify-center transition-colors">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <span className="font-bold text-[#0A2342]">Click to upload or drag file here</span>
-              <p className="text-[11px] text-slate-400 mt-0.5">Supports PDF, Word (.docx), or certified scans up to 25 MB</p>
+              <span className="font-semibold text-gray-900 text-xs">
+                Click to browse or drag file here
+              </span>
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                Certified PDF, Word document (.docx), or notary scans up to 50 MB
+              </p>
             </div>
-            <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 font-mono text-[10px]">
-              Selected: {fileName} ({fileSize})
+            <span className="px-2.5 py-0.5 rounded-md bg-white border border-gray-200 text-gray-800 font-mono text-[11px] shadow-2xs">
+              Payload: {fileName} ({fileSize})
             </span>
           </label>
 
           <div>
-            <label className="font-bold text-slate-700">Document Title / Docket Name:</label>
+            <label className="font-semibold text-gray-700 block mb-1">
+              Document Official Title / Docket Description:
+            </label>
             <input
               type="text"
               required
-              placeholder="e.g. Statement of Claim & Factual Memoranda"
+              placeholder="e.g. Statement of Claim & Factual Memoranda (Amman Court)"
               value={docTitle}
               onChange={(e) => setDocTitle(e.target.value)}
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800"
+              className="w-full px-3 py-2 bg-white border border-gray-200/90 rounded-lg text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
             />
           </div>
 
           <div>
-            <label className="font-bold text-slate-700">Document Classification:</label>
+            <label className="font-semibold text-gray-700 block mb-1">
+              Legal Classification & Type:
+            </label>
             <select
               value={docCategory}
               onChange={(e) => setDocCategory(e.target.value)}
-              className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl mt-1 text-slate-800"
+              className="w-full px-3 py-2 bg-white border border-gray-200/90 rounded-lg text-xs text-gray-800 font-medium focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
             >
-              <option value="Pleading & Memorandum">Pleading & Court Memorandum (لائحة دعوى / مذكرة)</option>
-              <option value="Commercial Register Extract">Commercial Register & Authorization Extract</option>
-              <option value="Power of Attorney Scan">Power of Attorney Notary Copy (سند وكالة)</option>
-              <option value="Expert Financial Report">Expert Financial Assessment & Damage Calculation</option>
-              <option value="Hearing Outcome Receipt">Court Hearing Filing Receipt</option>
+              <option value="Pleading & Court Memorandum">Pleading & Court Memorandum (لائحة دعوى / مذكرة تفصيلية)</option>
+              <option value="Power of Attorney Scan">Power of Attorney Notary Copy (سند وكالة عدلية)</option>
+              <option value="Commercial Register Extract">Commercial Register & Authorization Extract (شهادة تسجيل ومفوضين)</option>
+              <option value="Expert Financial Report">Expert Financial Assessment & Valuation (تقرير خبرة وتخمين أضرار)</option>
+              <option value="Evidentiary Exhibits">Evidentiary Exhibits & Contracts (أدلة وعقود رسمية)</option>
+              <option value="Court Decrees & Orders">Court Hearing Order & Official Decrees (قرارات وإيصالات قضائية)</option>
             </select>
           </div>
 
           {/* Visibility Toggle */}
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              {isVisibleToClient ? (
-                <Eye className="w-4 h-4 text-emerald-600 shrink-0" />
-              ) : (
-                <Lock className="w-4 h-4 text-amber-600 shrink-0" />
-              )}
-              <div>
-                <span className="font-bold text-slate-800">
-                  {isVisibleToClient ? "Visible in Client Portal" : "Internal Office Vault Only"}
+          <div className="p-3 rounded-xl bg-gray-50 border border-gray-200/90 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-7 h-7 rounded-lg bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                {isVisibleToClient ? (
+                  <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                ) : (
+                  <Lock className="w-3.5 h-3.5 text-amber-600" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <span className="font-semibold text-gray-900 block text-xs">
+                  {isVisibleToClient ? "Visible in Client Portal" : "Chambers Internal Vault Only"}
                 </span>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-gray-500 leading-tight">
                   {isVisibleToClient
                     ? "Client can view, download, and receive update notifications in their portal."
                     : "Strict attorney-client work product. Hidden from client portal."}
@@ -154,25 +209,25 @@ export function UploadDocumentModal({
                 onChange={(e) => setIsVisibleToClient(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#0A2342]" />
+              <div className="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-navy-950" />
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-xs font-bold bg-[#0A2342] hover:bg-blue-900 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
             >
-              <Upload className="w-3.5 h-3.5" />
-              Upload & Seal into Vault
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Seal into Vault</span>
             </button>
           </div>
         </form>

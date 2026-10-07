@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { FinanceTransaction, INITIAL_TRANSACTIONS } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TaxInvoiceModal, TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
 import { FinanceRefundModal } from "./finance-refund-modal";
@@ -316,12 +317,14 @@ export function FinanceView() {
                     {/* 2. Client */}
                     <td className="py-3.5 px-4 whitespace-nowrap align-middle text-start">
                       <div className="flex items-center gap-2.5">
-                        <Avatar className="w-7 h-7 rounded-full ring-1 ring-slate-200 shrink-0">
-                          <AvatarImage src={txn.clientAvatar} alt={txn.clientName} />
-                          <AvatarFallback className="bg-slate-800 text-white font-medium text-[10px]">
-                            {txn.clientInitials}
-                          </AvatarFallback>
-                        </Avatar>
+                        <ClientAvatar
+                          name={txn.clientName}
+                          src={txn.clientAvatar}
+                          initials={txn.clientInitials}
+                          shape="circle"
+                          className="w-7 h-7 rounded-full ring-1 ring-slate-200 shrink-0"
+                          fallbackClassName="text-[10px] font-bold rounded-full"
+                        />
                         <span className="font-medium text-slate-900 text-xs truncate max-w-[120px]">{txn.clientName}</span>
                       </div>
                     </td>

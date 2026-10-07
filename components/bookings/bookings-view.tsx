@@ -25,6 +25,7 @@ import {
 import { Booking } from "@/lib/mock-data";
 import { usePractice } from "@/lib/practice-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ConflictReviewModal } from "@/components/modals/conflict-review-modal";
 import { PostConsultationModal } from "@/components/modals/post-consultation-modal";
@@ -404,12 +405,13 @@ export function BookingsView({
                         {/* 1. Client / Contact */}
                         <td className="py-3.5 px-4 align-middle">
                           <div className="flex items-center gap-3 min-w-0">
-                            <Avatar className="h-8.5 w-8.5 rounded-lg ring-1 ring-gray-200/80 shrink-0">
-                              <AvatarImage src={booking.clientAvatar} alt={booking.clientName} />
-                              <AvatarFallback className="bg-navy-950 text-white text-[11px] font-medium rounded-lg">
-                                {booking.clientInitials}
-                              </AvatarFallback>
-                            </Avatar>
+                            <ClientAvatar
+                              name={booking.clientName}
+                              src={booking.clientAvatar}
+                              initials={booking.clientInitials}
+                              className="h-8.5 w-8.5 rounded-lg ring-1 ring-black/10 shrink-0"
+                              fallbackClassName="text-[11.5px] font-bold rounded-lg"
+                            />
                             <div className="min-w-0 flex-1">
                               <button
                                 type="button"

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Video, Phone, MapPin, ExternalLink, Calendar, Clock, ChevronRight, Gavel } from "lucide-react";
 import { UpcomingConsultationItem, UPCOMING_CONSULTATIONS } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ClientAvatar } from "@/components/ui/client-avatar";
 import { PostConsultationModal } from "@/components/modals/post-consultation-modal";
 
 interface UpcomingConsultationsPanelProps {
@@ -84,12 +85,13 @@ export function UpcomingConsultationsPanel({
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {/* Avatar */}
-                    <Avatar className="w-9 h-9 rounded-md shrink-0 ring-1 ring-black/10 shadow-xs">
-                      <AvatarImage src={item.clientAvatar} alt={item.clientName} />
-                      <AvatarFallback className="bg-navy-100 text-navy-900 font-bold text-xs">
-                        {item.clientInitials}
-                      </AvatarFallback>
-                    </Avatar>
+                    <ClientAvatar
+                      name={item.clientName}
+                      src={item.clientAvatar}
+                      initials={item.clientInitials}
+                      className="w-9 h-9 rounded-md shrink-0 ring-1 ring-black/10 shadow-xs"
+                      fallbackClassName="text-xs font-bold rounded-md"
+                    />
 
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-2">

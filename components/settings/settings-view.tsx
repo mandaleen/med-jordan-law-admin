@@ -247,28 +247,6 @@ export function SettingsView() {
             )}
           </div>
         </div>
-
-        {/* Informative Location Guide: How & Where to Upload */}
-        <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-100/90 text-xs text-slate-600 flex flex-col gap-2">
-          <div className="flex items-center gap-2 font-bold text-navy-950">
-            <Info className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Where can you add or upload this image?</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
-            <div className="p-3 rounded-lg bg-white/85 border border-blue-100 shadow-2xs">
-              <span className="font-bold text-navy-900 block mb-1">Option 1: Directly in the UI (Browser)</span>
-              <p className="text-[11.5px] text-slate-500 leading-relaxed">
-                Click <strong>"Upload New Photo"</strong> above, or hover over the avatar in the sidebar and click the camera icon. You can pick any JPEG, PNG, or WebP file from your computer. It updates immediately and persists in your browser storage.
-              </p>
-            </div>
-            <div className="p-3 rounded-lg bg-white/85 border border-blue-100 shadow-2xs">
-              <span className="font-bold text-navy-900 block mb-1">Option 2: In Project Files (Permanent Code)</span>
-              <p className="text-[11.5px] text-slate-500 leading-relaxed">
-                Drop your image file inside the <code className="bg-slate-100 px-1 py-0.5 rounded text-navy-900 font-mono text-[11px]">public/</code> directory (e.g. <code className="bg-slate-100 px-1 py-0.5 rounded text-navy-900 font-mono text-[11px]">public/tariq.jpg</code>), then in <code className="bg-slate-100 px-1 py-0.5 rounded text-navy-900 font-mono text-[11px]">lib/mock-data.ts</code> set <code className="bg-slate-100 px-1 py-0.5 rounded text-navy-900 font-mono text-[11px]">CURRENT_USER.avatar = "/tariq.jpg"</code>.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* SECTION 1: TEAM & ROLES (2FA ENFORCEMENT & PERMISSIONS) */}

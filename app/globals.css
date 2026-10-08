@@ -178,6 +178,111 @@
   .press:active, .press-sm:active { transform: none; }
 }
 
+/* ---- Sidebar brand / weather card (components/layout/brand-weather-card.tsx) ---- */
+@property --bw-a { syntax: "<color>"; inherits: true; initial-value: #3e95f5; }
+@property --bw-b { syntax: "<color>"; inherits: true; initial-value: #7fc3ff; }
+
+.bw-root {
+  --bw-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --bw-a: #3e95f5; --bw-b: #7fc3ff; --bw-glow: rgba(255, 220, 110, 0.55);
+  transition: --bw-a 1400ms ease, --bw-b 1400ms ease;
+  box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--bw-a) 55%, #111a30);
+}
+/* Sky palettes: [condition][day|night] */
+.bw-root[data-sky="clear"][data-day="false"]  { --bw-a: #0a1230; --bw-b: #24367a; --bw-glow: rgba(160, 185, 255, 0.35); }
+.bw-root[data-sky="partly"][data-day="true"]  { --bw-a: #4f8fe0; --bw-b: #8db6e8; }
+.bw-root[data-sky="partly"][data-day="false"] { --bw-a: #111b3a; --bw-b: #34456f; --bw-glow: rgba(160, 185, 255, 0.3); }
+.bw-root[data-sky="cloud"][data-day="true"]   { --bw-a: #667a99; --bw-b: #9aa9c0; --bw-glow: rgba(255, 255, 255, 0.25); }
+.bw-root[data-sky="cloud"][data-day="false"]  { --bw-a: #1e2638; --bw-b: #414e69; --bw-glow: rgba(160, 185, 255, 0.18); }
+.bw-root[data-sky="fog"][data-day="true"]     { --bw-a: #6e7b8c; --bw-b: #a0aab7; --bw-glow: rgba(255, 255, 255, 0.25); }
+.bw-root[data-sky="fog"][data-day="false"]    { --bw-a: #2a323e; --bw-b: #515c6b; --bw-glow: rgba(255, 255, 255, 0.12); }
+.bw-root[data-sky="rain"][data-day="true"]    { --bw-a: #3b4d6b; --bw-b: #6a819f; --bw-glow: rgba(180, 205, 255, 0.22); }
+.bw-root[data-sky="rain"][data-day="false"]   { --bw-a: #151d2e; --bw-b: #33425c; --bw-glow: rgba(150, 180, 255, 0.16); }
+.bw-root[data-sky="storm"][data-day="true"]   { --bw-a: #2f2b4a; --bw-b: #5a5580; --bw-glow: rgba(200, 180, 255, 0.2); }
+.bw-root[data-sky="storm"][data-day="false"]  { --bw-a: #12101f; --bw-b: #2e2a4a; --bw-glow: rgba(180, 160, 255, 0.16); }
+.bw-root[data-sky="snow"][data-day="true"]    { --bw-a: #5f7898; --bw-b: #93a9c6; --bw-glow: rgba(255, 255, 255, 0.3); }
+.bw-root[data-sky="snow"][data-day="false"]   { --bw-a: #1f2a40; --bw-b: #4a5f82; --bw-glow: rgba(200, 220, 255, 0.2); }
+
+.bw-sky { background: linear-gradient(165deg, var(--bw-a) 0%, var(--bw-b) 100%); }
+.bw-fx-glow { background: radial-gradient(55% 70% at 14% 6%, var(--bw-glow), transparent 70%); animation: bw-glow 7s ease-in-out infinite alternate; }
+
+/* Brand veil: the card is brand navy while the logo plays, then lifts to reveal the live sky */
+.bw-veil {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(122, 143, 192, 0.35) 0%, transparent 55%),
+    linear-gradient(150deg, var(--navy-800) 0%, var(--navy-900) 50%, var(--navy-950) 100%);
+  opacity: 1;
+  transition: opacity 1300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.bw-root[data-state="weather"] .bw-veil { opacity: 0; }
+
+/* ---- Logo choreography: rules draw outward, capital + base follow, wordmark opens from the centre ---- */
+.bw-logo-layer { transition: opacity 700ms ease, transform 900ms var(--bw-ease), filter 700ms ease; }
+.bw-root[data-state="weather"] .bw-logo-layer { opacity: 0; transform: translateY(-14px) scale(0.94); filter: blur(5px); pointer-events: none; }
+
+.bwl-cap path, .bwl-base path, .bwl-rule path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.bw-root[data-state="logo"] .bwl-cap path,
+.bw-root[data-state="logo"] .bwl-base path,
+.bw-root[data-state="logo"] .bwl-rule path {
+  animation: bwl-draw 1100ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.bw-root[data-state="logo"] .bwl-cap path  { animation-delay: 80ms; }
+.bw-root[data-state="logo"] .bwl-r0 path   { animation-delay: 380ms; }
+.bw-root[data-state="logo"] .bwl-r1 path   { animation-delay: 470ms; }
+.bw-root[data-state="logo"] .bwl-r2 path   { animation-delay: 560ms; }
+.bw-root[data-state="logo"] .bwl-r3 path   { animation-delay: 650ms; }
+.bw-root[data-state="logo"] .bwl-base path { animation-delay: 760ms; }
+
+.bwl-word { transform-origin: center; }
+.bw-root[data-state="logo"] .bwl-word { animation: bwl-word 1100ms cubic-bezier(0.16, 1, 0.3, 1) 1050ms both; }
+
+@keyframes bwl-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes bwl-word { from { opacity: 0; clip-path: inset(0 50% 0 50%); filter: blur(3px); } to { opacity: 1; clip-path: inset(0 0 0 0); filter: none; } }
+
+/* ---- Weather content: staggered blur-up entrance ---- */
+.bw-in { opacity: 0; transform: translateY(12px); filter: blur(6px); transition: opacity 600ms ease, transform 800ms var(--bw-ease), filter 600ms ease; }
+.bw-pop { opacity: 0; transform: scale(0.5) rotate(-18deg); transition: opacity 400ms ease, transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.bw-root[data-state="weather"] .bw-in,
+.bw-root[data-state="weather"] .bw-pop { opacity: 1; transform: none; filter: none; transition-delay: var(--d, 0ms); }
+.bw-root[data-state="logo"] .bw-in, .bw-root[data-state="logo"] .bw-pop { transition-duration: 200ms; transition-delay: 0ms; }
+
+/* ---- Ambient weather layers ---- */
+.bw-star { position: absolute; width: 2px; height: 2px; border-radius: 9999px; background: #fff; animation: bw-twinkle 3s ease-in-out infinite; }
+.bw-cloud { position: absolute; inset-inline-start: -160px; border-radius: 9999px; background: rgba(255, 255, 255, 0.16); filter: blur(10px); animation: bw-cloud linear infinite; }
+.bw-streak { position: absolute; top: -18px; width: 1px; height: 16px; background: linear-gradient(to bottom, transparent, rgba(220, 232, 255, 0.7)); animation: bw-fall linear infinite; }
+.bw-flake { position: absolute; top: -6px; width: 3px; height: 3px; border-radius: 9999px; background: rgba(255, 255, 255, 0.85); animation: bw-snow linear infinite; }
+.bw-fog { position: absolute; inset-inline: -20%; height: 34px; border-radius: 9999px; background: rgba(255, 255, 255, 0.14); filter: blur(12px); animation: bw-fog 18s ease-in-out infinite alternate; }
+.bw-lightning { position: absolute; inset: 0; background: rgba(230, 220, 255, 0.55); opacity: 0; animation: bw-lightning 7s steps(1, end) infinite; }
+
+@keyframes bw-glow { from { opacity: 0.7; } to { opacity: 1; transform: translate(4px, 2px); } }
+@keyframes bw-cloud { from { transform: translateX(0); } to { transform: translateX(520px); } }
+@keyframes bw-fall { from { transform: translate(0, 0) rotate(14deg); opacity: 0; } 15% { opacity: 1; } to { transform: translate(30px, 190px) rotate(14deg); opacity: 0.2; } }
+@keyframes bw-snow { from { transform: translate(0, 0); opacity: 0; } 15% { opacity: 1; } 50% { transform: translate(8px, 90px); } to { transform: translate(-6px, 190px); opacity: 0.2; } }
+@keyframes bw-fog { from { transform: translateX(-8%); } to { transform: translateX(8%); } }
+@keyframes bw-lightning { 0%, 60%, 100% { opacity: 0; } 61% { opacity: 1; } 63% { opacity: 0.1; } 65% { opacity: 0.8; } 68% { opacity: 0; } }
+
+/* ---- Icon animations ---- */
+.bw-spin { animation: bw-spin 24s linear infinite; }
+.bw-breathe { animation: bw-breathe 4s ease-in-out infinite; }
+.bw-drift { animation: bw-drift 6s ease-in-out infinite alternate; }
+.bw-twinkle { animation: bw-twinkle 2.4s ease-in-out infinite; }
+.bw-drop { animation: bw-drop 1.2s linear infinite; }
+.bw-flash { animation: bw-flash 3s steps(1, end) infinite; }
+.bw-icon { filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22)); }
+.bw-mini * { animation: none !important; } /* hourly icons stay still so the main icon leads */
+
+@keyframes bw-spin { to { transform: rotate(360deg); } }
+@keyframes bw-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+@keyframes bw-drift { from { transform: translateX(-1.5px); } to { transform: translateX(2.5px); } }
+@keyframes bw-twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes bw-drop { 0% { transform: translateY(-3px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(5px); opacity: 0; } }
+@keyframes bw-flash { 0%, 80%, 100% { opacity: 1; } 85% { opacity: 0.2; } 90% { opacity: 1; } 95% { opacity: 0.3; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bw-root, .bw-veil, .bw-logo-layer, .bw-in, .bw-pop { transition-duration: 1ms !important; transition-delay: 0ms !important; }
+  .bw-root *, .bw-root *::before { animation: none !important; }
+}
+
 /* ---- Scrollbars ---- */
 .custom-scrollbar,
 .scrollbar-thin {

@@ -25,7 +25,7 @@ import {
   NAV_GENERAL_ITEMS,
   UPCOMING_CONSULTATIONS,
 } from "@/lib/mock-data";
-import { Logo } from "@/components/brand/logo";
+import { BrandWeatherCard } from "@/components/layout/brand-weather-card";
 import { getTranslation } from "@/lib/i18n";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -108,13 +108,13 @@ export function Sidebar({
           onClick={onClick}
           aria-current={isActive ? "page" : undefined}
           className={cn(
-            "group w-full flex items-center gap-3 ps-2 pe-3 py-[7px] rounded-2xl text-[13.5px] text-start cursor-pointer transition-all duration-200",
+            "group w-full flex items-center gap-3 ps-2 pe-3 py-[7px] rounded-2xl text-[13.5px] text-start cursor-pointer transition-all duration-200 border",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600/40",
             isActive
-              ? "bg-navy-50 text-navy-950 font-semibold"
+              ? "bg-navy-50 text-navy-950 font-semibold border-navy-200 shadow-2xs"
               : opts.danger
-              ? "text-gray-500 hover:text-error hover:bg-error/5 font-medium"
-              : "text-gray-500 hover:text-navy-900 hover:bg-gray-50 font-medium"
+              ? "border-transparent text-gray-500 hover:text-error hover:bg-error/5 font-medium"
+              : "border-transparent text-gray-500 hover:text-navy-900 hover:bg-gray-50 font-medium"
           )}
         >
           <span
@@ -149,19 +149,21 @@ export function Sidebar({
     <>
       <div className="flex-1 min-h-0 -mx-4 px-4 flex flex-col gap-5 overflow-y-auto no-scrollbar">
         {/* Brand */}
-        <div className="relative flex items-center px-2 pt-1 shrink-0">
-          <Logo className="w-full max-w-[164px] h-auto text-navy-900" label="Med Jordan Law" />
-          {isMobile && onCloseMobile && (
-            <button
-              type="button"
-              onClick={onCloseMobile}
-              className="absolute end-0 top-0 p-1.5 rounded-lg text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-              aria-label="Close navigation"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        <BrandWeatherCard
+          currentLang={currentLang}
+          closeSlot={
+            isMobile && onCloseMobile ? (
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                className="p-1.5 rounded-lg bg-white/80 text-gray-500 shadow-xs backdrop-blur hover:text-navy-900 hover:bg-white transition-colors cursor-pointer"
+                aria-label="Close navigation"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            ) : undefined
+          }
+        />
 
         {/* Menu */}
         <nav aria-label="Primary" className="flex flex-col gap-1.5">

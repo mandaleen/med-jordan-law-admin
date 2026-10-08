@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { WEEKLY_CHART_DATA, DayBarData } from "@/lib/mock-data";
 import { TrendingUp } from "lucide-react";
+import { WEEKLY_CHART_DATA, DayBarData } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
 interface WeeklyBookingsProps {
   initialData?: DayBarData[];
@@ -10,123 +11,103 @@ interface WeeklyBookingsProps {
 
 export function WeeklyBookings({ initialData = WEEKLY_CHART_DATA }: WeeklyBookingsProps) {
   const [data] = useState<DayBarData[]>(initialData);
-  const [activeDayIndex, setActiveDayIndex] = useState<number>(3); // Wednesday active
+  const [activeDayIndex, setActiveDayIndex] = useState<number>(3); // Wednesday
   const [timeRange, setTimeRange] = useState<"week" | "month">("week");
 
-  const activeItem = data[activeDayIndex] || data[3];
-
-  const handleBarClick = (index: number) => {
-    setActiveDayIndex(index);
-  };
-
   const totalBookings = data.reduce((acc, curr) => acc + curr.bookings, 0);
+  const peak = Math.max(...data.map((d) => d.bookings));
 
   return (
-    <div className="rounded-xl apple-glass-card p-6 flex flex-col justify-between h-full min-h-[330px]">
-      {/* Header: Title, Total & Segmented Range Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+    <section
+      className="surface-card rise-in p-6 flex flex-col h-full min-h-[340px]"
+      style={{ "--rise-delay": "240ms" } as React.CSSProperties}
+      aria-label="Booking volume"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-base font-semibold text-navy-900 tracking-tight">
-              Weekly Bookings
-            </h3>
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-success bg-success/10 px-2 py-0.5 rounded-md border border-success/20 whitespace-nowrap shrink-0">
-              <TrendingUp className="w-3 h-3 shrink-0" /> +14.2%
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2 mt-1">
-            <span className="text-2xl font-bold text-navy-900 font-mono apple-mono">
+          <h3 className="text-[17px] font-semibold tracking-tight text-navy-950">Booking Volume</h3>
+          <div className="mt-2 flex items-center gap-2.5">
+            <span className="text-[34px] leading-none font-semibold tracking-[-0.03em] tabular-nums text-navy-950">
               {totalBookings}
             </span>
-            <span className="text-xs text-gray-500 whitespace-nowrap">
-              Consultations logged • Avg 5.4 / day
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success/10 px-1.5 py-0.5 rounded-md">
+              <TrendingUp className="w-3 h-3" strokeWidth={2.4} />
+              14.2%
             </span>
+            <span className="text-xs text-gray-500">Avg 5.4 / day</span>
           </div>
         </div>
 
-        {/* Minimal Segmented Switcher */}
-        <div className="inline-flex p-1 bg-gray-100 rounded-lg border border-gray-300 self-start sm:self-auto shrink-0">
-          <button
-            type="button"
-            onClick={() => setTimeRange("week")}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-              timeRange === "week"
-                ? "bg-white text-navy-900 shadow-xs font-semibold"
-                : "text-gray-500 hover:text-navy-900"
-            }`}
-          >
-            This Week
-          </button>
-          <button
-            type="button"
-            onClick={() => setTimeRange("month")}
-            className={`px-3 py-1 text-xs font-medium rounded-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-              timeRange === "month"
-                ? "bg-white text-navy-900 shadow-xs font-semibold"
-                : "text-gray-500 hover:text-navy-900"
-            }`}
-          >
-            Past 30 Days
-          </button>
+        <div className="inline-flex p-1 bg-gray-100 rounded-full" role="tablist" aria-label="Range">
+          {(["week", "month"] as const).map((range) => (
+            <button
+              key={range}
+              type="button"
+              role="tab"
+              aria-selected={timeRange === range}
+              onClick={() => setTimeRange(range)}
+              className={cn(
+                "px-3.5 py-1 text-xs rounded-full transition-all cursor-pointer capitalize",
+                timeRange === range
+                  ? "bg-white text-navy-900 font-semibold shadow-xs"
+                  : "text-gray-500 hover:text-navy-900 font-medium"
+              )}
+            >
+              {range}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Bar Chart Area */}
-      <div className="relative flex-1 flex flex-col justify-end pt-6 pb-2">
-        {/* Floating Tooltip for Active Day */}
-        <div className="flex justify-center mb-3">
-          <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-md bg-white border border-gray-300 shadow-xs text-xs font-medium whitespace-nowrap shrink-0">
-            <span className="w-2 h-2 rounded-sm bg-navy-900 shrink-0" />
-            <span className="font-semibold text-navy-900 whitespace-nowrap">
-              {activeItem.fullDay}:
-            </span>
-            <span className="font-mono font-bold text-navy-600 whitespace-nowrap">
-              {activeItem.bookings} Bookings
-            </span>
-            <span className="text-[10px] text-gray-500 whitespace-nowrap">
-              ({activeItem.heightPercent}%)
-            </span>
-          </div>
-        </div>
-
-        {/* 7 Day Column Pillar Bars */}
-        <div className="grid grid-cols-7 gap-3 sm:gap-4 items-end h-[160px] px-2">
-          {data.map((item, index) => {
-            const isActive = activeDayIndex === index;
-            const barHeight = `${item.heightPercent}%`;
-
-            return (
-              <div
-                key={item.day + index}
-                onClick={() => handleBarClick(index)}
-                className="flex flex-col items-center h-full justify-end cursor-pointer group"
-              >
-                {/* Outer Column Track */}
-                <div className="w-full max-w-[28px] h-full flex items-end justify-center bg-gray-100 hover:bg-navy-100 rounded-t-sm p-0.5 border-b border-gray-300">
-                  {/* Inner Filled Pillar */}
-                  <div
-                    className={`w-full rounded-t-sm transition-all ${
-                      isActive
-                        ? "bg-navy-900 shadow-xs"
-                        : "bg-gray-300 group-hover:bg-navy-300"
-                    }`}
-                    style={{ height: barHeight }}
-                  />
-                </div>
-
-                {/* Day Label with Active Indicator */}
-                <span
-                  className={`text-xs font-semibold mt-2.5 transition-colors ${
-                    isActive ? "text-navy-900 font-bold" : "text-gray-500 group-hover:text-navy-700"
-                  }`}
-                >
-                  {item.day}
-                </span>
+      {/* Capsule bars */}
+      <div className="flex-1 grid grid-cols-7 gap-2 sm:gap-4 items-end mt-6 pt-8 min-h-[200px]">
+        {data.map((item, index) => {
+          const isActive = activeDayIndex === index;
+          const isPeak = item.bookings === peak;
+          return (
+            <button
+              key={item.day + index}
+              type="button"
+              onClick={() => setActiveDayIndex(index)}
+              onMouseEnter={() => setActiveDayIndex(index)}
+              onFocus={() => setActiveDayIndex(index)}
+              aria-label={`${item.fullDay}: ${item.bookings} bookings`}
+              aria-pressed={isActive}
+              className="group relative flex flex-col items-center justify-end h-full cursor-pointer focus-visible:outline-none"
+            >
+              <div className="relative w-full flex-1 flex items-end justify-center">
+                {isActive && (
+                  <span className="absolute z-10 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-2 px-2 py-0.5 rounded-full bg-white border border-navy-900/10 shadow-sm text-[11px] font-semibold text-navy-900 tabular-nums whitespace-nowrap"
+                    style={{ bottom: `${item.heightPercent}%` }}
+                  >
+                    {item.bookings}
+                    <span className="text-gray-400 font-medium"> · {item.fullDay.slice(0, 3)}</span>
+                  </span>
+                )}
+                <div
+                  className={cn(
+                    "w-full max-w-[56px] rounded-full transition-all duration-500 ease-out group-focus-visible:ring-2 group-focus-visible:ring-navy-600/50",
+                    isActive
+                      ? "bg-gradient-to-b from-navy-700 to-navy-950 shadow-[0_10px_22px_-8px_rgba(26,39,68,0.6)]"
+                      : isPeak
+                      ? "bg-gold-500"
+                      : "pattern-hatch group-hover:opacity-80"
+                  )}
+                  style={{ height: `${item.heightPercent}%` }}
+                />
               </div>
-            );
-          })}
-        </div>
+              <span
+                className={cn(
+                  "mt-3 text-xs transition-colors",
+                  isActive ? "text-navy-950 font-semibold" : "text-gray-500 font-medium"
+                )}
+              >
+                {item.day}
+              </span>
+            </button>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }

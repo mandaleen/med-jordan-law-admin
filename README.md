@@ -1,6 +1,6 @@
 # Med Jordan Law — Practice Management Dashboard
 
-A legal practice management system built with Next.js 16 (Turbopack, App Router), React 19, Tailwind CSS v4, Base UI, and TypeScript. Styled in executive architectural light mode adhering to Apple Design fluid mechanics and Med Jordan Law's signature deep navy palette (`#0A2342` / `--navy-900`) and warm monochrome accents.
+A legal practice management system built with Next.js 16 (Turbopack, App Router), React 19, Tailwind CSS v4, Base UI, and TypeScript. Styled in executive architectural light mode adhering to the MJL Design System (see DESIGN_SYSTEM.md).
 
 ---
 
@@ -34,7 +34,7 @@ The application maps the full end-to-end lifecycle of legal practice representat
 - **Primitives**: [@base-ui/react](https://base-ui.com/) & custom Accessible Dialog primitives
 - **Typography**: [Geist Sans](https://vercel.com/font), Geist Mono, and [Cinzel](https://fonts.google.com/specimen/Cinzel)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Design Philosophy**: [Apple Design Fluid Interfaces](SKILL.md) — direct manipulation, 1:1 pointer tracking, interruptible transitions, and reduced-motion fallbacks.
+- **Design Philosophy**: [MJL Design System](DESIGN_SYSTEM.md) — direct manipulation, 1:1 pointer tracking, interruptible transitions, and reduced-motion fallbacks.
 
 ---
 

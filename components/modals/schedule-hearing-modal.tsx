@@ -61,8 +61,8 @@ export function ScheduleHearingModal({
               <Gavel className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-navy-950">Schedule Court Hearing (جلسة محاكمة)</h3>
-              <p className="text-xs text-gray-500">Court calendar docket for matter {caseNumber} (Page 9)</p>
+              <h3 className="text-base font-bold text-navy-950">Schedule Hearing</h3>
+              <p className="text-xs text-gray-500">Matter {caseNumber}</p>
             </div>
           </div>
           <button
@@ -78,7 +78,7 @@ export function ScheduleHearingModal({
         <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-semibold text-gray-700">Hearing Date:</label>
+              <label className="font-semibold text-gray-700">Date:</label>
               <input
                 type="date"
                 required
@@ -88,7 +88,7 @@ export function ScheduleHearingModal({
               />
             </div>
             <div>
-              <label className="font-semibold text-gray-700">Docket Time:</label>
+              <label className="font-semibold text-gray-700">Time:</label>
               <input
                 type="text"
                 required
@@ -100,7 +100,7 @@ export function ScheduleHearingModal({
           </div>
 
           <div>
-            <label className="font-semibold text-gray-700">Presiding Court Chamber (المحكمة والغرفة):</label>
+            <label className="font-semibold text-gray-700">Chamber:</label>
             <select
               value={chamber}
               onChange={(e) => setChamber(e.target.value)}
@@ -115,7 +115,7 @@ export function ScheduleHearingModal({
           </div>
 
           <div>
-            <label className="font-semibold text-gray-700">Presiding Judge / Arbitrator:</label>
+            <label className="font-semibold text-gray-700">Judge / Arbitrator:</label>
             <input
               type="text"
               required
@@ -131,9 +131,9 @@ export function ScheduleHearingModal({
             <div className="flex items-center gap-2.5">
               <Bell className="w-4 h-4 text-navy-800 shrink-0" />
               <div>
-                <span className="font-semibold text-gray-900">Automated WhatsApp & SMS Reminders</span>
+                <span className="font-semibold text-gray-900">Reminders</span>
                 <p className="text-[11px] text-gray-500">
-                  Sends reminder notification to client and lead counsel 48 hours prior to hearing docket.
+                  Notify client and counsel 48h prior via WhatsApp & SMS.
                 </p>
               </div>
             </div>
@@ -160,10 +160,10 @@ export function ScheduleHearingModal({
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
+              className="px-5 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
             >
               <Gavel className="w-3.5 h-3.5" />
-              Schedule Hearing Docket
+              Schedule Hearing
             </button>
           </div>
         </form>

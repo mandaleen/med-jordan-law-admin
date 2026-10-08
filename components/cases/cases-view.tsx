@@ -15,21 +15,18 @@ import {
   ShieldAlert,
   FileCheck,
   FileX,
-  Layers,
   LayoutGrid,
   List,
-  Filter,
-  CheckCircle2,
-  Calendar,
-  Building,
-  Scale,
   Upload,
   ArrowUpRight,
-  SlidersHorizontal,
 } from "lucide-react";
 import { DocumentItem, HearingItem, CaseItem } from "@/lib/mock-data";
 import { usePractice } from "@/lib/practice-context";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { ActionButton } from "@/components/ui/action-button";
+import { Segmented } from "@/components/ui/segmented";
 import { UploadDocumentModal } from "@/components/modals/upload-document-modal";
 import { ScheduleHearingModal } from "@/components/modals/schedule-hearing-modal";
 import { DocumentAuditModal } from "@/components/modals/document-audit-modal";
@@ -50,8 +47,6 @@ export function CasesView() {
     updateHearingOutcome,
     addCaseDocument,
     toggleCaseDocumentVisibility,
-    updateCaseDocumentStatus,
-    deleteCaseDocument,
     setActiveNav,
   } = usePractice();
 
@@ -179,184 +174,79 @@ export function CasesView() {
         /* ===================================================================== */
         /* DIRECTORY VIEW: MATTERS & MASTER VAULT */
         /* ===================================================================== */
-        <div className="flex-1 flex flex-col gap-3.5 min-h-0">
-          {/* Top Executive Header & View Controller */}
-          <div className="bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)] shrink-0">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-navy-50 text-navy-950 border border-navy-100 flex items-center justify-center font-bold shrink-0">
-                  <Scale className="w-5 h-5 text-navy-900" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
-                      Litigation Matters & Evidence Vault (القضايا والوثائق)
-                    </h1>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                      {totalMattersCount} Matters Registered
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    Judicial dockets, courtroom hearing management, client milestone tracking, and cryptographic document vaults
-                  </p>
-                </div>
-              </div>
-
-              {/* Primary Actions */}
-              <div className="flex items-center gap-2 self-start sm:self-auto">
-                <button
-                  type="button"
+        <div className="flex-1 flex flex-col gap-5 min-h-0">
+          <PageHeader
+            title="Cases"
+            description={`${totalMattersCount} active matters across court, arbitration and advisory work.`}
+            actions={
+              <>
+                <ActionButton
+                  icon={<Upload className="w-4 h-4" />}
                   onClick={() => {
                     setTargetCaseForUpload(null);
                     setIsUploadDocOpen(true);
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 text-xs font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
                 >
-                  <Upload className="w-3.5 h-3.5 text-navy-700" />
-                  <span>Upload Document</span>
-                </button>
+                  Upload
+                </ActionButton>
+                <ActionButton variant="primary" icon={<Plus className="w-4 h-4" strokeWidth={2.4} />} onClick={() => setIsNewCaseModalOpen(true)}>
+                  New Case
+                </ActionButton>
+              </>
+            }
+          />
 
-                <button
-                  type="button"
-                  onClick={() => setIsNewCaseModalOpen(true)}
-                  className="px-3.5 py-1.5 rounded-lg bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium inline-flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Open Matter File</span>
-                </button>
-              </div>
-            </div>
+          <StatGrid>
+            <StatTile
+              dark
+              title="Active"
+              icon={Briefcase}
+              value={totalMattersCount}
+              caption={`${cases.filter((c) => c.statusStage === "Pleadings" || c.statusStage === "Hearings").length} in court`}
+              delay={0}
+            />
+            <StatTile title="Hearings" icon={Gavel} value={activeHearingsCount} caption="Scheduled" chipTone="warning" delay={60} />
+            <StatTile
+              title="Documents"
+              icon={FileCheck}
+              value={totalDocumentsCount}
+              chip={`${validatedDocumentsCount} verified`}
+              chipTone="success"
+              delay={120}
+            />
+            <StatTile
+              title="Compliance"
+              icon={ShieldCheck}
+              value={pendingAuditDocumentsCount}
+              unit="to audit"
+              chip={rejectedDocumentsCount > 0 ? `${rejectedDocumentsCount} re-upload` : "All audited"}
+              chipTone={rejectedDocumentsCount > 0 ? "error" : "success"}
+              delay={180}
+            />
+          </StatGrid>
 
-            {/* Metric Summary Ribbon */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-3 border-t border-gray-100">
-              <div className="p-3 rounded-xl bg-gray-50/70 border border-gray-200/70 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-semibold text-gray-400 tracking-wider">
-                    Active Matters
-                  </span>
-                  <div className="text-base font-bold text-gray-900 font-mono tabular-nums mt-0.5">
-                    {totalMattersCount} Litigation Files
-                  </div>
-                  <span className="text-[10.5px] text-gray-500">
-                    {cases.filter((c) => c.statusStage === "Pleadings" || c.statusStage === "Hearings").length} in court action
-                  </span>
-                </div>
-                <div className="w-7 h-7 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center text-navy-900 shrink-0">
-                  <Briefcase className="w-3.5 h-3.5" />
-                </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-gray-50/70 border border-gray-200/70 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-semibold text-gray-400 tracking-wider">
-                    Judicial Hearings
-                  </span>
-                  <div className="text-base font-bold text-amber-700 font-mono tabular-nums mt-0.5">
-                    {activeHearingsCount} Upcoming Sessions
-                  </div>
-                  <span className="text-[10.5px] text-gray-500">
-                    Automated WhatsApp alerts active
-                  </span>
-                </div>
-                <div className="w-7 h-7 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center text-amber-600 shrink-0">
-                  <Gavel className="w-3.5 h-3.5" />
-                </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-gray-50/70 border border-gray-200/70 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-semibold text-gray-400 tracking-wider">
-                    Vault Documents
-                  </span>
-                  <div className="text-base font-bold text-gray-900 font-mono tabular-nums mt-0.5">
-                    {totalDocumentsCount} Indexed Files
-                  </div>
-                  <span className="text-[10.5px] text-emerald-700 font-medium">
-                    {validatedDocumentsCount} Security Validated
-                  </span>
-                </div>
-                <div className="w-7 h-7 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center text-emerald-700 shrink-0">
-                  <FileCheck className="w-3.5 h-3.5" />
-                </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-gray-50/70 border border-gray-200/70 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-semibold text-gray-400 tracking-wider">
-                    Compliance & Audits
-                  </span>
-                  <div className="text-base font-bold text-navy-950 font-mono tabular-nums mt-0.5">
-                    {pendingAuditDocumentsCount} Pending Review
-                  </div>
-                  <span className="text-[10.5px] text-gray-500">
-                    {rejectedDocumentsCount > 0 ? (
-                      <span className="text-rose-700 font-medium">{rejectedDocumentsCount} re-upload needed</span>
-                    ) : (
-                      "All client filings audited"
-                    )}
-                  </span>
-                </div>
-                <div className="w-7 h-7 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center text-navy-800 shrink-0">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                </div>
-              </div>
-            </div>
-
-            {/* Segmented Mode Switcher: Litigation Matters vs Master Document Vault */}
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex bg-gray-100 p-1 rounded-xl border border-gray-200 text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspaceMode("matters")}
-                  className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeWorkspaceMode === "matters"
-                      ? "bg-white text-navy-950 shadow-2xs"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <Briefcase className="w-3.5 h-3.5" />
-                  <span>Litigation Matters Docket ({filteredCases.length})</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspaceMode("vault")}
-                  className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeWorkspaceMode === "vault"
-                      ? "bg-white text-navy-950 shadow-2xs"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Master Document Vault ({allVaultDocuments.length})</span>
-                </button>
-              </div>
-
-              {activeWorkspaceMode === "matters" && (
-                <div className="hidden sm:flex items-center gap-1 bg-gray-100 p-1 rounded-lg border border-gray-200 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setMattersLayout("table")}
-                    className={`p-1 rounded-md cursor-pointer transition-colors ${
-                      mattersLayout === "table" ? "bg-white text-navy-950 shadow-2xs" : "text-gray-500 hover:text-gray-900"
-                    }`}
-                    title="Table View"
-                  >
-                    <List className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMattersLayout("board")}
-                    className={`p-1 rounded-md cursor-pointer transition-colors ${
-                      mattersLayout === "board" ? "bg-white text-navy-950 shadow-2xs" : "text-gray-500 hover:text-gray-900"
-                    }`}
-                    title="Pipeline Board View"
-                  >
-                    <LayoutGrid className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-            </div>
+          <div className="flex items-center justify-between gap-3 shrink-0">
+            <Segmented
+              label="Workspace"
+              value={activeWorkspaceMode}
+              onChange={setActiveWorkspaceMode}
+              options={[
+                { id: "matters", label: `Cases (${filteredCases.length})`, icon: <Briefcase className="w-3.5 h-3.5" /> },
+                { id: "vault", label: `Vault (${allVaultDocuments.length})`, icon: <Lock className="w-3.5 h-3.5" /> },
+              ]}
+            />
+            {activeWorkspaceMode === "matters" && (
+              <Segmented
+                label="Layout"
+                value={mattersLayout}
+                onChange={setMattersLayout}
+                className="hidden sm:inline-flex"
+                options={[
+                  { id: "table", label: <span className="sr-only">Table view</span>, icon: <List className="w-3.5 h-3.5" />, title: "Table View" },
+                  { id: "board", label: <span className="sr-only">Pipeline board view</span>, icon: <LayoutGrid className="w-3.5 h-3.5" />, title: "Pipeline Board View" },
+                ]}
+              />
+            )}
           </div>
 
           {/* =================================================================== */}
@@ -365,15 +255,15 @@ export function CasesView() {
           {activeWorkspaceMode === "matters" && (
             <div className="flex-1 flex flex-col gap-3 min-h-0">
               {/* Matters Filters Bar */}
-              <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+              <div className="surface-card p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
                 <div className="relative w-full md:w-80">
                   <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search docket #, client, title, judge, forum..."
+                    placeholder="Search cases..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+                    className="w-full pl-8.5 pr-3 py-2 text-xs bg-white hover:bg-gray-50 focus:bg-white border border-navy-900/10 focus:border-navy-900 rounded-full focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
                   />
                 </div>
 
@@ -389,7 +279,7 @@ export function CasesView() {
                     <option value="pleadings">Pleadings</option>
                     <option value="hearings">Hearings</option>
                     <option value="settlement">Settlement</option>
-                    <option value="closed">Closed / Concluded</option>
+                    <option value="closed">Closed</option>
                   </select>
 
                   <select
@@ -397,19 +287,19 @@ export function CasesView() {
                     onChange={(e) => setForumFilter(e.target.value)}
                     className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
                   >
-                    <option value="all">All Judicial Forums</option>
-                    <option value="appeal">Court of Appeal (محكمة الاستئناف)</option>
-                    <option value="first instance">Court of First Instance (البداية)</option>
-                    <option value="companies">Companies Controller (مراقبة الشركات)</option>
-                    <option value="property">IP Protection Directorate (الملكية الفكرية)</option>
-                    <option value="cassation">Court of Cassation (التمييز)</option>
+                    <option value="all">All Forums</option>
+                    <option value="appeal">Appeal</option>
+                    <option value="first instance">First Instance</option>
+                    <option value="companies">Companies</option>
+                    <option value="property">IP</option>
+                    <option value="cassation">Cassation</option>
                   </select>
                 </div>
               </div>
 
               {/* TABLE VIEW */}
               {mattersLayout === "table" ? (
-                <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <div className="surface-table flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                   <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse table-fixed min-w-[1240px]">
                       <colgroup>
@@ -424,22 +314,22 @@ export function CasesView() {
                       <thead className="sticky top-0 z-10">
                         <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Docket Number
+                            Docket #
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Matter Title & Client
+                            Title & Client
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Lead Counsel
+                            Counsel
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Stage / Status
+                            Stage
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Next Hearing Session
+                            Next Hearing
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                            Vault Documents
+                            Documents
                           </th>
                           <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">
                             Actions
@@ -543,7 +433,7 @@ export function CasesView() {
                                           : c.statusStage === "Pleadings"
                                           ? "bg-amber-500"
                                           : c.statusStage === "Hearings"
-                                          ? "bg-rose-500 animate-pulse"
+                                          ? "bg-rose-500"
                                           : c.statusStage === "Settlement"
                                           ? "bg-teal-500"
                                           : "bg-emerald-500"
@@ -589,9 +479,9 @@ export function CasesView() {
                                       e.stopPropagation();
                                       setSelectedCaseId(c.id);
                                     }}
-                                    className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-navy-950 hover:text-white text-gray-700 transition-colors inline-flex items-center gap-1 cursor-pointer text-xs font-medium"
+                                    className="px-2.5 py-1 rounded-full bg-gray-100 hover:bg-navy-950 hover:text-white text-gray-700 transition-colors inline-flex items-center gap-1 cursor-pointer text-xs font-medium"
                                   >
-                                    <span>Dossier</span>
+                                    <span>View</span>
                                     <ChevronRight className="w-3.5 h-3.5" />
                                   </button>
                                 </td>
@@ -606,9 +496,8 @@ export function CasesView() {
                   {/* Table Footer */}
                   <div className="bg-gray-50/70 border-t border-gray-200/80 px-4 py-3 flex items-center justify-between text-xs text-gray-500 mt-auto shrink-0">
                     <span>
-                      Showing <strong className="text-gray-900 font-semibold">{filteredCases.length}</strong> of {cases.length} litigation matters
+                      Showing <strong className="text-gray-900 font-semibold">{filteredCases.length}</strong> of {cases.length} cases
                     </span>
-                    <span className="font-medium text-navy-900">Med Jordan Law Judicial Docket</span>
                   </div>
                 </div>
               ) : (
@@ -680,15 +569,15 @@ export function CasesView() {
           {activeWorkspaceMode === "vault" && (
             <div className="flex-1 flex flex-col gap-3 min-h-0">
               {/* Vault Search and Filters Bar */}
-              <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+              <div className="surface-card p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
                 <div className="relative w-full md:w-80">
                   <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search documents by title, case #, client, or hash..."
+                    placeholder="Search vault..."
                     value={vaultSearch}
                     onChange={(e) => setVaultSearch(e.target.value)}
-                    className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+                    className="w-full pl-8.5 pr-3 py-2 text-xs bg-white hover:bg-gray-50 focus:bg-white border border-navy-900/10 focus:border-navy-900 rounded-full focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
                   />
                 </div>
 
@@ -698,13 +587,13 @@ export function CasesView() {
                     onChange={(e) => setVaultCategoryFilter(e.target.value)}
                     className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
                   >
-                    <option value="all">All Classifications</option>
-                    <option value="pleading">Pleadings & Memoranda (لوائح دعوى)</option>
-                    <option value="power of attorney">Powers of Attorney (وكالات عدلية)</option>
-                    <option value="commercial register">Commercial Register Extracts (شهادات تسجيل)</option>
-                    <option value="expert financial">Expert Financial Reports (تقارير خبرة)</option>
-                    <option value="evidentiary">Evidentiary Exhibits (أدلة وعقود)</option>
-                    <option value="court decrees">Court Decrees & Orders (قرارات قضائية)</option>
+                    <option value="all">All Categories</option>
+                    <option value="pleading">Pleadings</option>
+                    <option value="power of attorney">Powers of Attorney</option>
+                    <option value="commercial register">Commercial Register</option>
+                    <option value="expert financial">Financial Reports</option>
+                    <option value="evidentiary">Exhibits</option>
+                    <option value="court decrees">Court Decrees</option>
                   </select>
 
                   <select
@@ -712,10 +601,10 @@ export function CasesView() {
                     onChange={(e) => setVaultStatusFilter(e.target.value)}
                     className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
                   >
-                    <option value="all">All Audit Statuses</option>
-                    <option value="validated">Security Validated ({validatedDocumentsCount})</option>
-                    <option value="pending">Pending Audit ({pendingAuditDocumentsCount})</option>
-                    <option value="rejected">Re-upload Required ({rejectedDocumentsCount})</option>
+                    <option value="all">All Statuses</option>
+                    <option value="validated">Validated ({validatedDocumentsCount})</option>
+                    <option value="pending">Pending ({pendingAuditDocumentsCount})</option>
+                    <option value="rejected">Rejected ({rejectedDocumentsCount})</option>
                   </select>
 
                   <select
@@ -724,14 +613,14 @@ export function CasesView() {
                     className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
                   >
                     <option value="all">All Visibilities</option>
-                    <option value="visible">Visible in Client Portal</option>
-                    <option value="internal">Chambers Internal Only</option>
+                    <option value="visible">Client</option>
+                    <option value="internal">Chambers</option>
                   </select>
                 </div>
               </div>
 
               {/* Master Documents Table */}
-              <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <div className="surface-table flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                 <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
                   <table className="w-full text-left border-collapse table-fixed min-w-[1240px]">
                     <colgroup>
@@ -746,22 +635,22 @@ export function CasesView() {
                     <thead className="sticky top-0 z-10">
                       <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Document Title
+                          Title
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Litigation Matter
+                          Case
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Classification
+                          Category
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Payload Size
+                          Size
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Validation Status
+                          Status
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                          Client Portal
+                          Visibility
                         </th>
                         <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">
                           Actions
@@ -820,7 +709,7 @@ export function CasesView() {
                               <button
                                 type="button"
                                 onClick={() => setSelectedCaseId(c.id)}
-                                className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-gray-100 text-gray-900 hover:bg-navy-950 hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1"
+                                className="font-mono text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-900 hover:bg-navy-950 hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1"
                                 title="Open Parent Case Dossier"
                               >
                                 <span>{c.caseNumber}</span>
@@ -854,7 +743,7 @@ export function CasesView() {
                               {doc.status === "Pending" && (
                                 <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200/70 px-2.5 py-0.5 rounded-full">
                                   <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                                  Pending Audit
+                                  Pending
                                 </span>
                               )}
                               {doc.status === "Rejected" && (
@@ -863,7 +752,7 @@ export function CasesView() {
                                   title={doc.rejectionReason}
                                 >
                                   <FileX className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                                  Re-upload
+                                  Rejected
                                 </span>
                               )}
                             </td>
@@ -883,12 +772,12 @@ export function CasesView() {
                                 {doc.isOfficeVisibleToClient ? (
                                   <>
                                     <Eye className="w-3 h-3 text-emerald-600" />
-                                    <span>Client Visible</span>
+                                    <span>Client</span>
                                   </>
                                 ) : (
                                   <>
                                     <Lock className="w-3 h-3 text-gray-500" />
-                                    <span>Chambers Only</span>
+                                    <span>Chambers</span>
                                   </>
                                 )}
                               </button>
@@ -906,7 +795,7 @@ export function CasesView() {
                                       clientName: c.clientName,
                                     })
                                   }
-                                  className="px-2 py-1 rounded-md bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors text-xs font-medium cursor-pointer inline-flex items-center gap-1"
+                                  className="px-2 py-1 rounded-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors text-xs font-medium cursor-pointer inline-flex items-center gap-1"
                                   title="Preview Certified Document"
                                 >
                                   <Eye className="w-3.5 h-3.5 text-gray-500" />
@@ -916,7 +805,7 @@ export function CasesView() {
                                 <button
                                   type="button"
                                   onClick={() => setAuditDoc(doc)}
-                                  className="px-2 py-1 rounded-md bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors text-xs font-medium cursor-pointer inline-flex items-center gap-1"
+                                  className="px-2 py-1 rounded-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors text-xs font-medium cursor-pointer inline-flex items-center gap-1"
                                   title="Inspect Forensic Audit Trail"
                                 >
                                   <ShieldAlert className="w-3.5 h-3.5 text-navy-700" />
@@ -934,9 +823,8 @@ export function CasesView() {
                 {/* Vault Table Footer */}
                 <div className="bg-gray-50/70 border-t border-gray-200/80 px-4 py-3 flex items-center justify-between text-xs text-gray-500 mt-auto shrink-0">
                   <span>
-                    Showing <strong className="text-gray-900 font-semibold">{filteredVaultDocuments.length}</strong> of {allVaultDocuments.length} total vault documents
+                    Showing <strong className="text-gray-900 font-semibold">{filteredVaultDocuments.length}</strong> of {allVaultDocuments.length} documents
                   </span>
-                  <span className="font-medium text-navy-900">100% SHA-256 Tamper-Evident Security Seal</span>
                 </div>
               </div>
             </div>
@@ -968,11 +856,6 @@ export function CasesView() {
             })
           }
           onLogOutcomeClick={(hearing) => setOutcomeModalHearing(hearing)}
-          onToggleDocVisibility={(docId) => toggleCaseDocumentVisibility(selectedCase.id, docId)}
-          onDeleteDoc={(docId) => deleteCaseDocument(selectedCase.id, docId)}
-          onUpdateDocStatus={(docId, status, reason) =>
-            updateCaseDocumentStatus(selectedCase.id, docId, status, reason)
-          }
           onViewContract={() => setActiveNav("contracts")}
         />
       )}

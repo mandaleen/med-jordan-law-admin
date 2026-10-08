@@ -21,21 +21,21 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-gray-200/80",
+        "flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-1",
         className
       )}
     >
       <div className="flex flex-col gap-1 min-w-0">
         {eyebrow && (
-          <span className="text-[11px] font-semibold tracking-wider uppercase text-gold-700 font-mono">
+          <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-gold-700">
             {eyebrow}
           </span>
         )}
-        <h1 className="text-xl md:text-2xl font-bold tracking-tight text-navy-900">
+        <h1 className="text-2xl md:text-[32px] leading-[1.1] font-semibold tracking-[-0.03em] text-navy-950">
           {title}
         </h1>
         {description && (
-          <p className="text-xs md:text-sm text-gray-500 max-w-3xl leading-relaxed">
+          <p className="text-sm text-gray-500 max-w-3xl leading-relaxed">
             {description}
           </p>
         )}
@@ -64,14 +64,14 @@ export function SectionHeader({
     <div
       id={id}
       className={cn(
-        "flex items-center justify-between pb-3 border-b border-gray-200/80 mb-3",
+        "flex items-center justify-between mb-3",
         className
       )}
     >
       <div className="flex items-center gap-2">
-        <h2 className="text-sm font-bold text-navy-900 tracking-tight">{title}</h2>
+        <h2 className="text-[17px] font-semibold text-navy-950 tracking-tight">{title}</h2>
         {typeof count === "number" && (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-navy-50 text-navy-800 border border-navy-200/60 font-mono">
+          <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-navy-50 text-navy-700 tabular-nums">
             {count}
           </span>
         )}

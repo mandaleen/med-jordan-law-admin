@@ -69,11 +69,8 @@ export function PostConsultationModal({
             </div>
             <div>
               <h3 className="text-base font-bold tracking-tight">
-                Post-Consultation Lawyer Decision Flow
+                Post-Consultation
               </h3>
-              <p className="text-xs text-slate-300">
-                Session wrap-up & triage decision (Page 8 · بعد الاستشارة)
-              </p>
             </div>
           </div>
 
@@ -87,62 +84,60 @@ export function PostConsultationModal({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-5">
+        <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4">
           {/* Appointment Meta Strip */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
             <div className="flex items-center gap-3">
               <ClientAvatar
                 name={clientName}
                 src={booking?.clientAvatar}
                 initials={booking?.clientInitials}
-                className="w-10 h-10 rounded-xl ring-1 ring-black/10 shrink-0 shadow-2xs"
+                className="w-9 h-9 rounded-xl ring-1 ring-black/10 shrink-0 shadow-2xs"
                 fallbackClassName="text-xs font-bold rounded-xl"
               />
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Client</span>
-                <span className="font-bold text-[#0A2342] text-sm block mt-0.5">{clientName}</span>
+                <span className="font-bold text-[#0A2342] text-sm block">{clientName}</span>
                 <span className="text-[11px] text-slate-500">{practiceArea}</span>
               </div>
             </div>
             <div className="text-right">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Counsel</span>
-              <span className="font-bold text-slate-800 text-sm block mt-0.5">{lawyerName}</span>
-              <span className="text-[11px] text-emerald-700 font-semibold">Consultation Delivered</span>
+              <span className="font-medium text-slate-700 text-xs block">{lawyerName}</span>
+              <span className="text-[11px] text-emerald-700 font-semibold">Delivered</span>
             </div>
           </div>
 
           {/* Lawyer Session Notes */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">
-              1. Session Summary & Legal Advice Given (الملاحظات والنتيجة):
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-semibold text-slate-700">
+              Notes:
             </label>
             <textarea
               rows={3}
               value={lawyerNotes}
               onChange={(e) => setLawyerNotes(e.target.value)}
-              placeholder="Record legal analysis, merits of the case, and preliminary counsel advice..."
+              placeholder="Session notes and legal analysis..."
               className="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#0A2342]"
             />
           </div>
 
           {/* Client Objectives */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">
-              2. Client Objectives & Immediate Milestones:
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-semibold text-slate-700">
+              Client Objectives:
             </label>
             <textarea
               rows={2}
               value={clientObjectives}
               onChange={(e) => setClientObjectives(e.target.value)}
-              placeholder="e.g. Urgent injunction petition, commercial arbitration clause enforcement..."
+              placeholder="Client goals and next requirements..."
               className="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#0A2342]"
             />
           </div>
 
           {/* 3 Branching Decisions */}
           <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
-            <label className="text-xs font-bold text-slate-700">
-              3. Determine Next Operational Step (تحديد الخطوة التالية):
+            <label className="text-xs font-semibold text-slate-700">
+              Next Step:
             </label>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
@@ -155,18 +150,13 @@ export function PostConsultationModal({
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-900 flex items-center justify-center font-bold">
-                    <Briefcase className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
-                    صفحة 9
-                  </span>
+                <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-900 flex items-center justify-center font-bold">
+                  <Briefcase className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[#0A2342] text-xs">Open Litigation Case</h4>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-normal">
-                    Assign counsel, establish court chamber, and provision shared document vault.
+                  <h4 className="font-bold text-[#0A2342] text-xs">Open Case</h4>
+                  <p className="text-[10px] text-slate-500 mt-0.5 leading-normal">
+                    Create matter file and assign chamber.
                   </p>
                 </div>
               </div>
@@ -180,18 +170,13 @@ export function PostConsultationModal({
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                    <FileCheck className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
-                    صفحة 10
-                  </span>
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                  <FileCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-emerald-950 text-xs">Fee Agreement (عقد أتعاب)</h4>
-                  <p className="text-[10px] text-emerald-800 mt-1 leading-normal">
-                    Prepare contract from firm template and dispatch for client e-signature.
+                  <h4 className="font-bold text-emerald-950 text-xs">Fee Agreement</h4>
+                  <p className="text-[10px] text-emerald-800 mt-0.5 leading-normal">
+                    Draft contract and send for signature.
                   </p>
                 </div>
               </div>
@@ -205,18 +190,13 @@ export function PostConsultationModal({
                     : "border-slate-200 hover:border-slate-300 bg-white"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">
-                    إنهاء
-                  </span>
+                <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-xs">Conclude Session Only</h4>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-normal">
-                    Advisory session complete. Retain legal log and financial invoice in vault.
+                  <h4 className="font-bold text-slate-900 text-xs">Conclude Only</h4>
+                  <p className="text-[10px] text-slate-500 mt-0.5 leading-normal">
+                    Save advisory log and complete.
                   </p>
                 </div>
               </div>
@@ -239,7 +219,7 @@ export function PostConsultationModal({
             onClick={handleExecute}
             className="px-5 py-2 text-xs font-bold bg-[#0A2342] hover:bg-blue-900 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-2"
           >
-            <span>Proceed with Next Step</span>
+            <span>Continue</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

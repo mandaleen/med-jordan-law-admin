@@ -19,26 +19,26 @@ export function ExportSheetModal({ isOpen, onClose }: ExportSheetModalProps) {
   const formats = [
     {
       id: "csv",
-      title: "Client & Bookings Ledger",
-      subtitle: "Comma-separated spreadsheet format (.csv)",
+      title: "Spreadsheet (CSV)",
+      subtitle: ".csv format",
       icon: Table,
-      color: "#2F9E6E", // success
+      color: "#2F9E6E",
       extension: "csv",
     },
     {
       id: "pdf",
-      title: "Executive Partner Brief",
-      subtitle: "Full vector PDF with financial graphs (.pdf)",
+      title: "Report (PDF)",
+      subtitle: ".pdf format",
       icon: FileText,
-      color: "#D64545", // error
+      color: "#D64545",
       extension: "pdf",
     },
     {
       id: "json",
-      title: "Encrypted Dossier Archive",
-      subtitle: "Complete practice data in secure JSON (.json)",
+      title: "Archive (JSON)",
+      subtitle: ".json format",
       icon: Lock,
-      color: "#3B82C4", // info
+      color: "#3B82C4",
       extension: "json",
     },
   ];
@@ -79,23 +79,20 @@ export function ExportSheetModal({ isOpen, onClose }: ExportSheetModalProps) {
         showCloseButton={false}
         className="max-w-md bg-white/95 backdrop-blur-2xl border border-gray-300 rounded-xl shadow-[0_24px_60px_rgba(26,39,68,0.18)] overflow-hidden p-6"
       >
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+        <div className="flex items-center justify-between pb-3.5 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-navy-900/10 flex items-center justify-center text-navy-900">
               <Share2 className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="text-base font-semibold text-navy-900 tracking-tight whitespace-nowrap">
-                Export Practice Data
-              </h3>
-              <p className="text-xs text-gray-500 whitespace-nowrap">Formal Dossier & Ledger Dispatch</p>
-            </div>
+            <h3 className="text-base font-semibold text-navy-900 tracking-tight whitespace-nowrap">
+              Export Data
+            </h3>
           </div>
           <button
             onClick={() => {
               onClose();
             }}
-            className="w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 apple-press"
+            className="w-7 h-7 rounded-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 press cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -112,7 +109,7 @@ export function ExportSheetModal({ isOpen, onClose }: ExportSheetModalProps) {
                 onClick={() => {
                   setSelectedFormat(f.id as "csv" | "pdf" | "json");
                 }}
-                className={`w-full flex items-center justify-between p-3.5 rounded-lg border transition-all text-left cursor-pointer apple-press ${
+                className={`w-full flex items-center justify-between p-3.5 rounded-lg border transition-all text-left cursor-pointer press ${
                   isSelected
                     ? "bg-navy-50 border-navy-900 shadow-xs"
                     : "bg-white hover:bg-gray-50 border-gray-300"
@@ -151,19 +148,19 @@ export function ExportSheetModal({ isOpen, onClose }: ExportSheetModalProps) {
             type="button"
             onClick={handleDownload}
             disabled={isExporting}
-            className="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-950 text-white text-sm font-semibold shadow-sm border border-navy-900 transition-all apple-press flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap shrink-0"
+            className="w-full py-2.5 rounded-lg bg-navy-900 hover:bg-navy-950 text-white text-xs font-semibold shadow-sm border border-navy-900 transition-all press flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap shrink-0"
           >
             {isSuccess ? (
               <>
                 <Check className="w-4 h-4 stroke-[3] shrink-0" />
-                <span className="whitespace-nowrap">Downloaded Successfully</span>
+                <span className="whitespace-nowrap">Downloaded</span>
               </>
             ) : isExporting ? (
-              <span className="whitespace-nowrap">Preparing Archive...</span>
+              <span className="whitespace-nowrap">Exporting...</span>
             ) : (
               <>
                 <Download className="w-4 h-4 shrink-0" />
-                <span className="whitespace-nowrap">Download {selectedFormat.toUpperCase()} Dossier</span>
+                <span className="whitespace-nowrap">Download {selectedFormat.toUpperCase()}</span>
               </>
             )}
           </button>

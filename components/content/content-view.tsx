@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { ActionButton } from "@/components/ui/action-button";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   FileText,
   Search,
@@ -114,34 +116,28 @@ export function ContentView() {
       {/* MASTER ARTICLES TABLE VIEW vs NO-CODE EDITOR */}
       {!editingArticle && !isCreatingNew ? (
         <div className="flex-1 flex flex-col gap-3 min-h-0">
-          {/* Header & Filter Controls */}
-          <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
-            <div className="flex items-center gap-3 w-full md:w-auto">
-              <div className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold">
-                <FileText className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-base font-semibold text-navy-900 tracking-tight">Legal Insights & Articles</h2>
-                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
-                    {articles.length} Insights
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">Firm thought leadership published directly to the public website</p>
-              </div>
-            </div>
+          <PageHeader
+            title="Articles"
+            description={`${articles.length} bilingual articles across published, draft and scheduled states.`}
+            actions={
+              <ActionButton variant="primary" icon={<Plus className="w-4 h-4" strokeWidth={2.4} />} onClick={() => handleOpenEditor()}>
+                New Article
+              </ActionButton>
+            }
+          />
 
+          <div className="surface-card p-3 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
             {/* Actions & Filters */}
             <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
               {/* Search Box */}
-              <div className="relative min-w-[220px]">
+              <div className="relative min-w-[200px]">
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Search title, practice area, counsel..."
+                  placeholder="Search articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full ps-8 pe-7 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 text-slate-900 text-start"
+                  className="w-full ps-8 pe-7 py-1.5 text-xs bg-slate-50/80 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 text-slate-900 text-start"
                 />
                 {searchQuery && (
                   <button
@@ -161,42 +157,33 @@ export function ContentView() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none text-slate-700 font-medium"
               >
-                <option value="all">All Statuses</option>
+                <option value="all">All</option>
                 <option value="Published">Published</option>
                 <option value="Draft">Draft</option>
                 <option value="Scheduled">Scheduled</option>
               </select>
 
-              {/* Create Article Button */}
-              <button
-                type="button"
-                onClick={() => handleOpenEditor()}
-                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 transition-colors"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Draft Insight
-              </button>
             </div>
           </div>
 
           {/* Articles Table */}
-          <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex-1 flex flex-col min-h-[460px] overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-200/80 shadow-2xs flex-1 flex flex-col min-h-[460px] overflow-hidden">
             <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar min-h-0">
-              <table className="w-full text-start border-collapse table-fixed min-w-[1250px]">
+              <table className="w-full text-start border-collapse table-fixed min-w-[1100px]">
                 <colgroup>
                   <col className="w-[300px]" />
                   <col className="w-[160px]" />
-                  <col className="w-[160px]" />
-                  <col className="w-[130px]" />
-                  <col className="w-[140px]" />
-                  <col className="w-[100px]" />
+                  <col className="w-[150px]" />
                   <col className="w-[120px]" />
-                  <col className="w-[140px]" />
+                  <col className="w-[110px]" />
+                  <col className="w-[90px]" />
+                  <col className="w-[110px]" />
+                  <col className="w-[90px]" />
                 </colgroup>
                 <thead className="sticky top-0 z-10">
                   <tr className="bg-slate-50/80 border-b border-slate-200/80">
-                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Article Title (EN / AR)</th>
-                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Practice Area</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Title</th>
+                    <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Area</th>
                     <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Author</th>
                     <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Status</th>
                     <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Languages</th>
@@ -289,7 +276,7 @@ export function ContentView() {
                         <td className="py-3.5 px-4 align-middle whitespace-nowrap text-start">
                           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[11px] font-medium border border-slate-200/70">
                             <Globe className="w-3 h-3 text-slate-500 shrink-0" />
-                            EN + AR Synced
+                            EN / AR
                           </span>
                         </td>
 
@@ -321,18 +308,11 @@ export function ContentView() {
             </div>
 
             {/* Table Footer Summary Strip */}
-            <div className="bg-slate-50/80 border-t border-slate-200/80 px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 mt-auto shrink-0">
-              <div className="flex items-center gap-4">
-                <span>Showing <strong className="text-slate-800">{filteredArticles.length}</strong> of {articles.length} articles</span>
-                <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="hidden sm:inline">Published: <strong className="text-emerald-700">{articles.filter((a) => a.status === "Published").length}</strong></span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-400">Total Readership:</span>
-                <span className="font-mono font-bold text-navy-900 text-[13px]">
-                  {articles.reduce((acc, a) => acc + a.views, 0).toLocaleString()} views
-                </span>
-              </div>
+            <div className="bg-slate-50/80 border-t border-slate-200/80 px-4 py-2.5 flex items-center justify-between text-xs text-slate-500 mt-auto shrink-0">
+              <span>{filteredArticles.length} of {articles.length} articles</span>
+              <span className="font-mono font-bold text-navy-900 text-xs">
+                {articles.reduce((acc, a) => acc + a.views, 0).toLocaleString()} views
+              </span>
             </div>
           </div>
         </div>

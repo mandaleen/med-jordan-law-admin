@@ -80,11 +80,8 @@ export function UploadDocumentModal({
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
-                Upload & Seal Legal Document
+                Upload Document
               </h3>
-              <p className="text-xs text-gray-500">
-                Encrypted vault ingest with SHA-256 forensic certificate
-              </p>
             </div>
           </div>
           <button
@@ -102,7 +99,7 @@ export function UploadDocumentModal({
           {availableCases.length > 0 && !caseNumber && (
             <div>
               <label className="font-semibold text-gray-700 block mb-1">
-                Assign to Litigation Matter:
+                Matter:
               </label>
               <select
                 value={chosenCaseId}
@@ -119,7 +116,7 @@ export function UploadDocumentModal({
           )}
 
           {/* File Drag Box */}
-          <label className="p-5 rounded-xl border-2 border-dashed border-gray-200 hover:border-navy-900 bg-gray-50/70 hover:bg-white flex flex-col items-center justify-center text-center gap-2 transition-all cursor-pointer group">
+          <label className="p-4 rounded-xl border-2 border-dashed border-gray-200 hover:border-navy-900 bg-gray-50/70 hover:bg-white flex flex-col items-center justify-center text-center gap-2 transition-all cursor-pointer group">
             <input
               type="file"
               className="sr-only"
@@ -132,30 +129,30 @@ export function UploadDocumentModal({
                 }
               }}
             />
-            <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-navy-50 text-gray-700 group-hover:text-navy-900 flex items-center justify-center transition-colors">
-              <FileText className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-gray-100 group-hover:bg-navy-50 text-gray-700 group-hover:text-navy-900 flex items-center justify-center transition-colors">
+              <FileText className="w-4 h-4" />
             </div>
             <div>
               <span className="font-semibold text-gray-900 text-xs">
-                Click to browse or drag file here
+                Click or drag file here
               </span>
               <p className="text-[11px] text-gray-500 mt-0.5">
-                Certified PDF, Word document (.docx), or notary scans up to 50 MB
+                PDF, DOCX up to 50 MB
               </p>
             </div>
             <span className="px-2.5 py-0.5 rounded-md bg-white border border-gray-200 text-gray-800 font-mono text-[11px] shadow-2xs">
-              Payload: {fileName} ({fileSize})
+              {fileName} ({fileSize})
             </span>
           </label>
 
           <div>
             <label className="font-semibold text-gray-700 block mb-1">
-              Document Official Title / Docket Description:
+              Title:
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Statement of Claim & Factual Memoranda (Amman Court)"
+              placeholder="Document title"
               value={docTitle}
               onChange={(e) => setDocTitle(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-gray-200/90 rounded-lg text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
@@ -164,19 +161,19 @@ export function UploadDocumentModal({
 
           <div>
             <label className="font-semibold text-gray-700 block mb-1">
-              Legal Classification & Type:
+              Category:
             </label>
             <select
               value={docCategory}
               onChange={(e) => setDocCategory(e.target.value)}
               className="w-full px-3 py-2 bg-white border border-gray-200/90 rounded-lg text-xs text-gray-800 font-medium focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
             >
-              <option value="Pleading & Court Memorandum">Pleading & Court Memorandum (لائحة دعوى / مذكرة تفصيلية)</option>
-              <option value="Power of Attorney Scan">Power of Attorney Notary Copy (سند وكالة عدلية)</option>
-              <option value="Commercial Register Extract">Commercial Register & Authorization Extract (شهادة تسجيل ومفوضين)</option>
-              <option value="Expert Financial Report">Expert Financial Assessment & Valuation (تقرير خبرة وتخمين أضرار)</option>
-              <option value="Evidentiary Exhibits">Evidentiary Exhibits & Contracts (أدلة وعقود رسمية)</option>
-              <option value="Court Decrees & Orders">Court Hearing Order & Official Decrees (قرارات وإيصالات قضائية)</option>
+              <option value="Pleading & Court Memorandum">Pleading & Court Memorandum</option>
+              <option value="Power of Attorney Scan">Power of Attorney Copy</option>
+              <option value="Commercial Register Extract">Commercial Register Extract</option>
+              <option value="Expert Financial Report">Expert Financial Report</option>
+              <option value="Evidentiary Exhibits">Evidentiary Exhibits</option>
+              <option value="Court Decrees & Orders">Court Orders & Decrees</option>
             </select>
           </div>
 
@@ -192,12 +189,12 @@ export function UploadDocumentModal({
               </div>
               <div className="min-w-0">
                 <span className="font-semibold text-gray-900 block text-xs">
-                  {isVisibleToClient ? "Visible in Client Portal" : "Chambers Internal Vault Only"}
+                  {isVisibleToClient ? "Visible to Client" : "Internal Only"}
                 </span>
                 <p className="text-[11px] text-gray-500 leading-tight">
                   {isVisibleToClient
-                    ? "Client can view, download, and receive update notifications in their portal."
-                    : "Strict attorney-client work product. Hidden from client portal."}
+                    ? "Available in client portal."
+                    : "Internal team only."}
                 </p>
               </div>
             </div>
@@ -224,10 +221,10 @@ export function UploadDocumentModal({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
+              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Seal into Vault</span>
+              <span>Upload</span>
             </button>
           </div>
         </form>

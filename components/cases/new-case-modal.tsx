@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Briefcase, X, Scale } from "lucide-react";
+import { X, Scale } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface NewCaseModalProps {
@@ -52,11 +52,8 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
-                Open Active Litigation Matter
+                New Case
               </h3>
-              <p className="text-xs text-gray-500">
-                Initialize official judicial docket and client vault
-              </p>
             </div>
           </div>
           <button
@@ -72,12 +69,12 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
           <div>
             <label className="font-semibold text-gray-700 block mb-1">
-              Client / Corporate Entity Name:
+              Client:
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Sara Odeh (Odeh Industrial Group)"
+              placeholder="e.g. Sara Odeh"
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
               className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
@@ -86,12 +83,12 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
 
           <div>
             <label className="font-semibold text-gray-700 block mb-1">
-              Matter Title / Dispute Summary:
+              Title:
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Commercial Shareholder Restructuring & Asset Defense"
+              placeholder="e.g. Shareholder Dispute"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 transition-colors"
@@ -101,22 +98,22 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="font-semibold text-gray-700 block mb-1">
-                Assigned Lead Counsel:
+                Counsel:
               </label>
               <select
                 value={assignedLawyer}
                 onChange={(e) => setAssignedLawyer(e.target.value)}
                 className="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white text-gray-900 focus:outline-none focus:border-navy-900 transition-colors cursor-pointer"
               >
-                <option value="Tariq Qudah">Tariq Qudah (Senior Partner)</option>
-                <option value="Sara Al-Majali">Sara Al-Majali (Partner)</option>
-                <option value="Kareem Masri">Kareem Masri (Senior Associate)</option>
+                <option value="Tariq Qudah">Tariq Qudah</option>
+                <option value="Sara Al-Majali">Sara Al-Majali</option>
+                <option value="Kareem Masri">Kareem Masri</option>
               </select>
             </div>
 
             <div>
               <label className="font-semibold text-gray-700 block mb-1">
-                Practice Area:
+                Area:
               </label>
               <select
                 value={practiceArea}
@@ -142,9 +139,9 @@ export function NewCaseModal({ isOpen, onClose, onSubmit }: NewCaseModalProps) {
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer transition-colors"
+              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer transition-colors"
             >
-              Initialize Matter Docket
+              Create Case
             </button>
           </div>
         </form>

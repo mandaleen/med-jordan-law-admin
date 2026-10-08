@@ -391,18 +391,18 @@ export interface OfficeSettings {
 
 export const NAV_MENU_ITEMS: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: "LayoutDashboard", href: "#" },
-  { id: "bookings", label: "Bookings", icon: "Calendar", badge: "2 New", href: "#" },
-  { id: "cases", label: "Cases & documents", icon: "Briefcase", badge: "28", href: "#" },
+  { id: "bookings", label: "Bookings", icon: "Calendar", href: "#" },
+  { id: "cases", label: "Cases", icon: "Briefcase", href: "#" },
   { id: "clients", label: "Clients", icon: "Users", href: "#" },
-  { id: "contracts", label: "Fee Contracts", icon: "FileCheck", badge: "8 Active", href: "#" },
-  { id: "leads", label: "Inquiries & Leads", icon: "Mail", badge: "3 New", href: "#" },
+  { id: "contracts", label: "Contracts", icon: "FileCheck", href: "#" },
+  { id: "leads", label: "Leads", icon: "Mail", href: "#" },
   { id: "finance", label: "Finance", icon: "Wallet", href: "#" },
   { id: "content", label: "Content", icon: "FileText", href: "#" },
 ];
 
 export const NAV_GENERAL_ITEMS: NavItem[] = [
   { id: "settings", label: "Settings", icon: "Settings", href: "#" },
-  { id: "audit", label: "Audit Trail", icon: "ShieldAlert", href: "#" },
+  { id: "audit", label: "Audit", icon: "ShieldAlert", href: "#" },
   { id: "help", label: "Help", icon: "HelpCircle", href: "#" },
   { id: "logout", label: "Logout", icon: "LogOut", href: "#" },
 ];
@@ -428,47 +428,44 @@ export const CURRENT_USER: UserProfile = {
 export const DASHBOARD_STAT_CARDS: StatItem[] = [
   {
     id: "bookings-today",
-    title: "Bookings Today",
+    title: "Bookings",
     value: "6",
-    trendText: "vs yesterday",
+    trendText: "Yesterday",
     trendValue: "+2",
     isAccentDark: true,
-    subMetric: "2 awaiting acceptance",
+    subMetric: "2 awaiting",
   },
   {
     id: "total-clients",
     title: "Clients",
     value: "184",
-    trendText: "this month",
+    trendText: "Month",
     trendValue: "+14",
     isAccentDark: false,
     accentColor: "#3D5390",
-    subMetric: "92 corporate groups",
+    subMetric: "92 corporate",
   },
   {
     id: "open-cases",
-    title: "Open Cases",
+    title: "Cases",
     value: "28",
-    trendText: "this week",
+    trendText: "Week",
     trendValue: "4 Hearings",
     isAccentDark: false,
     accentColor: "#2F9E6E",
-    subMetric: "3 in pleading stage",
+    subMetric: "3 pleadings",
   },
   {
     id: "pending-approval",
-    title: "Pending Approval",
+    title: "Pending",
     value: "4",
-    trendText: "requires review",
+    trendText: "Review",
     trendValue: "Urgent",
     isAccentDark: false,
     accentColor: "#E0A030",
-    subMetric: "2 bookings · 2 rejected docs",
+    subMetric: "2 bookings · 2 docs",
   },
 ];
-
-// Preserved for backwards compatibility
-export const STAT_CARDS: StatItem[] = DASHBOARD_STAT_CARDS;
 
 export const UPCOMING_CONSULTATIONS: UpcomingConsultationItem[] = [
   {
@@ -1778,19 +1775,6 @@ export const WEEKLY_CHART_DATA: DayBarData[] = [
   { day: "Fri", fullDay: "Friday", bookings: 3, heightPercent: 42 },
   { day: "Sat", fullDay: "Saturday", bookings: 6, heightPercent: 68 },
 ];
-
-export const NEXT_CONSULTATION = {
-  clientName: "Sara Odeh",
-  headline: "Consultation with Sara Odeh",
-  firm: "Odeh Industrial & Commercial Group",
-  time: "02:00 PM – 04:00 PM",
-  date: "Today, Oct 6",
-  countdown: "Starts in 24m",
-  status: "Scheduled",
-  type: "Commercial Retainer Agreement",
-  avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256&h=256",
-  location: "FaceTime HD / Encrypted Portal",
-};
 
 export const NOTIFICATIONS: NotificationItem[] = [
   {

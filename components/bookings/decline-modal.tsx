@@ -33,7 +33,7 @@ export function DeclineModal({ booking, onClose, onConfirm }: DeclineModalProps)
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-navy-900">Decline Consultation Request</h3>
+            <h3 className="text-base font-bold text-navy-900">Decline Request</h3>
             <p className="text-xs text-gray-500">
               {booking.clientName} · {booking.fee} Retainer
             </p>
@@ -41,32 +41,30 @@ export function DeclineModal({ booking, onClose, onConfirm }: DeclineModalProps)
         </div>
 
         <p className="text-xs text-gray-600 leading-relaxed">
-          Declining will immediately notify the client via WhatsApp and email, and trigger an automated refund of the{" "}
-          <strong className="text-navy-900 font-bold">{booking.fee}</strong> consultation fee back to their payment
-          card.
+          The client will be notified and refunded the <strong className="text-navy-900 font-bold">{booking.fee}</strong> consultation fee.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-gray-700">Decline Justification:</label>
+            <label className="text-xs font-bold text-gray-700">Reason:</label>
             <select
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 text-gray-900 focus:outline-none"
             >
-              <option value="Lawyer schedule conflict of interest">Lawyer schedule conflict of interest</option>
-              <option value="Practice area out of firm jurisdiction">Practice area out of firm jurisdiction</option>
+              <option value="Lawyer schedule conflict of interest">Schedule conflict</option>
+              <option value="Practice area out of firm jurisdiction">Out of practice area</option>
               <option value="Firm at full litigation capacity for requested dates">
-                Firm at full litigation capacity for requested dates
+                At full capacity
               </option>
-              <option value="Client documentation incomplete">Client documentation incomplete</option>
+              <option value="Client documentation incomplete">Incomplete documentation</option>
             </select>
           </div>
 
           <div className="p-3 bg-gray-50 rounded-xl text-[11px] text-gray-700 flex items-center gap-2 border border-gray-200">
             <DollarSign className="w-4 h-4 text-success shrink-0" />
             <span>
-              Gateway Transaction ID: <strong className="font-mono">{booking.transactionId}</strong>
+              Transaction ID: <strong className="font-mono">{booking.transactionId}</strong>
             </span>
           </div>
 
@@ -76,13 +74,13 @@ export function DeclineModal({ booking, onClose, onConfirm }: DeclineModalProps)
               onClick={onClose}
               className="px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer whitespace-nowrap shrink-0 transition-colors"
             >
-              Keep Request
+              Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 text-xs font-bold bg-error hover:bg-error/90 text-white rounded-xl shadow-xs cursor-pointer whitespace-nowrap shrink-0 transition-colors"
             >
-              Decline & Issue Refund
+              Decline & Refund
             </button>
           </div>
         </form>

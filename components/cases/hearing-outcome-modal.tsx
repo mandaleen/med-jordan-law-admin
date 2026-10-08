@@ -32,7 +32,7 @@ function HearingOutcomeForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-xs">
       <div className="flex flex-col gap-1.5">
-        <label className="font-semibold text-gray-700">Official Outcome / Bench Ruling:</label>
+        <label className="font-semibold text-gray-700">Outcome:</label>
         <textarea
           rows={3}
           required
@@ -53,9 +53,9 @@ function HearingOutcomeForm({
         </button>
         <button
           type="submit"
-          className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer transition-colors"
+          className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer transition-colors"
         >
-          Record Bench Ruling
+          Save
         </button>
       </div>
     </form>
@@ -78,7 +78,7 @@ export function HearingOutcomeModal({ hearing, onClose, onSave }: HearingOutcome
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
-                Log Court Hearing Outcome
+                Log Outcome
               </h3>
               <p className="text-xs text-gray-500">
                 {hearing.date} · {hearing.chamber}

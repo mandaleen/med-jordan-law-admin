@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, Search, Plus } from "lucide-react";
 import { Sidebar } from "@/components/layout/sidebar";
+import { TopHeader } from "@/components/layout/top-header";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 import { BookingsView } from "@/components/bookings/bookings-view";
 import { CasesView } from "@/components/cases/cases-view";
@@ -25,18 +25,9 @@ function DashboardContent() {
     activeCardId,
     setActiveCardId,
     lang,
-    toggleLang,
-    setLang,
-    t,
     stats,
-    notifications,
-    markNotificationsRead,
     addBooking,
     toastMessage,
-    currentUser,
-    updateUserAvatar,
-    resetUserAvatar,
-    showToast,
   } = usePractice();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,67 +50,24 @@ function DashboardContent() {
   }, []);
 
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-gray-50 text-navy-900 antialiased font-sans">
+    <div className="h-screen w-full flex overflow-hidden bg-[#EEF1F7] text-navy-900 antialiased font-sans">
       {/* Responsive Sidebar (Desktop sticky sidebar + Mobile off-canvas drawer) */}
       <Sidebar
         activeId={activeNav}
         onSelectNav={setActiveNav}
-        notifications={notifications}
-        onMarkNotificationsRead={markNotificationsRead}
         currentLang={lang}
-        onToggleLang={toggleLang}
-        onSelectLang={setLang}
         isOpenMobile={isMobileMenuOpen}
         onCloseMobile={() => setIsMobileMenuOpen(false)}
-        currentUser={currentUser}
-        onUpdateAvatar={updateUserAvatar}
-        onResetAvatar={resetUserAvatar}
-        showToast={showToast}
       />
 
       {/* Main Content Area */}
       <main className="flex-1 h-screen overflow-y-auto custom-scrollbar min-w-0 flex flex-col">
-        {/* Mobile Header Bar (lg:hidden) */}
-        <header className="lg:hidden sticky top-0 z-20 flex items-center justify-between px-4 py-3 bg-white/95 backdrop-blur-md border-b border-gray-200 shrink-0">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 -m-1 rounded-xl text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-              aria-label="Open navigation menu"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-navy-900 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
-                MJL
-              </div>
-              <div>
-                <h1 className="text-xs font-bold text-navy-900 leading-tight">Med Jordan Law</h1>
-                <span className="text-[10px] text-gray-500 font-medium capitalize block">{activeNav} Workspace</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setIsSpotlightOpen(true)}
-              className="p-2 rounded-xl text-gray-600 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer"
-              aria-label="Search"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsNewBookingOpen(true)}
-              className="px-2.5 py-1.5 rounded-xl bg-navy-900 text-white text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>{t("action.new")}</span>
-            </button>
-          </div>
-        </header>
+        {/* Unified Top Header Bar (Desktop & Mobile) */}
+        <TopHeader
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+          onOpenSpotlight={() => setIsSpotlightOpen(true)}
+          onOpenNewBooking={() => setIsNewBookingOpen(true)}
+        />
 
         {/* Content Container */}
         <div className="flex-1 p-3 sm:p-5 lg:p-6 flex flex-col min-w-0">
@@ -132,6 +80,7 @@ function DashboardContent() {
                 onCardClick={setActiveCardId}
                 onNavigateTab={setActiveNav}
                 onNewBooking={() => setIsNewBookingOpen(true)}
+                onExport={() => setIsExportSheetOpen(true)}
               />
             )}
 
@@ -181,22 +130,21 @@ function DashboardContent() {
             )}
 
             {activeNav === "help" && (
-              <div className="apple-glass-card p-8 rounded-[22px] flex flex-col items-center justify-center text-center gap-4 max-w-lg mx-auto mt-12 animate-in fade-in duration-200">
+              <div className="surface-card p-8 rounded-[22px] flex flex-col items-center justify-center text-center gap-4 max-w-lg mx-auto mt-12 animate-in fade-in duration-200">
                 <div className="w-14 h-14 rounded-2xl bg-navy-900 text-white flex items-center justify-center font-bold text-xl shadow-md">
                   MJL
                 </div>
-                <h2 className="text-xl font-bold text-navy-900">Senior Legal Advisory Desk & Support</h2>
+                <h2 className="text-xl font-bold text-navy-900">Help & Support</h2>
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  Direct internal escalation channel for managing partners, litigation leads, and staff accounts.
-                  For urgent docket assistance, reach out to Senior Partner Tariq Qudah directly.
+                  For assistance, contact Tariq Qudah directly.
                 </p>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setActiveNav("dashboard")}
-                    className="px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap shrink-0 transition-all"
+                    className="px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold rounded-full cursor-pointer whitespace-nowrap shrink-0 transition-all"
                   >
-                    Return to Dashboard
+                    Dashboard
                   </button>
                 </div>
               </div>

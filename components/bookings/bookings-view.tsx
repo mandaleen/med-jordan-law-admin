@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { ActionButton } from "@/components/ui/action-button";
+import { Segmented } from "@/components/ui/segmented";
 import {
   Calendar as CalendarIcon,
   List,
@@ -24,7 +28,6 @@ import {
 } from "lucide-react";
 import { Booking } from "@/lib/mock-data";
 import { usePractice } from "@/lib/practice-context";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ConflictReviewModal } from "@/components/modals/conflict-review-modal";
@@ -121,7 +124,7 @@ function BookingRowActionMenu({
               className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-emerald-50 text-gray-800 hover:text-emerald-950 font-medium transition-colors cursor-pointer"
             >
               <Gavel className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span>Conclude & Wrap-up</span>
+              <span>Wrap-up</span>
             </button>
           )}
 
@@ -135,7 +138,7 @@ function BookingRowActionMenu({
               className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
             >
               <Clock className="w-3.5 h-3.5 text-navy-600 shrink-0" />
-              <span>Reschedule Consultation</span>
+              <span>Reschedule</span>
             </button>
           )}
 
@@ -149,7 +152,7 @@ function BookingRowActionMenu({
               className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-blue-50/70 text-gray-800 hover:text-blue-950 font-medium transition-colors cursor-pointer"
             >
               <FileCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              <span>View Signed Agreement (PDF)</span>
+              <span>Agreement (PDF)</span>
             </button>
           )}
 
@@ -163,7 +166,7 @@ function BookingRowActionMenu({
               className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-gray-50 text-gray-700 font-medium transition-colors cursor-pointer"
             >
               <User className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-              <span>View Client Profile</span>
+              <span>Client Profile</span>
             </button>
           )}
 
@@ -179,7 +182,7 @@ function BookingRowActionMenu({
                 className="w-full text-left px-3 py-1.5 flex items-center gap-2.5 hover:bg-rose-50 text-rose-700 font-medium transition-colors cursor-pointer"
               >
                 <DollarSign className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                <span>Cancel & Refund Retainer</span>
+                <span>Refund</span>
               </button>
             </>
           )}
@@ -250,45 +253,41 @@ export function BookingsView({
 
   return (
     <div className="flex-1 flex flex-col min-h-0 w-full animate-in fade-in duration-200">
-      {/* View Switcher, Filter & Search Control Header */}
-      <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 mb-3 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-        <div className="flex items-center gap-3">
-          <div className="flex bg-gray-100/80 p-0.5 rounded-lg border border-gray-200/60">
-            <button
-              type="button"
-              onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs transition-all cursor-pointer ${
-                viewMode === "list"
-                  ? "bg-white text-navy-950 font-semibold shadow-2xs"
-                  : "text-gray-500 hover:text-navy-900 font-medium"
-              }`}
-            >
-              <List className="w-3.5 h-3.5" />
-              <span>List Ledger</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("calendar")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs transition-all cursor-pointer ${
-                viewMode === "calendar"
-                  ? "bg-white text-navy-950 font-semibold shadow-2xs"
-                  : "text-gray-500 hover:text-navy-900 font-medium"
-              }`}
-            >
-              <CalendarIcon className="w-3.5 h-3.5" />
-              <span>Week Calendar</span>
-            </button>
-          </div>
+      <PageHeader
+        title="Bookings"
+        description={`${bookings.length} consultations across video, phone and in-person channels.`}
+        actions={
+          onNewBookingClick && (
+            <ActionButton variant="primary" icon={<Plus className="w-4 h-4" strokeWidth={2.4} />} onClick={onNewBookingClick}>
+              New Booking
+            </ActionButton>
+          )
+        }
+      />
 
-          <div className="hidden sm:flex items-center gap-2">
-            {awaitingCount > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-50 text-amber-900 border border-amber-200/70">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
-                <span>{awaitingCount} Awaiting Intake</span>
-              </span>
-            )}
-          </div>
-        </div>
+      <StatGrid className="my-5">
+        <StatTile dark title="Total" icon={CalendarIcon} value={bookings.length} caption="All consultations" />
+        <StatTile title="Confirmed" icon={CheckCircle2} value={confirmedCount} chip="On the calendar" chipTone="success" delay={60} />
+        <StatTile title="Awaiting" icon={Clock} value={awaitingCount} chip="Needs acceptance" chipTone="warning" delay={120} />
+        <StatTile
+          title="Settled"
+          icon={DollarSign}
+          value={`$${totalSettledRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+          caption="Fees received"
+          delay={180}
+        />
+      </StatGrid>
+
+      <div className="surface-card p-3 flex flex-col md:flex-row md:items-center justify-between gap-3 shrink-0 mb-4">
+        <Segmented
+          label="View mode"
+          value={viewMode}
+          onChange={setViewMode}
+          options={[
+            { id: "list", label: "List", icon: <List className="w-3.5 h-3.5" /> },
+            { id: "calendar", label: "Calendar", icon: <CalendarIcon className="w-3.5 h-3.5" /> },
+          ]}
+        />
 
         {/* Search & Select Filters */}
         <div className="flex flex-wrap items-center gap-2">
@@ -296,10 +295,10 @@ export function BookingsView({
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search client, email, lawyer..."
+              placeholder="Search bookings..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+              className="w-full pl-8.5 pr-3 py-2 text-xs bg-white hover:bg-gray-50 focus:bg-white border border-navy-900/10 focus:border-navy-900 rounded-full focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
             />
           </div>
 
@@ -308,11 +307,11 @@ export function BookingsView({
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
-            <option value="all">All Statuses</option>
+            <option value="all">All</option>
             <option value="confirmed">Confirmed</option>
-            <option value="awaiting">Awaiting Acceptance</option>
-            <option value="reschedule">Reschedule Requested</option>
-            <option value="cancelled">Refunded / Declined</option>
+            <option value="awaiting">Awaiting</option>
+            <option value="reschedule">Reschedule</option>
+            <option value="cancelled">Cancelled</option>
           </select>
 
           <select
@@ -321,27 +320,17 @@ export function BookingsView({
             className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
             <option value="all">All Channels</option>
-            <option value="video">Video (Encrypted)</option>
+            <option value="video">Video</option>
             <option value="phone">Phone</option>
-            <option value="in-person">In-Person (Office)</option>
+            <option value="in-person">In-Person</option>
           </select>
 
-          {onNewBookingClick && (
-            <button
-              type="button"
-              onClick={onNewBookingClick}
-              className="px-3.5 py-1.5 rounded-lg bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>New Consultation</span>
-            </button>
-          )}
         </div>
       </div>
 
       {/* VIEW 1: LIST VIEW */}
       {viewMode === "list" ? (
-        <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+        <div className="surface-table flex-1 flex flex-col min-h-[460px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
           <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
             <table className="w-full text-left border-collapse table-fixed min-w-[1140px]">
               <colgroup>
@@ -355,12 +344,12 @@ export function BookingsView({
               </colgroup>
               <thead className="sticky top-0 z-10">
                 <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client / Contact</th>
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Matter / Area</th>
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Date & Slot</th>
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Counsel Assigned</th>
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Status & Conflict</th>
-                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Retainer Fee</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Area</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Schedule</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Counsel</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Status</th>
+                  <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Fee</th>
                   <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">Actions</th>
                 </tr>
               </thead>
@@ -370,7 +359,7 @@ export function BookingsView({
                     <td colSpan={7} className="py-16 text-center">
                       <EmptyState
                         icon={CalendarIcon}
-                        title="No bookings match criteria"
+                        title="No bookings found"
                         description={
                           searchQuery
                             ? `No consultations found for "${searchQuery}". Try clearing search keywords or status filters.`
@@ -463,7 +452,6 @@ export function BookingsView({
                         {/* 4. Assigned Lawyer */}
                         <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                           <span className="font-medium text-gray-900 text-xs block">{booking.lawyerName}</span>
-                          <span className="text-[11px] text-gray-400 block mt-0.5 font-normal">Senior Chambers</span>
                         </td>
 
                         {/* 5. Status & Conflict */}
@@ -547,7 +535,7 @@ export function BookingsView({
                                 <button
                                   type="button"
                                   onClick={() => setDeclineModalBooking(booking)}
-                                  className="px-2.5 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:text-rose-700 hover:bg-rose-50 border border-gray-200/80 hover:border-rose-200 transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0"
+                                  className="px-2.5 py-1.5 rounded-full text-xs font-medium text-gray-600 hover:text-rose-700 hover:bg-rose-50 border border-gray-200/80 hover:border-rose-200 transition-colors inline-flex items-center gap-1 cursor-pointer shrink-0"
                                   title="Decline request (triggers refund & auto-notifies client)"
                                 >
                                   <X className="w-3.5 h-3.5" />
@@ -562,7 +550,7 @@ export function BookingsView({
                                       acceptBooking(booking.id);
                                     }
                                   }}
-                                  className="px-3 py-1.5 rounded-md bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium transition-colors inline-flex items-center gap-1.5 cursor-pointer shrink-0 shadow-2xs"
+                                  className="px-3 py-1.5 rounded-full bg-navy-950 hover:bg-navy-900 text-white text-xs font-medium transition-colors inline-flex items-center gap-1.5 cursor-pointer shrink-0 shadow-2xs"
                                 >
                                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                                   <span>Accept</span>
@@ -576,10 +564,10 @@ export function BookingsView({
                                 <button
                                   type="button"
                                   onClick={() => setRescheduleModalBooking(booking)}
-                                  className="px-2.5 py-1.5 rounded-md bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
+                                  className="px-2.5 py-1.5 rounded-full bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
                                 >
                                   <RotateCcw className="w-3.5 h-3.5" />
-                                  <span>Review Request</span>
+                                  <span>Review</span>
                                 </button>
                                 <BookingRowActionMenu
                                   booking={booking}
@@ -657,7 +645,7 @@ export function BookingsView({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500">Total Settled Fees:</span>
+              <span className="text-gray-500">Total Settled:</span>
               <span className="font-mono font-semibold text-gray-900 text-[13px] tabular-nums">
                 ${totalSettledRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { ArrowUpRight, Users, Briefcase, AlertCircle, Calendar } from "lucide-react";
+import { ArrowUpRight, TrendingUp } from "lucide-react";
 import { StatItem } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
 interface StatCardsProps {
   stats: StatItem[];
@@ -10,134 +11,95 @@ interface StatCardsProps {
   onCardClick?: (id: string) => void;
 }
 
-export function StatCards({
-  stats,
-  activeCardId,
-  onCardClick,
-}: StatCardsProps) {
-  const getIcon = (id: string, color: string = "#3D5390") => {
-    switch (id) {
-      case "bookings-today":
-      case "total-bookings":
-        return <Calendar className="w-3.5 h-3.5 text-white" />;
-      case "total-clients":
-        return <Users className="w-3.5 h-3.5" style={{ color }} />;
-      case "open-cases":
-      case "active-cases":
-        return <Briefcase className="w-3.5 h-3.5" style={{ color }} />;
-      case "pending-approval":
-        return <AlertCircle className="w-3.5 h-3.5" style={{ color }} />;
-      default:
-        return <Briefcase className="w-3.5 h-3.5" style={{ color }} />;
-    }
-  };
-
+export function StatCards({ stats, activeCardId, onCardClick }: StatCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-      {stats.map((stat) => {
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      {stats.map((stat, i) => {
+        const isDark = !!stat.isAccentDark;
         const isSelected = activeCardId === stat.id;
+        const accent = stat.accentColor || "#3D5390";
 
-        // Dark obsidian accent card (e.g. Bookings Today)
-        if (stat.isAccentDark) {
-          return (
-            <div
-              key={stat.id}
-              onClick={() => onCardClick?.(stat.id)}
-              className={`relative overflow-hidden rounded-xl apple-obsidian-card p-5 text-white cursor-pointer group flex flex-col justify-between min-h-[160px] apple-press transition-all ${
-                isSelected ? "ring-2 ring-navy-400 ring-offset-2 ring-offset-gray-50" : ""
-              }`}
-            >
-              <div className="absolute -top-16 -right-16 w-36 h-36 bg-navy-500/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="flex items-center justify-between z-10">
-                <span className="text-[11px] font-bold text-white/70 tracking-wider uppercase whitespace-nowrap">
-                  {stat.title}
-                </span>
-                <div className="w-7 h-7 rounded-lg bg-white/10 group-hover:bg-white text-white group-hover:text-navy-900 flex items-center justify-center transition-all shadow-xs ring-1 ring-white/10 shrink-0">
-                  <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                </div>
-              </div>
-
-              <div className="my-2 z-10">
-                <div className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-mono apple-mono leading-tight">
-                  {stat.value}
-                </div>
-                {stat.subMetric && (
-                  <div className="text-[11px] text-white/60 font-medium truncate mt-0.5" title={stat.subMetric}>
-                    {stat.subMetric}
-                  </div>
-                )}
-              </div>
-
-              <div className="pt-2.5 border-t border-white/10 flex items-center gap-2 text-xs font-medium z-10 min-w-0">
-                {stat.trendValue && (
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-navy-500/20 text-navy-200 text-[10px] font-semibold border border-navy-400/30 whitespace-nowrap shrink-0">
-                    {stat.trendValue}
-                  </span>
-                )}
-                {stat.trendText && (
-                  <span className="text-[11px] text-white/70 font-medium whitespace-nowrap truncate" title={stat.trendText}>
-                    {stat.trendText}
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        }
-
-        // White crisp cards
         return (
-          <div
+          <button
             key={stat.id}
+            type="button"
             onClick={() => onCardClick?.(stat.id)}
-            className={`relative rounded-xl apple-glass-card p-5 cursor-pointer group flex flex-col justify-between min-h-[160px] apple-press transition-all ${
-              isSelected ? "ring-2 ring-navy-900 ring-offset-2 ring-offset-gray-50" : ""
-            }`}
+            aria-pressed={isSelected}
+            style={{ "--rise-delay": `${i * 60}ms` } as React.CSSProperties}
+            className={cn(
+              "rise-in group relative text-start flex flex-col justify-between min-h-[172px] p-5 cursor-pointer",
+              "transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.99]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600/50 focus-visible:ring-offset-2",
+              isDark ? "surface-dark" : "surface-card hover:shadow-[0_14px_30px_-14px_rgba(26,39,68,0.2)]",
+              isSelected && (isDark ? "ring-2 ring-navy-300 ring-offset-2" : "ring-2 ring-navy-900 ring-offset-2")
+            )}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-gray-500 tracking-wider uppercase whitespace-nowrap">
+            {isDark && (
+              <svg
+                aria-hidden="true"
+                className="absolute -end-8 -bottom-10 w-52 h-52 text-white/[0.06] pointer-events-none"
+                viewBox="0 0 200 200"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <circle cx="100" cy="100" r="28" />
+                <circle cx="100" cy="100" r="54" />
+                <circle cx="100" cy="100" r="80" />
+                <circle cx="100" cy="100" r="106" />
+              </svg>
+            )}
+
+            <div className="relative flex items-start justify-between gap-3">
+              <span
+                className={cn(
+                  "text-[15px] font-medium tracking-tight",
+                  isDark ? "text-white/90" : "text-navy-900"
+                )}
+              >
                 {stat.title}
               </span>
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105 shrink-0"
-                style={{
-                  backgroundColor: `${stat.accentColor || "#3D5390"}15`,
-                }}
+              <span
+                className={cn(
+                  "w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300",
+                  isDark
+                    ? "bg-white text-navy-900 group-hover:rotate-12"
+                    : "border border-navy-900/15 text-navy-900 group-hover:bg-navy-900 group-hover:text-white group-hover:border-navy-900 group-hover:rotate-12"
+                )}
               >
-                {getIcon(stat.id, stat.accentColor)}
-              </div>
+                <ArrowUpRight className="w-4 h-4 rtl:-scale-x-100" strokeWidth={2} />
+              </span>
             </div>
 
-            <div className="my-2">
-              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-navy-900 font-mono apple-mono leading-tight">
+            <div className="relative mt-3">
+              <div
+                className={cn(
+                  "text-[52px] leading-none font-semibold tracking-[-0.04em] tabular-nums",
+                  isDark ? "text-white" : "text-navy-950"
+                )}
+              >
                 {stat.value}
               </div>
-              {stat.subMetric && (
-                <div className="text-[11px] text-gray-500 font-medium truncate mt-0.5" title={stat.subMetric}>
-                  {stat.subMetric}
-                </div>
-              )}
             </div>
 
-            <div className="pt-2.5 border-t border-gray-100 flex items-center gap-2 text-xs font-medium min-w-0">
+            <div className="relative mt-4 flex items-center gap-2 min-w-0 text-[12px]">
               {stat.trendValue && (
                 <span
-                  className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-semibold whitespace-nowrap shrink-0"
-                  style={{
-                    backgroundColor: `${stat.accentColor || "#3D5390"}14`,
-                    color: stat.accentColor || "#3D5390",
-                  }}
+                  className={cn(
+                    "inline-flex items-center gap-1 ps-1 pe-1.5 py-0.5 rounded-md font-semibold whitespace-nowrap shrink-0",
+                    isDark ? "bg-white/15 text-gold-300" : ""
+                  )}
+                  style={isDark ? undefined : { backgroundColor: `${accent}18`, color: accent }}
                 >
+                  <TrendingUp className="w-3 h-3" strokeWidth={2.4} />
                   {stat.trendValue}
                 </span>
               )}
-              {stat.trendText && (
-                <span className="text-[11px] text-gray-500 font-medium whitespace-nowrap truncate" title={stat.trendText}>
-                  {stat.trendText}
-                </span>
-              )}
+              <span className={cn("truncate", isDark ? "text-white/65" : "text-gray-500")}>
+                {stat.subMetric || stat.trendText}
+              </span>
             </div>
-          </div>
+          </button>
         );
       })}
     </div>

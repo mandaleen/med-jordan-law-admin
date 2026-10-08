@@ -3,29 +3,23 @@
 import React, { useState } from "react";
 import {
   ArrowLeft,
-  Calendar,
   Briefcase,
   FileText,
   DollarSign,
   MessageSquare,
   Phone,
-  Mail,
   Download,
   CheckCircle2,
   Send,
   FileCheck,
   Building2,
   ShieldCheck,
-  Scale,
   Printer,
   Plus,
   Lock,
-  ExternalLink,
-  Clock,
   ChevronRight,
 } from "lucide-react";
 import { ClientProfile, InternalNoteItem } from "@/lib/mock-data";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientAvatar } from "@/components/ui/client-avatar";
 import { TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
 import { usePractice } from "@/lib/practice-context";
@@ -102,7 +96,7 @@ export function ClientDetail({
             className="inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-navy-900 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Clients Directory</span>
+            <span>Clients</span>
             <span className="text-gray-300">/</span>
             <span className="text-navy-900 font-semibold">{client.name}</span>
           </button>
@@ -143,10 +137,10 @@ export function ClientDetail({
                   status: "Paid via Gateway",
                 });
               }}
-              className="h-8 px-3.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+              className="h-8 px-3.5 rounded-full bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
             >
               <FileText className="w-3.5 h-3.5 text-gold-300" />
-              <span>Issue Tax Invoice</span>
+              <span>Tax Invoice</span>
             </button>
           </div>
         </div>
@@ -274,7 +268,7 @@ export function ClientDetail({
           }`}
         >
           <Building2 className="w-3.5 h-3.5" />
-          <span>Legal KYC & Profile</span>
+          <span>Profile</span>
         </button>
 
         <button
@@ -287,7 +281,7 @@ export function ClientDetail({
           }`}
         >
           <Briefcase className="w-3.5 h-3.5" />
-          <span>Court Matters ({client.linkedCases.length})</span>
+          <span>Cases ({client.linkedCases.length})</span>
         </button>
 
         <button
@@ -300,7 +294,7 @@ export function ClientDetail({
           }`}
         >
           <DollarSign className="w-3.5 h-3.5" />
-          <span>Invoices & Jordan E-Fawateer ({client.invoices.length})</span>
+          <span>Invoices ({client.invoices.length})</span>
         </button>
 
         <button
@@ -313,7 +307,7 @@ export function ClientDetail({
           }`}
         >
           <FileCheck className="w-3.5 h-3.5" />
-          <span>Executed Agreements ({client.signedAgreements.length})</span>
+          <span>Agreements ({client.signedAgreements.length})</span>
         </button>
 
         <button
@@ -326,7 +320,7 @@ export function ClientDetail({
           }`}
         >
           <Lock className="w-3.5 h-3.5" />
-          <span>Privileged Notes ({notes.length})</span>
+          <span>Notes ({notes.length})</span>
         </button>
       </div>
 
@@ -410,7 +404,6 @@ export function ClientDetail({
               <div>
                 <span className="text-gray-400 text-[11px] block">Primary Phone / WhatsApp</span>
                 <span className="font-mono font-medium text-gray-900 block mt-0.5">{client.phone}</span>
-                <span className="text-[10px] text-emerald-600 font-medium">✓ Verified WhatsApp Delivery Channel</span>
               </div>
 
               <div>
@@ -486,7 +479,7 @@ export function ClientDetail({
                       Hearings: <strong>{c.hearings.length}</strong> logged
                     </span>
                     <span className="text-xs font-medium text-navy-800 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                      Open Docket <ChevronRight className="w-3.5 h-3.5" />
+                      View <ChevronRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </div>
@@ -501,9 +494,9 @@ export function ClientDetail({
         <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-gray-100">
             <div>
-              <h3 className="font-semibold text-sm text-navy-900">National Tax Invoices & Payment Ledger</h3>
+              <h3 className="font-semibold text-sm text-navy-900">Invoices & Payment Ledger</h3>
               <p className="text-xs text-gray-500">
-                Jordan National E-Invoicing System (نظام الفوترة الوطني) receipts & gateway transactions
+                Receipts & gateway transactions
               </p>
             </div>
           </div>
@@ -555,10 +548,10 @@ export function ClientDetail({
                         status: inv.status === "Paid via Gateway" ? "Paid via Gateway" : "Settled",
                       })
                     }
-                    className="h-7 px-3 rounded-md bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium cursor-pointer shadow-2xs transition-colors inline-flex items-center gap-1.5"
+                    className="h-7 px-3 rounded-full bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium cursor-pointer shadow-2xs transition-colors inline-flex items-center gap-1.5"
                   >
                     <Printer className="w-3.5 h-3.5 text-gold-300" />
-                    <span>Print Invoice</span>
+                    <span>Print</span>
                   </button>
                 </div>
               </div>
@@ -610,18 +603,18 @@ export function ClientDetail({
                     <button
                       type="button"
                       onClick={() => onToast(`Downloading ${sa.pdfName}...`)}
-                      className="h-8 px-3 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer"
+                      className="h-8 px-3 rounded-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5 text-gray-400" />
-                      <span>Download PDF</span>
+                      <span>Download</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => onToast(`Retainer agreement resent to ${client.phone} via WhatsApp.`)}
-                      className="h-8 px-3 rounded-lg bg-navy-900 text-white hover:bg-navy-800 text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
+                      className="h-8 px-3 rounded-full bg-navy-900 text-white hover:bg-navy-800 text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
                     >
                       <Send className="w-3.5 h-3.5 text-gold-300" />
-                      <span>Resend WhatsApp</span>
+                      <span>Resend</span>
                     </button>
                   </div>
                 </div>
@@ -640,14 +633,11 @@ export function ClientDetail({
               <div>
                 <h3 className="font-semibold text-sm text-navy-900 flex items-center gap-2">
                   <Lock className="w-4 h-4 text-gold-600" />
-                  Attorney-Client Privileged Internal Notes
+                  Notes
                 </h3>
-                <p className="text-xs text-gray-500">
-                  Confidential legal strategy, hearing evaluations, and partner instructions
-                </p>
               </div>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-gold-700 bg-gold-100/70 border border-gold-300/60 px-2 py-0.5 rounded">
-                Privileged & Confidential
+                Privileged
               </span>
             </div>
 
@@ -656,7 +646,7 @@ export function ClientDetail({
               <textarea
                 rows={3}
                 required
-                placeholder="Enter confidential memorandum, partner assessment, or retainer note..."
+                placeholder="Enter note..."
                 value={newNoteContent}
                 onChange={(e) => setNewNoteContent(e.target.value)}
                 className="w-full p-2.5 bg-white border border-gray-300 rounded-lg text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900"
@@ -669,14 +659,14 @@ export function ClientDetail({
                     onChange={(e) => setIsNotePrivileged(e.target.checked)}
                     className="rounded border-gray-300 text-navy-900 focus:ring-navy-900 w-3.5 h-3.5"
                   />
-                  <span>Stamp as Attorney-Client Privileged (سرية مهنية)</span>
+                  <span>Privileged</span>
                 </label>
                 <button
                   type="submit"
-                  className="px-3.5 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-full bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium cursor-pointer shadow-xs inline-flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5 text-gold-300" />
-                  <span>Record Note</span>
+                  <span>Save</span>
                 </button>
               </div>
             </form>

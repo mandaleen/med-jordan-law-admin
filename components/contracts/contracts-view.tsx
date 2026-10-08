@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { ActionButton } from "@/components/ui/action-button";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   FileCheck,
   Search,
   Plus,
   CheckCircle2,
-  Clock,
   Send,
   ShieldCheck,
-  AlertTriangle,
   X,
   PenTool,
   DollarSign,
@@ -252,124 +253,69 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
         </div>
       )}
 
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-navy-950 text-white flex items-center justify-center font-bold shadow-2xs border border-navy-800">
-            <FileCheck className="w-5 h-5 text-gray-200" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-gray-900 tracking-tight">
-                Fee Agreements & E-Signature (عقود الأتعاب)
-              </h1>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-navy-50 text-navy-800 border border-navy-100">
-                {contracts.length} Agreements
-              </span>
-            </div>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Contract drafting from firm templates, secure SMS/Email dispatch, cryptographic IP proof & countersigning
-            </p>
-          </div>
-        </div>
+      <PageHeader
+        title="Contracts"
+        description={`${contracts.length} fee agreements and retainers, from draft to fully executed.`}
+        actions={
+          <ActionButton variant="primary" icon={<Plus className="w-4 h-4" strokeWidth={2.4} />} onClick={() => setIsNewContractOpen(true)}>
+            New Contract
+          </ActionButton>
+        }
+      />
 
-        <button
-          type="button"
-          onClick={() => setIsNewContractOpen(true)}
-          className="px-4 py-2 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer whitespace-nowrap self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          Draft Fee Agreement
-        </button>
-      </div>
-
-      {/* 4 Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 shrink-0">
-        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-          <div>
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Contract Value</span>
-            <div className="text-xl font-bold text-gray-900 mt-0.5 font-mono tabular-nums">
-              ${totalValueSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-            </div>
-            <span className="text-[10px] text-gray-400">{contracts.length} total active matters</span>
-          </div>
-          <div className="w-8.5 h-8.5 rounded-lg bg-gray-100 text-gray-700 flex items-center justify-center">
-            <DollarSign className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-          <div>
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Retainer Deposits</span>
-            <div className="text-xl font-bold text-emerald-700 mt-0.5 font-mono tabular-nums">
-              ${retainerSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-            </div>
-            <span className="text-[10px] text-gray-400">Upfront engagement deposits</span>
-          </div>
-          <div className="w-8.5 h-8.5 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-            <Briefcase className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-          <div>
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Awaiting Countersign</span>
-            <div className="text-xl font-bold text-amber-600 mt-0.5 font-mono tabular-nums">
-              {awaitingCountersignCount}
-            </div>
-            <span className="text-[10px] text-amber-700 font-medium">Signed by client · partner pending</span>
-          </div>
-          <div className="w-8.5 h-8.5 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-            <PenTool className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-gray-200/90 rounded-xl p-3.5 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-          <div>
-            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Out for Signature</span>
-            <div className="text-xl font-bold text-blue-600 mt-0.5 font-mono tabular-nums">
-              {outForSignatureCount}
-            </div>
-            <span className="text-[10px] text-blue-600 font-medium">Dispatched via SMS / Email</span>
-          </div>
-          <div className="w-8.5 h-8.5 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Send className="w-4 h-4" />
-          </div>
-        </div>
-      </div>
+      <StatGrid>
+        <StatTile
+          dark
+          title="Total Value"
+          icon={DollarSign}
+          value={`$${totalValueSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+          caption={`${contracts.length} matters`}
+        />
+        <StatTile
+          title="Retainers"
+          icon={Briefcase}
+          value={`$${retainerSum.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+          caption="Deposits held"
+          chip="Funded"
+          chipTone="success"
+          delay={60}
+        />
+        <StatTile title="Countersign" icon={PenTool} value={awaitingCountersignCount} chip="Client signed" chipTone="warning" delay={120} />
+        <StatTile title="Pending" icon={Send} value={outForSignatureCount} chip="Dispatched" chipTone="info" delay={180} />
+      </StatGrid>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white border border-gray-200/90 rounded-xl p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+      <div className="surface-card p-3 sm:p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <div className="relative w-full md:w-80">
           <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search contract #, client name, counsel..."
+            placeholder="Search contracts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8.5 pr-3 py-1.5 text-xs bg-white hover:bg-gray-50/50 focus:bg-white border border-gray-200/90 focus:border-navy-900 rounded-lg focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+            className="w-full pl-8.5 pr-3 py-2 text-xs bg-white hover:bg-gray-50 focus:bg-white border border-navy-900/10 focus:border-navy-900 rounded-full focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
           />
         </div>
 
         <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
-          <label className="text-[11px] font-semibold text-gray-500 whitespace-nowrap">Filter Status:</label>
+          <label className="text-[11px] font-semibold text-gray-500 whitespace-nowrap">Status:</label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-2.5 py-1.5 text-xs bg-white hover:bg-gray-50/50 border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-800 font-medium cursor-pointer transition-colors"
           >
-            <option value="all">All Statuses ({contracts.length})</option>
-            <option value="draft">Drafts ({contracts.filter((c) => c.status === "Draft").length})</option>
-            <option value="sent">Sent for Signature ({contracts.filter((c) => c.status === "Sent for Signature").length})</option>
-            <option value="awaiting">Awaiting Partner Countersign ({contracts.filter((c) => c.status === "Signed by Client").length})</option>
-            <option value="executed">Fully Executed ({contracts.filter((c) => c.status === "Countersigned & Executed").length})</option>
-            <option value="amendment">Amendment Requested ({contracts.filter((c) => c.status === "Amendment Requested").length})</option>
+            <option value="all">All ({contracts.length})</option>
+            <option value="draft">Draft ({contracts.filter((c) => c.status === "Draft").length})</option>
+            <option value="sent">Sent ({contracts.filter((c) => c.status === "Sent for Signature").length})</option>
+            <option value="awaiting">Countersign ({contracts.filter((c) => c.status === "Signed by Client").length})</option>
+            <option value="executed">Executed ({contracts.filter((c) => c.status === "Countersigned & Executed").length})</option>
+            <option value="amendment">Amendment ({contracts.filter((c) => c.status === "Amendment Requested").length})</option>
           </select>
         </div>
       </div>
 
       {/* Main Table */}
-      <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden flex-1 flex flex-col min-h-[480px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="surface-table flex-1 flex flex-col min-h-[480px] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar">
           <table className="w-full text-left border-collapse table-fixed min-w-[1190px]">
             <colgroup>
@@ -383,11 +329,11 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
             </colgroup>
             <thead className="sticky top-0 z-10">
               <tr className="bg-gray-50/90 backdrop-blur-xs border-b border-gray-200/80">
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Contract #</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client & Practice Area</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Template Type</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Fee Structure</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Lead Counsel</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Contract</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Client</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Template</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Fee</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Counsel</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">Status</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500 text-right pr-5">Actions</th>
               </tr>
@@ -397,8 +343,8 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 <tr>
                   <td colSpan={7} className="py-16 text-center text-gray-400">
                     <FileCheck className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-                    <p className="font-semibold text-gray-600">No fee contracts found matching criteria</p>
-                    <p className="text-xs text-gray-400">Click &ldquo;Draft Fee Agreement&rdquo; to issue a new contract.</p>
+                    <p className="font-semibold text-gray-600">No contracts found</p>
+                    <p className="text-xs text-gray-400">Click &ldquo;New Contract&rdquo; to issue a contract.</p>
                   </td>
                 </tr>
               ) : (
@@ -476,7 +422,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           <button
                             type="button"
                             onClick={() => handleDispatchContract(c.id)}
-                            className="px-2.5 py-1 rounded-md bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0 shadow-2xs"
+                            className="px-2.5 py-1 rounded-full bg-navy-950 text-white hover:bg-navy-900 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0 shadow-2xs"
                           >
                             <Send className="w-3.5 h-3.5" />
                             Dispatch
@@ -488,9 +434,9 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           <button
                             type="button"
                             onClick={() => showToast(`Signing link resent to ${c.clientPhone}.`)}
-                            className="px-2.5 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0"
+                            className="px-2.5 py-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0"
                           >
-                            Resend SMS
+                            Resend
                           </button>
                         )}
 
@@ -512,7 +458,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                             type="button"
                             onClick={() => setCertificateContract(c)}
                             className="px-2 py-1 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/70 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1 shrink-0"
-                            title="Inspect forensic audit signature certificate (SHA-256 / IP proof)"
+                            title="Inspect signature audit certificate"
                           >
                             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                             Proof
@@ -524,7 +470,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                           type="button"
                           onClick={() => setSelectedContract(c)}
                           className="p-1 rounded-md bg-white hover:bg-gray-100 text-gray-500 hover:text-gray-900 border border-gray-200/80 text-xs font-medium cursor-pointer transition-colors inline-flex items-center justify-center shrink-0"
-                          title="View contract details and milestones"
+                          title="View details"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
@@ -539,8 +485,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
         {/* Table Footer */}
         <div className="bg-gray-50/70 border-t border-gray-200/80 px-5 py-3 flex items-center justify-between text-xs text-gray-500 mt-auto">
-          <span>Showing <strong className="text-gray-900 font-semibold">{filteredContracts.length}</strong> of {contracts.length} legal fee agreements</span>
-          <span className="font-semibold text-gray-700">Med Jordan Law Practice Management (Page 10)</span>
+          <span>Showing <strong className="text-gray-900 font-semibold">{filteredContracts.length}</strong> of {contracts.length} contracts</span>
         </div>
       </div>
 
@@ -561,7 +506,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="text-base font-bold text-navy-950">
-                        Agreement Details: {selectedContract.contractNumber}
+                        {selectedContract.contractNumber}
                       </h3>
                       {getStatusBadge(selectedContract.status)}
                     </div>
@@ -585,7 +530,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                   <div className="p-3.5 rounded-xl bg-gray-50/70 border border-gray-200/80 space-y-2">
                     <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                       <User className="w-3.5 h-3.5 text-gray-400" />
-                      Client Entity & Contact
+                      Client
                     </span>
                     <div className="font-bold text-gray-900 text-[13px]">{selectedContract.clientName}</div>
                     <div className="text-gray-600 flex items-center gap-2">
@@ -601,22 +546,22 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                   <div className="p-3.5 rounded-xl bg-gray-50/70 border border-gray-200/80 space-y-2">
                     <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                       <Briefcase className="w-3.5 h-3.5 text-gray-400" />
-                      Representation & Engagement
+                      Representation
                     </span>
                     <div>
                       <span className="text-gray-500">Lead Counsel:</span>
                       <span className="font-bold text-gray-900 ml-1.5">{selectedContract.assignedLawyer}</span>
                     </div>
                     <div>
-                      <span className="text-gray-500">Practice Area:</span>
+                      <span className="text-gray-500">Area:</span>
                       <span className="font-medium text-gray-800 ml-1.5">{selectedContract.practiceArea}</span>
                     </div>
                     <div className="pt-1 border-t border-gray-200/60 flex items-center justify-between">
-                      <span className="text-gray-500">Total Agreed Fee:</span>
+                      <span className="text-gray-500">Total Fee:</span>
                       <span className="font-mono font-bold text-navy-950 text-[13px]">{selectedContract.totalFee}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Initial Retainer Deposit:</span>
+                      <span className="text-gray-500">Deposit:</span>
                       <span className="font-mono font-bold text-emerald-700">{selectedContract.retainerDeposit}</span>
                     </div>
                   </div>
@@ -626,16 +571,16 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 <div className="space-y-2">
                   <span className="text-[11px] font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
                     <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                    Scheduled Fee Payment Milestones
+                    Milestones
                   </span>
                   <div className="border border-gray-200/80 rounded-xl overflow-hidden">
                     <table className="w-full text-left border-collapse">
                       <thead className="bg-gray-50/80 border-b border-gray-200/80 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
                         <tr>
                           <th className="py-2.5 px-3">#</th>
-                          <th className="py-2.5 px-3">Milestone Deliverable</th>
+                          <th className="py-2.5 px-3">Deliverable</th>
                           <th className="py-2.5 px-3 text-right">Amount</th>
-                          <th className="py-2.5 px-3">Due Condition / Trigger</th>
+                          <th className="py-2.5 px-3">Condition</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 text-xs">
@@ -656,22 +601,22 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 <div className="p-3.5 rounded-xl bg-navy-50/50 border border-navy-100 space-y-2">
                   <span className="text-[11px] font-bold text-navy-950 uppercase tracking-wider flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-navy-800" />
-                    Electronic Signature & Cryptographic Trail
+                    Signature & Audit
                   </span>
                   
                   {selectedContract.status === "Draft" && (
                     <p className="text-gray-600 leading-relaxed">
-                      Contract is currently in draft format. Once reviewed by lead counsel, dispatch to client via secure SMS and email link for biometric / drawn signature.
+                      Contract is in draft. Dispatch to client for signature.
                     </p>
                   )}
 
                   {selectedContract.status === "Sent for Signature" && (
                     <div className="space-y-1">
                       <p className="text-gray-700">
-                        Dispatched on <strong className="text-gray-900">{selectedContract.sentDate}</strong> to client number <span className="font-mono">{selectedContract.clientPhone}</span>.
+                        Dispatched on <strong className="text-gray-900">{selectedContract.sentDate}</strong> to <span className="font-mono">{selectedContract.clientPhone}</span>.
                       </p>
                       <p className="text-[11px] text-gray-500">
-                        Awaiting client digital endorsement. Link valid for 7 days with automated SMS reminder intervals.
+                        Awaiting client digital endorsement.
                       </p>
                     </div>
                   )}
@@ -680,11 +625,11 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                     <div className="space-y-1.5 pt-1 text-gray-700">
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
                         <span>Signatory: <strong className="text-gray-900">{selectedContract.clientSignature.signatoryName}</strong></span>
-                        <span>IP Address: <span className="font-mono font-bold text-gray-800">{selectedContract.clientSignature.ipAddress}</span></span>
-                        <span>Signed Timestamp: <span className="font-mono text-gray-800">{selectedContract.clientSignature.timestamp}</span></span>
+                        <span>IP: <span className="font-mono font-bold text-gray-800">{selectedContract.clientSignature.ipAddress}</span></span>
+                        <span>Date: <span className="font-mono text-gray-800">{selectedContract.clientSignature.timestamp}</span></span>
                       </div>
                       <div className="text-[10px] font-mono text-gray-600 bg-white/90 p-2 rounded-lg border border-gray-200/80 break-all select-all">
-                        SHA-256 Digest: {selectedContract.clientSignature.docHashSha256}
+                        SHA-256: {selectedContract.clientSignature.docHashSha256}
                       </div>
                     </div>
                   )}
@@ -701,7 +646,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
                   {selectedContract.amendmentNotes && (
                     <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-[11px]">
-                      <strong>Client Amendment Request:</strong> {selectedContract.amendmentNotes}
+                      <strong>Amendment:</strong> {selectedContract.amendmentNotes}
                     </div>
                   )}
                 </div>
@@ -716,10 +661,10 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                       onClick={() => {
                         handleDispatchContract(selectedContract.id);
                       }}
-                      className="px-4 py-2 bg-navy-950 hover:bg-navy-900 text-white font-semibold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors"
+                      className="px-4 py-2 bg-navy-950 hover:bg-navy-900 text-white font-semibold rounded-full text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      Dispatch Contract Now
+                      Dispatch
                     </button>
                   )}
 
@@ -732,7 +677,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                       className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer transition-colors"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      Resend WhatsApp / SMS
+                      Resend Link
                     </button>
                   )}
 
@@ -745,7 +690,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                       className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors"
                     >
                       <PenTool className="w-3.5 h-3.5" />
-                      Countersign Agreement Now
+                      Countersign
                     </button>
                   )}
 
@@ -758,7 +703,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                       className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300/80 font-semibold rounded-lg text-xs flex items-center gap-1.5 cursor-pointer transition-colors"
                     >
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      View Cryptographic Audit Certificate
+                      Certificate
                     </button>
                   )}
                 </div>
@@ -788,8 +733,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 <FileCheck className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-navy-950">Draft Fee Agreement (عقد أتعاب محاماة)</h3>
-                <p className="text-xs text-gray-500">Formal legal retainer contract preparation (Page 10)</p>
+                <h3 className="text-base font-bold text-navy-950">New Contract</h3>
               </div>
             </div>
             <button
@@ -804,11 +748,11 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
           <form onSubmit={handleCreateContract} className="flex flex-col gap-3.5 text-xs">
             <div>
-              <label className="font-semibold text-gray-700">Client / Company Entity Name:</label>
+              <label className="font-semibold text-gray-700">Client Name:</label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Sara Odeh (Odeh Industrial Group)"
+                placeholder="e.g. Sara Odeh"
                 value={newClientName}
                 onChange={(e) => setNewClientName(e.target.value)}
                 className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 font-medium focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
@@ -817,7 +761,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="font-semibold text-gray-700">Client WhatsApp / Phone:</label>
+                <label className="font-semibold text-gray-700">Phone:</label>
                 <input
                   type="text"
                   required
@@ -827,7 +771,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 />
               </div>
               <div>
-                <label className="font-semibold text-gray-700">Client Email Address:</label>
+                <label className="font-semibold text-gray-700">Email:</label>
                 <input
                   type="email"
                   placeholder="client@company.jo"
@@ -840,34 +784,34 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="font-semibold text-gray-700">Template Structure:</label>
+                <label className="font-semibold text-gray-700">Template:</label>
                 <select
                   value={newTemplateType}
                   onChange={(e) => setNewTemplateType(e.target.value as FeeContractItem["templateType"])}
                   className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
                 >
-                  <option value="Litigation Retainer">Litigation Retainer (قالب التقاضي)</option>
-                  <option value="Corporate General Counsel">Corporate General Counsel (استشارات سنوية)</option>
-                  <option value="Arbitration Agreement">Arbitration Agreement (اتفاقية تحكيم)</option>
-                  <option value="Custom Upload">Custom Uploaded Draft</option>
+                  <option value="Litigation Retainer">Litigation Retainer</option>
+                  <option value="Corporate General Counsel">Corporate General Counsel</option>
+                  <option value="Arbitration Agreement">Arbitration Agreement</option>
+                  <option value="Custom Upload">Custom Upload</option>
                 </select>
               </div>
               <div>
-                <label className="font-semibold text-gray-700">Lead Counsel:</label>
+                <label className="font-semibold text-gray-700">Counsel:</label>
                 <select
                   value={newCounsel}
                   onChange={(e) => setNewCounsel(e.target.value)}
                   className="w-full p-2.5 bg-white border border-gray-200/90 rounded-lg mt-1 text-gray-800 focus:outline-none focus:border-navy-950 focus:ring-1 focus:ring-navy-950/20 transition-colors"
                 >
-                  <option value="Tariq Qudah">Tariq Qudah (Senior Partner)</option>
-                  <option value="Sara Al-Majali">Sara Al-Majali (Partner)</option>
-                  <option value="Kareem Masri">Kareem Masri (Senior Associate)</option>
+                  <option value="Tariq Qudah">Tariq Qudah</option>
+                  <option value="Sara Al-Majali">Sara Al-Majali</option>
+                  <option value="Kareem Masri">Kareem Masri</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="font-semibold text-gray-700">Practice Area:</label>
+              <label className="font-semibold text-gray-700">Area:</label>
               <input
                 type="text"
                 value={newPracticeArea}
@@ -878,7 +822,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
             <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50/70 border border-gray-200/80 rounded-xl">
               <div>
-                <label className="font-semibold text-gray-700">Total Legal Fee ($):</label>
+                <label className="font-semibold text-gray-700">Total Fee ($):</label>
                 <input
                   type="text"
                   value={newTotalFee}
@@ -887,7 +831,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
                 />
               </div>
               <div>
-                <label className="font-semibold text-gray-700">Initial Retainer Deposit ($):</label>
+                <label className="font-semibold text-gray-700">Deposit ($):</label>
                 <input
                   type="text"
                   value={newRetainerDeposit}
@@ -899,7 +843,7 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
 
             {/* Legal Notice */}
             <div className="p-3 bg-navy-50/50 border border-navy-100 text-navy-900 rounded-xl text-[11px] leading-relaxed">
-              <strong>Legal Compliance Note (Page 10):</strong> Electronic signature is legally documented with IP and SHA-256 fingerprint. Statutory court powers of attorney (الوكالات الرسمية) must be executed before competent court notaries.
+              <strong>Compliance:</strong> E-signature is documented with IP and SHA-256 fingerprint. Official powers of attorney must be executed before court notaries.
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
@@ -912,10 +856,10 @@ export function ContractsView({ initialClientName, onViewClient }: ContractsView
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
+                className="px-5 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
               >
                 <FileCheck className="w-3.5 h-3.5" />
-                Save Draft Contract
+                Save Draft
               </button>
             </div>
           </form>

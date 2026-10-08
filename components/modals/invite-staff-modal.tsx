@@ -53,27 +53,24 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
         className="max-w-md p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col gap-4"
       >
         <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-navy-50 text-navy-900 flex items-center justify-center">
-              <UserPlus className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-navy-50 text-navy-900 flex items-center justify-center">
+              <UserPlus className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="text-base font-bold text-navy-900">Invite Legal Staff</h3>
-              <p className="text-xs text-gray-500">Add attorney or support staff to firm roster</p>
-            </div>
+            <h3 className="text-base font-bold text-navy-900">Invite Staff</h3>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="p-1 rounded-lg text-gray-400 hover:text-gray-700 cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
-            <label className="text-xs font-bold text-gray-700">Full Legal Name:</label>
+            <label className="text-xs font-bold text-gray-700">Name:</label>
             <div className="relative mt-1">
               <User className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -81,14 +78,14 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Attorney Omar Al-Kilani"
+                placeholder="Full name..."
                 className="w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-1 focus:ring-navy-900"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700">Official Firm Email:</label>
+            <label className="text-xs font-bold text-gray-700">Email:</label>
             <div className="relative mt-1">
               <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -96,7 +93,7 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. o.kilani@medjordanlaw.com"
+                placeholder="name@medjordanlaw.com"
                 className="w-full pl-9 pr-3 py-2 text-xs border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-1 focus:ring-navy-900"
               />
             </div>
@@ -104,7 +101,7 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-bold text-gray-700">Practice Role:</label>
+              <label className="text-xs font-bold text-gray-700">Role:</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as TeamMember["role"])}
@@ -119,7 +116,7 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
             </div>
 
             <div>
-              <label className="text-xs font-bold text-gray-700">Active Matter Quota:</label>
+              <label className="text-xs font-bold text-gray-700">Quota:</label>
               <input
                 type="number"
                 min="0"
@@ -130,13 +127,10 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs mt-1">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs mt-1">
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-emerald-700" />
-              <div>
-                <div className="font-bold text-emerald-900 text-[11px]">Enforce Hardware / App 2FA</div>
-                <div className="text-[10px] text-emerald-700">Mandatory under Jordan firm policy</div>
-              </div>
+              <Shield className="w-4 h-4 text-navy-700" />
+              <span className="font-bold text-navy-900 text-xs">Enforce 2FA</span>
             </div>
             <input
               type="checkbox"
@@ -156,10 +150,10 @@ export function InviteStaffModal({ isOpen, onClose, onInvite }: InviteStaffModal
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-full shadow-xs cursor-pointer flex items-center gap-1.5"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
-              Send Chambers Invitation
+              Invite
             </button>
           </div>
         </form>

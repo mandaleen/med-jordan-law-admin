@@ -10,11 +10,7 @@ import {
   X,
   Lock,
   Eye,
-  Printer,
-  Calendar,
   Building,
-  User,
-  ExternalLink,
 } from "lucide-react";
 import { DocumentItem } from "@/lib/mock-data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -63,10 +59,10 @@ export function DocumentPreviewModal({
         className="max-w-3xl p-0 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in duration-200"
       >
         {/* Header Strip */}
-        <div className="bg-navy-950 px-6 py-4 text-white flex items-center justify-between shrink-0 border-b border-navy-800">
+        <div className="bg-navy-950 px-6 py-3.5 text-white flex items-center justify-between shrink-0 border-b border-navy-800">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-navy-800/80 border border-navy-700/60 flex items-center justify-center font-bold shrink-0">
-              <FileText className="w-5 h-5 text-gray-200" />
+            <div className="w-9 h-9 rounded-xl bg-navy-800/80 border border-navy-700/60 flex items-center justify-center font-bold shrink-0">
+              <FileText className="w-4 h-4 text-gray-200" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
@@ -77,10 +73,10 @@ export function DocumentPreviewModal({
                 <span className="text-[11px] font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-emerald-400" />
                   {document.status === "Validated"
-                    ? "Cryptographically Sealed"
+                    ? "Sealed"
                     : document.status === "Pending"
-                    ? "Pending Forensic Audit"
-                    : "Action Required: Re-upload"}
+                    ? "Pending"
+                    : "Action Required"}
                 </span>
               </div>
               <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight truncate mt-0.5">
@@ -107,15 +103,15 @@ export function DocumentPreviewModal({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 bg-white border border-gray-200/90 rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400">
-                Classification
+                Category
               </span>
               <span className="font-medium text-gray-900 truncate">
-                {document.category || "Legal Memorandum"}
+                {document.category || "Memorandum"}
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400">
-                Filing Date & Size
+                Date & Size
               </span>
               <span className="font-mono text-gray-800 tabular-nums">
                 {document.uploadDate} · {document.size}
@@ -123,7 +119,7 @@ export function DocumentPreviewModal({
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400">
-                Source Origin
+                Source
               </span>
               <span className="font-medium text-gray-800">
                 {document.type}
@@ -131,18 +127,18 @@ export function DocumentPreviewModal({
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400">
-                Client Visibility
+                Visibility
               </span>
               <div className="flex items-center gap-1.5 mt-0.5">
                 {document.isOfficeVisibleToClient ? (
                   <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700">
                     <Eye className="w-3 h-3 text-emerald-600" />
-                    Visible in Portal
+                    Visible
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700">
                     <Lock className="w-3 h-3 text-amber-600" />
-                    Chambers Only
+                    Private
                   </span>
                 )}
                 {onToggleVisibility && (
@@ -232,7 +228,7 @@ export function DocumentPreviewModal({
             <div className="flex items-center justify-between text-[11px]">
               <span className="font-mono text-emerald-400 font-medium flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                SHA-256 Cryptographic Fingerprint (بصمة الوثيقة المشفرة)
+                SHA-256 Fingerprint:
               </span>
               <button
                 type="button"
@@ -242,12 +238,12 @@ export function DocumentPreviewModal({
                 {copiedHash ? (
                   <>
                     <Check className="w-3 h-3 text-emerald-400" />
-                    <span>Copied!</span>
+                    <span>Copied</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-3 h-3 text-gray-300" />
-                    <span>Copy Hash</span>
+                    <span>Copy</span>
                   </>
                 )}
               </button>
@@ -259,7 +255,7 @@ export function DocumentPreviewModal({
         </div>
 
         {/* Modal Actions Footer */}
-        <div className="px-6 py-3.5 bg-gray-50 border-t border-gray-200/90 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div className="px-6 py-3 bg-gray-50 border-t border-gray-200/90 flex flex-wrap items-center justify-between gap-2 shrink-0">
           <div className="flex items-center gap-2">
             {onOpenAuditTrail && (
               <button
@@ -268,10 +264,10 @@ export function DocumentPreviewModal({
                   onClose();
                   onOpenAuditTrail(document);
                 }}
-                className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 text-xs font-medium cursor-pointer transition-colors inline-flex items-center gap-1.5"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-navy-700" />
-                <span>Forensic Audit Trail</span>
+                <span>Audit Trail</span>
               </button>
             )}
           </div>
@@ -280,24 +276,24 @@ export function DocumentPreviewModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200/60 rounded-lg cursor-pointer transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200/60 rounded-lg cursor-pointer transition-colors"
             >
               Close
             </button>
             <button
               type="button"
               onClick={handleDownload}
-              className="px-4 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer transition-colors inline-flex items-center gap-1.5"
+              className="px-3.5 py-1.5 text-xs font-medium bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer transition-colors inline-flex items-center gap-1.5"
             >
               {downloadSuccess ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Downloaded!</span>
+                  <span>Downloaded</span>
                 </>
               ) : (
                 <>
                   <Download className="w-3.5 h-3.5" />
-                  <span>Download Certified PDF</span>
+                  <span>Download PDF</span>
                 </>
               )}
             </button>

@@ -42,7 +42,7 @@ export function NotificationsPopover({
           "w-80 sm:w-96 bg-white/95 backdrop-blur-3xl border border-gray-300/80 rounded-xl shadow-[0_20px_50px_rgba(26,39,68,0.18),0_1px_3px_rgba(0,0,0,0.04)] z-50 overflow-hidden animate-in zoom-in-95 fade-in duration-200",
           placement === "sidebar"
             ? "fixed left-4 bottom-20 sm:left-[264px] sm:bottom-4"
-            : "absolute right-0 top-12"
+            : "absolute end-0 top-full mt-2.5"
         )}
       >
         <div className="px-4 py-3.5 border-b border-gray-100 flex items-center justify-between">
@@ -50,22 +50,24 @@ export function NotificationsPopover({
             <span className="text-sm font-semibold text-navy-900 tracking-tight whitespace-nowrap">
               Notifications
             </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-navy-600/10 text-navy-600 border border-navy-600/20 whitespace-nowrap shrink-0">
-              {items.filter((i) => !i.read).length} new
-            </span>
+            {items.some((i) => !i.read) && (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-navy-600/10 text-navy-600 whitespace-nowrap shrink-0">
+                {items.filter((i) => !i.read).length}
+              </span>
+            )}
           </div>
           <button
             type="button"
             onClick={() => {
               onMarkAllRead();
             }}
-            className="text-xs font-semibold text-navy-600 hover:text-navy-800 apple-press whitespace-nowrap shrink-0 cursor-pointer"
+            className="text-xs font-semibold text-navy-600 hover:text-navy-800 press whitespace-nowrap shrink-0 cursor-pointer"
           >
             Mark all read
           </button>
         </div>
 
-        <div className="max-h-80 overflow-y-auto apple-scrollbar divide-y divide-gray-100">
+        <div className="max-h-80 overflow-y-auto scrollbar-thin divide-y divide-gray-100">
           {items.map((item) => {
             const Icon = categoryIcons[item.category];
             const color = categoryColors[item.category];
@@ -101,12 +103,6 @@ export function NotificationsPopover({
               </div>
             );
           })}
-        </div>
-
-        <div className="p-2.5 bg-gray-50 text-center border-t border-gray-100">
-          <span className="text-[11px] font-medium text-gray-500 whitespace-nowrap">
-            Encrypted Practice Dispatch Channel
-          </span>
         </div>
       </div>
     </>

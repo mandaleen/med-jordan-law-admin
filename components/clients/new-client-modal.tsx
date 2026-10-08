@@ -7,9 +7,7 @@ import {
   User,
   ShieldCheck,
   CheckCircle2,
-  FileText,
   AlertCircle,
-  Briefcase,
   Phone,
   Mail,
   Scale,
@@ -38,7 +36,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
   const [poaStatus, setPoaStatus] = useState<"Verified on File" | "Pending Notarization">("Verified on File");
   const [poaNumber, setPoaNumber] = useState("");
   const [conflictCleared, setConflictCleared] = useState(false);
-  const [initialRetainerAmount, setInitialRetainerAmount] = useState("$5,000.00");
+  const initialRetainerAmount = "$5,000.00";
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -133,11 +131,8 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
             </div>
             <div>
               <h2 id="new-client-title" className="text-base font-semibold tracking-tight text-white">
-                Onboard Client Account / قيد موكل
+                New Client
               </h2>
-              <p className="text-xs text-white/70">
-                Official registration with National ID / Ministry Registry, POA audit & conflict clearance
-              </p>
             </div>
           </div>
           <button
@@ -162,7 +157,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
           {/* 1. Entity Classification Switch */}
           <div>
             <label className="block text-gray-700 font-semibold mb-2 text-xs">
-              Entity Classification / نوع الموكل
+              Entity Type
             </label>
             <div className="grid grid-cols-2 gap-2 bg-gray-100 p-1 rounded-xl">
               <button
@@ -175,7 +170,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
                 }`}
               >
                 <Building2 className="w-4 h-4 text-gold-500" />
-                <span>Corporate Entity / شركة تجارية</span>
+                <span>Corporate</span>
               </button>
               <button
                 type="button"
@@ -187,21 +182,20 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
                 }`}
               >
                 <User className="w-4 h-4 text-navy-600" />
-                <span>Private Individual / موكل فردي</span>
+                <span>Individual</span>
               </button>
             </div>
           </div>
 
-          {/* 2. Identity Information */}
           <div className="space-y-3">
             <h3 className="font-semibold text-gray-900 text-xs uppercase tracking-wider text-gray-400">
-              Identity & Ministry Records
+              Identity
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">
-                  {entityType === "Corporate" ? "Corporate Entity Name *" : "Full Legal Name *"}
+                  {entityType === "Corporate" ? "Entity Name *" : "Full Name *"}
                 </label>
                 <input
                   type="text"
@@ -218,7 +212,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
 
               {entityType === "Corporate" ? (
                 <div>
-                  <label className="block text-gray-700 font-medium mb-1">Parent Holding / Trade Group</label>
+                  <label className="block text-gray-700 font-medium mb-1">Parent / Trade Group</label>
                   <input
                     type="text"
                     placeholder="e.g. Arab Potash Group (Amman)"
@@ -229,10 +223,10 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
                 </div>
               ) : (
                 <div>
-                  <label className="block text-gray-700 font-medium mb-1">Occupation / Family Office</label>
+                  <label className="block text-gray-700 font-medium mb-1">Occupation</label>
                   <input
                     type="text"
-                    placeholder="e.g. Kayali Family Holdings / Managing Director"
+                    placeholder="e.g. Managing Director"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-navy-900 text-xs"
@@ -244,7 +238,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">
-                  {entityType === "Corporate" ? "Commercial Register (السجل) *" : "National ID (الرقم الوطني) *"}
+                  {entityType === "Corporate" ? "Commercial Reg *" : "National ID *"}
                 </label>
                 <input
                   type="text"
@@ -260,7 +254,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Tax ID (الرقم الضريبي)</label>
+                <label className="block text-gray-700 font-medium mb-1">Tax ID</label>
                 <input
                   type="text"
                   placeholder="e.g. TAX-JO-881920"
@@ -285,47 +279,47 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
           {/* 3. Representation & Retainer Structure */}
           <div className="space-y-3 pt-3 border-t border-gray-100">
             <h3 className="font-semibold text-gray-900 text-xs uppercase tracking-wider text-gray-400">
-              Legal Representation & Retainer Tier
+              Representation
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Lead Responsible Partner</label>
+                <label className="block text-gray-700 font-medium mb-1">Lead Partner</label>
                 <select
                   value={assignedPartner}
                   onChange={(e) => setAssignedPartner(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-navy-900 text-xs cursor-pointer"
                 >
-                  <option value="Tariq Qudah, Senior Partner">Tariq Qudah, Senior Partner (Corporate & Dispute)</option>
-                  <option value="Sara Al-Majali, Partner">Sara Al-Majali, Partner (Real Estate & Labor)</option>
-                  <option value="Kareem Masri, Senior Associate">Kareem Masri, Senior Associate (IP & Commercial)</option>
+                  <option value="Tariq Qudah, Senior Partner">Tariq Qudah</option>
+                  <option value="Sara Al-Majali, Partner">Sara Al-Majali</option>
+                  <option value="Kareem Masri, Senior Associate">Kareem Masri</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Engagement & Retainer Tier</label>
+                <label className="block text-gray-700 font-medium mb-1">Retainer Tier</label>
                 <select
                   value={retainerTier}
-                  onChange={(e) => setRetainerTier(e.target.value as any)}
+                  onChange={(e) => setRetainerTier(e.target.value as typeof retainerTier)}
                   className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-navy-900 text-xs cursor-pointer"
                 >
-                  <option value="Tier 1 General Counsel Retainer">Tier 1 General Counsel Retainer ($14,800/yr)</option>
-                  <option value="Litigation Retainer">Litigation Retainer (Matter Docket Basis)</option>
-                  <option value="Advisory / Project Basis">Advisory / Project Basis (Hourly / Fixed)</option>
+                  <option value="Tier 1 General Counsel Retainer">Tier 1 – General Counsel</option>
+                  <option value="Litigation Retainer">Litigation Retainer</option>
+                  <option value="Advisory / Project Basis">Advisory / Project Basis</option>
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Power of Attorney Status (الوكالة العدلية)</label>
+                <label className="block text-gray-700 font-medium mb-1">POA Status</label>
                 <select
                   value={poaStatus}
-                  onChange={(e) => setPoaStatus(e.target.value as any)}
+                  onChange={(e) => setPoaStatus(e.target.value as typeof poaStatus)}
                   className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-navy-900 text-xs cursor-pointer"
                 >
-                  <option value="Verified on File">Verified on File (مصدقة لدى الكاتب العدل)</option>
-                  <option value="Pending Notarization">Pending Notarization (قيد التوثيق العدلي)</option>
+                  <option value="Verified on File">Verified on File</option>
+                  <option value="Pending Notarization">Pending Notarization</option>
                 </select>
               </div>
 
@@ -345,12 +339,12 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
           {/* 4. Contact Details */}
           <div className="space-y-3 pt-3 border-t border-gray-100">
             <h3 className="font-semibold text-gray-900 text-xs uppercase tracking-wider text-gray-400">
-              Official Client Communications
+              Contact
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-gray-700 font-medium mb-1">WhatsApp / Phone Number *</label>
+                <label className="block text-gray-700 font-medium mb-1">Phone *</label>
                 <div className="relative">
                   <Phone className="w-3.5 h-3.5 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
@@ -365,7 +359,7 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
               </div>
 
               <div>
-                <label className="block text-gray-700 font-medium mb-1">Billing & Notice Email *</label>
+                <label className="block text-gray-700 font-medium mb-1">Email *</label>
                 <div className="relative">
                   <Mail className="w-3.5 h-3.5 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
@@ -396,11 +390,10 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
               <div className="flex flex-col">
                 <span className="font-semibold text-gray-900 flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  Conflict of Interest Clearance Check / فحص تعارض المصالح
+                  Conflict of Interest Clearance
                 </span>
                 <span className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
-                  I certify as counsel that adverse party checks were performed against all registered MJL litigation
-                  dockets and arbitration records, complying with Jordan Bar Association ethics bylaws.
+                  I certify adverse party checks were performed against all registered matters, per Bar Association ethics bylaws.
                 </span>
               </div>
             </label>
@@ -417,10 +410,10 @@ export function NewClientModal({ isOpen, onClose, onAddClient }: NewClientModalP
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white font-medium transition-colors shadow-xs cursor-pointer text-xs flex items-center gap-1.5"
+              className="px-5 py-2 rounded-full bg-navy-900 hover:bg-navy-800 text-white font-medium transition-colors shadow-xs cursor-pointer text-xs flex items-center gap-1.5"
             >
               <CheckCircle2 className="w-4 h-4 text-gold-400" />
-              <span>Complete Onboarding & Issue Dossier</span>
+              <span>Add Client</span>
             </button>
           </div>
         </form>

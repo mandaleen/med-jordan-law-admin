@@ -175,7 +175,7 @@ export function DialogContent({
       >
         {/* Backdrop Scrim */}
         <div
-          className={cn("fixed inset-0 bg-black/45 backdrop-blur-md transition-opacity", overlayClassName)}
+          className={cn("fixed inset-0 bg-navy-950/50 backdrop-blur-sm transition-opacity", overlayClassName)}
           onClick={handleClose}
           aria-hidden="true"
         />
@@ -187,7 +187,7 @@ export function DialogContent({
           aria-modal="true"
           tabIndex={-1}
           className={cn(
-            "relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-gray-200/80 overflow-hidden z-10 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] outline-none",
+            "relative w-full max-w-lg bg-white rounded-3xl shadow-[0_30px_80px_-20px_rgba(17,26,48,0.45)] border border-navy-900/10 overflow-hidden z-10 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] outline-none",
             className
           )}
           {...props}
@@ -196,7 +196,7 @@ export function DialogContent({
             <button
               type="button"
               onClick={handleClose}
-              className="absolute right-4 top-4 p-1.5 rounded-lg text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600"
+              className="absolute end-4 top-4 p-1.5 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition-colors cursor-pointer z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600"
               aria-label="Close dialog"
             >
               <X className="w-4 h-4" />
@@ -212,7 +212,7 @@ export function DialogContent({
 export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("px-6 pt-5 pb-4 border-b border-gray-100 flex flex-col gap-1.5", className)}
+      className={cn("px-6 pt-6 pb-4 border-b border-navy-900/[0.06] flex flex-col gap-1.5", className)}
       {...props}
     />
   );
@@ -221,7 +221,7 @@ export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLD
 export function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
-      className={cn("text-base font-bold text-navy-900 tracking-tight leading-none", className)}
+      className={cn("text-lg font-semibold text-navy-950 tracking-tight leading-none", className)}
       {...props}
     />
   );
@@ -239,7 +239,7 @@ export function DialogDescription({ className, ...props }: React.HTMLAttributes<
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("px-6 py-4 bg-gray-50/70 border-t border-gray-100 flex items-center justify-end gap-2.5", className)}
+      className={cn("px-6 py-4 bg-navy-50/50 border-t border-navy-900/[0.06] flex items-center justify-end gap-2.5", className)}
       {...props}
     />
   );

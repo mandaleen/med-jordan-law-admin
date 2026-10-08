@@ -17,7 +17,7 @@ Following an exhaustive, step-by-step audit and implementation lifecycle, the **
 | **State Persistence** | ✅ 100% | [lib/practice-context.tsx](file:///c:/Users/LENOVO/Desktop/admin/lib/practice-context.tsx) provides centralized practice store with URL query param sync (`?tab=...`), zero tab unmount data loss, and asynchronous localStorage hydration. |
 | **View Modularity** | ✅ 100% | All monolithic views decomposed into clean, modular subcomponents: [CasesView](file:///c:/Users/LENOVO/Desktop/admin/components/cases/cases-view.tsx) (73% LOC reduction), [BookingsView](file:///c:/Users/LENOVO/Desktop/admin/components/bookings/bookings-view.tsx) (65% LOC reduction), [ClientsView](file:///c:/Users/LENOVO/Desktop/admin/components/clients/clients-view.tsx) (62% LOC reduction), [FinanceView](file:///c:/Users/LENOVO/Desktop/admin/components/finance/finance-view.tsx) (44% LOC reduction), and [ContentView](file:///c:/Users/LENOVO/Desktop/admin/components/content/content-view.tsx) (54% LOC reduction). |
 | **Accessible Dialogs** | ✅ 100% | All 13 modals across the application wrap the unified [Dialog](file:///c:/Users/LENOVO/Desktop/admin/components/ui/dialog.tsx) primitive with React Portal mounting, focus trapping, Escape key dismiss, and scroll locks. |
-| **UI/UX & States** | ✅ 100% | 5 core UI states supported: [TableSkeleton](file:///c:/Users/LENOVO/Desktop/admin/components/ui/skeleton.tsx), [StatCardsSkeleton](file:///c:/Users/LENOVO/Desktop/admin/components/ui/skeleton.tsx), [EmptyState](file:///c:/Users/LENOVO/Desktop/admin/components/ui/empty-state.tsx) with one-click filter resets, error boundaries ([app/error.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/error.tsx), [app/global-error.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/global-error.tsx), [app/not-found.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/not-found.tsx)), and floating toast dispatch. |
+| **UI/UX & States** | ✅ 100% | Full suite of core UI states supported: Bespoke Stat Tiles, Matters Progress, [EmptyState](file:///c:/Users/LENOVO/Desktop/admin/components/ui/empty-state.tsx) with one-click filter resets, error boundaries ([app/error.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/error.tsx), [app/global-error.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/global-error.tsx), [app/not-found.tsx](file:///c:/Users/LENOVO/Desktop/admin/app/not-found.tsx)), and floating toast dispatch. |
 | **RTL & Bilingual i18n** | ✅ 100% | Authentic Jordanian legal Arabic dictionary implemented in [lib/i18n.ts](file:///c:/Users/LENOVO/Desktop/admin/lib/i18n.ts), reactive language switching synchronized with `document.documentElement` attributes (`dir="rtl"`, `lang="ar"`), and strict CSS logical properties (`border-s-2`, `text-start`, `text-end`, `ps-*`, `pe-*`, `ms-*`, `me-*`, `start-*`, `end-*`). |
 | **Mobile Responsiveness** | ✅ 100% | Off-canvas sheet drawer navigation for viewports `< 1024px` with smooth slide transition and backdrop scrim; sticky mobile header bar with hamburger toggle, MJL crest, and quick actions. |
 | **CI/CD & Config** | ✅ 100% | Automated GitHub Actions CI workflow in [.github/workflows/ci.yml](file:///c:/Users/LENOVO/Desktop/admin/.github/workflows/ci.yml), environment template in [.env.example](file:///c:/Users/LENOVO/Desktop/admin/.env.example), and accurate architectural documentation in [README.md](file:///c:/Users/LENOVO/Desktop/admin/README.md). |
@@ -73,10 +73,10 @@ Following an exhaustive, step-by-step audit and implementation lifecycle, the **
 
 ---
 
-## 3. UI/UX Completeness, States & Apple Design Polish
+## 3. UI/UX Completeness, States & Design System Polish
 
-- [x] **Skeleton Screens:**
-  - [x] Implemented [components/ui/skeleton.tsx](file:///c:/Users/LENOVO/Desktop/admin/components/ui/skeleton.tsx) with `Skeleton`, `StatCardsSkeleton`, and `TableSkeleton`.
+- [x] **Design System Primitives & Tokens:**
+  - [x] Implemented bespoke [DESIGN_SYSTEM.md](file:///c:/Users/LENOVO/Desktop/admin/DESIGN_SYSTEM.md), [StatTile](file:///c:/Users/LENOVO/Desktop/admin/components/ui/stat-tile.tsx), [ActionButton](file:///c:/Users/LENOVO/Desktop/admin/components/ui/action-button.tsx), and [Segmented](file:///c:/Users/LENOVO/Desktop/admin/components/ui/segmented.tsx).
 - [x] **Empty States:**
   - [x] Created reusable [components/ui/empty-state.tsx](file:///c:/Users/LENOVO/Desktop/admin/components/ui/empty-state.tsx).
   - [x] Integrated empty state screens with "Reset Filters" and "Clear Search" triggers across:

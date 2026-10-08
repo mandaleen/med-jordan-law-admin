@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  ShieldAlert,
   FileText,
   X,
   Globe,
@@ -76,24 +75,14 @@ export function DocumentAuditModal({ document, onClose }: DocumentAuditModalProp
         className="max-w-xl p-0 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in duration-200"
       >
         {/* Header */}
-        <div className="bg-navy-950 px-6 py-4 text-white flex items-center justify-between shrink-0 border-b border-navy-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-navy-800/80 border border-navy-700/60 text-white flex items-center justify-center font-bold shrink-0">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
+        <div className="bg-navy-950 px-6 py-3.5 text-white flex items-center justify-between shrink-0 border-b border-navy-800">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-navy-800/80 border border-navy-700/60 text-white flex items-center justify-center font-bold shrink-0">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
-                  Document Forensic Audit Trail
-                </h3>
-                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
-                  SEALED
-                </span>
-              </div>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Cryptographic custody log & access telemetry (سجل التدقيق الرقمي)
-              </p>
-            </div>
+            <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
+              Document Audit
+            </h3>
           </div>
           <button
             type="button"
@@ -123,7 +112,7 @@ export function DocumentAuditModal({ document, onClose }: DocumentAuditModalProp
               </div>
             </div>
             <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/80 text-[10.5px] font-medium shrink-0">
-              ✓ Verified Sealed
+              Verified
             </span>
           </div>
 
@@ -132,7 +121,7 @@ export function DocumentAuditModal({ document, onClose }: DocumentAuditModalProp
             <div className="flex items-center justify-between text-[11px]">
               <span className="font-mono text-emerald-400 font-medium flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
-                SHA-256 Digest:
+                SHA-256:
               </span>
               <button
                 type="button"
@@ -151,7 +140,7 @@ export function DocumentAuditModal({ document, onClose }: DocumentAuditModalProp
           {/* Chronological Event History */}
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-gray-700 uppercase tracking-wider text-[11px]">
-              Chronological Access & Verification Records:
+              Activity:
             </span>
 
             <div className="flex flex-col gap-2">
@@ -184,13 +173,13 @@ export function DocumentAuditModal({ document, onClose }: DocumentAuditModalProp
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 bg-gray-50 border-t border-gray-200/90 flex justify-end shrink-0">
+        <div className="px-6 py-3 bg-gray-50 border-t border-gray-200/90 flex justify-end shrink-0">
           <button
             type="button"
             onClick={onClose}
             className="px-4 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200/70 rounded-lg cursor-pointer transition-colors"
           >
-            Close Audit Log
+            Close
           </button>
         </div>
       </DialogContent>

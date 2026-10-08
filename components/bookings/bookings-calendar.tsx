@@ -22,18 +22,17 @@ export function BookingsCalendar({ bookings, onSelectBooking }: BookingsCalendar
     <div className="bg-white border border-gray-200/90 rounded-xl p-4 sm:p-5 flex flex-col gap-4 animate-in fade-in duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900 whitespace-nowrap">Week of October 5 – October 11, 2026</h3>
-          <p className="text-xs text-gray-500">Interactive consultation schedule across counsel roster</p>
+          <h3 className="text-sm font-semibold text-gray-900 whitespace-nowrap">Week of Oct 5 – 11, 2026</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="flex items-center gap-1.5 text-gray-600 font-medium whitespace-nowrap shrink-0">
-            <span className="w-2 h-2 rounded-full bg-navy-600 shrink-0" /> Video Consultations
+            <span className="w-2 h-2 rounded-full bg-navy-600 shrink-0" /> Video
           </span>
           <span className="flex items-center gap-1.5 text-gray-600 font-medium ml-2 whitespace-nowrap shrink-0">
-            <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> In-Person Sessions
+            <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> In-Person
           </span>
           <span className="flex items-center gap-1.5 text-gray-600 font-medium ml-2 whitespace-nowrap shrink-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> Phone Reviews
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> Phone
           </span>
         </div>
       </div>

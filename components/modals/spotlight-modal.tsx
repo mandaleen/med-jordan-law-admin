@@ -48,36 +48,33 @@ export function SpotlightModal({
   const quickActions = [
     {
       id: "qa-book",
-      title: "Schedule New Consultation",
-      subtitle: "Open the booking intake sheet",
+      title: "New Booking",
+      subtitle: "Open booking form",
       icon: Calendar,
       action: () => {
         handleClose();
         onNewBooking();
       },
-      badge: "Action",
     },
     {
       id: "qa-export",
-      title: "Export Dossier & Financials",
-      subtitle: "Generate CSV or encrypted PDF",
+      title: "Export Data",
+      subtitle: "Download CSV or PDF",
       icon: FileDown,
       action: () => {
         handleClose();
         onExportData();
       },
-      badge: "Export",
     },
     {
       id: "qa-facetime",
-      title: "Join Video Session with Sara Odeh",
-      subtitle: "Commercial Retainer Agreement review",
+      title: "Video Call",
+      subtitle: "Sara Odeh consultation",
       icon: Video,
       action: () => {
         handleClose();
         if (onNavigateTab) onNavigateTab("bookings");
       },
-      badge: "FaceTime",
     },
   ];
 
@@ -107,7 +104,7 @@ export function SpotlightModal({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search clients, matters, dossiers, or actions"
+            placeholder="Search..."
             className="w-full bg-transparent text-navy-900 text-lg font-medium placeholder:text-gray-400 focus:outline-none tracking-tight"
           />
           {query ? (
@@ -125,12 +122,12 @@ export function SpotlightModal({
         </div>
 
         {/* Results Container */}
-        <div className="max-h-[380px] overflow-y-auto apple-scrollbar p-3 space-y-4">
+        <div className="max-h-[380px] overflow-y-auto scrollbar-thin p-3 space-y-4">
           {/* Quick Actions */}
           {(!query || "actions".includes(query.toLowerCase())) && (
             <div>
               <div className="text-[11px] font-semibold text-gray-500 tracking-wider uppercase px-3 py-1">
-                Suggested Actions
+                Actions
               </div>
               <div className="space-y-1 mt-1">
                 {quickActions.map((item) => {
@@ -141,7 +138,7 @@ export function SpotlightModal({
                       onClick={() => {
                         item.action();
                       }}
-                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer apple-press"
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-full hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer press"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-md bg-gray-100 group-hover:bg-white/20 flex items-center justify-center shrink-0 transition-colors">
@@ -156,9 +153,6 @@ export function SpotlightModal({
                           </div>
                         </div>
                       </div>
-                      <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 group-hover:bg-white/20 text-gray-500 group-hover:text-white whitespace-nowrap shrink-0">
-                        {item.badge}
-                      </span>
                     </button>
                   );
                 })}
@@ -170,7 +164,7 @@ export function SpotlightModal({
           {filteredClients.length > 0 && (
             <div>
               <div className="text-[11px] font-semibold text-gray-500 tracking-wider uppercase px-3 py-1">
-                Clients & Bookings
+                Clients
               </div>
               <div className="space-y-1 mt-1">
                 {filteredClients.map((client) => (
@@ -180,7 +174,7 @@ export function SpotlightModal({
                       handleClose();
                       if (onNavigateTab) onNavigateTab("clients");
                     }}
-                    className="w-full flex items-center justify-between px-3.5 py-2 rounded-lg hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer apple-press"
+                    className="w-full flex items-center justify-between px-3.5 py-2 rounded-full hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer press"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <ClientAvatar
@@ -212,7 +206,7 @@ export function SpotlightModal({
           {filteredMatters.length > 0 && (
             <div>
               <div className="text-[11px] font-semibold text-gray-500 tracking-wider uppercase px-3 py-1">
-                Active Matters
+                Matters
               </div>
               <div className="space-y-1 mt-1">
                 {filteredMatters.map((matter) => (
@@ -222,7 +216,7 @@ export function SpotlightModal({
                       handleClose();
                       if (onNavigateTab) onNavigateTab("cases");
                     }}
-                    className="w-full flex items-center justify-between px-3.5 py-2 rounded-lg hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer apple-press"
+                    className="w-full flex items-center justify-between px-3.5 py-2 rounded-full hover:bg-navy-900 hover:text-white text-navy-900 text-left transition-colors group cursor-pointer press"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
@@ -252,7 +246,6 @@ export function SpotlightModal({
             </kbd>
             <span>to close</span>
           </span>
-          <span className="font-medium text-navy-900 whitespace-nowrap shrink-0">Med Jordan Law Dispatch</span>
         </div>
       </DialogContent>
     </Dialog>

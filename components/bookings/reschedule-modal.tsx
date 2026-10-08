@@ -47,7 +47,7 @@ export function RescheduleModal({ booking, onClose, onConfirm }: RescheduleModal
           </div>
           <div>
             <h3 className="text-base font-bold text-navy-900">
-              {isClientInitiated ? "Review Client-Initiated Reschedule" : "Office-Initiated Reschedule"}
+              {isClientInitiated ? "Review Reschedule" : "Reschedule"}
             </h3>
             <p className="text-xs text-gray-500">Consultation with {booking.clientName}</p>
           </div>
@@ -57,25 +57,24 @@ export function RescheduleModal({ booking, onClose, onConfirm }: RescheduleModal
           {isClientInitiated ? (
             <div className="p-3.5 bg-navy-50 border border-navy-200 rounded-xl flex flex-col gap-2 text-xs">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-navy-950">Client&apos;s Requested Slot:</span>
+                <span className="font-bold text-navy-950">Requested Slot:</span>
                 <span className="px-2 py-0.5 rounded-md bg-navy-200 text-navy-950 font-bold text-[11px]">
                   {booking.rescheduleDetails?.requestedDate} at {booking.rescheduleDetails?.requestedTime}
                 </span>
               </div>
               <p className="text-navy-900 text-[11px]">
-                <strong>Reason given:</strong> &ldquo;{booking.rescheduleDetails?.reason}&rdquo;
+                <strong>Reason:</strong> &ldquo;{booking.rescheduleDetails?.reason}&rdquo;
               </p>
             </div>
           ) : (
             <div className="flex flex-col gap-3">
               <p className="text-xs text-gray-700">
-                Select an updated slot for counsel <strong>{booking.lawyerName}</strong>. The client will receive an
-                automated notification to confirm this time or propose an alternative.
+                Select an updated slot for counsel <strong>{booking.lawyerName}</strong>.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-gray-700">New Date:</label>
+                  <label className="text-xs font-bold text-gray-700">Date:</label>
                   <input
                     type="date"
                     required
@@ -85,7 +84,7 @@ export function RescheduleModal({ booking, onClose, onConfirm }: RescheduleModal
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-gray-700">Time Window:</label>
+                  <label className="text-xs font-bold text-gray-700">Time:</label>
                   <select
                     value={rescheduleTime}
                     onChange={(e) => setRescheduleTime(e.target.value)}
@@ -100,7 +99,7 @@ export function RescheduleModal({ booking, onClose, onConfirm }: RescheduleModal
               </div>
 
               <div>
-                <label className="text-xs font-bold text-gray-700">Office Note to Client:</label>
+                <label className="text-xs font-bold text-gray-700">Note:</label>
                 <textarea
                   placeholder="e.g. Counsel was summoned for urgent court hearing in Palace of Justice."
                   value={rescheduleNote}
@@ -122,10 +121,10 @@ export function RescheduleModal({ booking, onClose, onConfirm }: RescheduleModal
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-colors"
+              className="px-4 py-2 text-xs font-bold bg-navy-900 hover:bg-navy-800 text-white rounded-full shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-colors"
             >
               <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-              {isClientInitiated ? "Approve Client's New Slot" : "Dispatch Reschedule Notice"}
+              {isClientInitiated ? "Approve Slot" : "Reschedule"}
             </button>
           </div>
         </form>

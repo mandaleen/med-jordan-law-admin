@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { ActionButton } from "@/components/ui/action-button";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   Search,
   Download,
@@ -94,89 +97,47 @@ export function AuditView() {
         </div>
       )}
 
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-navy-900">System Security Audit Trail</h1>
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/70">
-              Compliance Ledger
-            </span>
-          </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Immutable legal ledger recording document access, refunds, conflict clearance decisions, and contract executions.
-          </p>
-        </div>
+      <PageHeader
+        title="Audit Logs"
+        description="A tamper-evident record of sensitive actions across the practice."
+        actions={
+          <ActionButton icon={<Download className="w-4 h-4" />} onClick={handleExportCSV}>
+            Export CSV
+          </ActionButton>
+        }
+      />
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleExportCSV}
-            className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 cursor-pointer shadow-none transition-colors"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Export Forensic CSV
-          </button>
-        </div>
-      </div>
-
-      {/* Overview Metric Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Logged Operations</span>
-            <div className="text-xl font-bold text-navy-900 mt-0.5">{logs.length}</div>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center">
-            <Database className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Conflict Waivers</span>
-            <div className="text-xl font-bold text-amber-600 mt-0.5">
-              {logs.filter((l) => l.action === "CLEAR_CONFLICT").length}
-            </div>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-            <AlertTriangle className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Refunds Issued</span>
-            <div className="text-xl font-bold text-rose-600 mt-0.5">
-              {logs.filter((l) => l.action === "ISSUE_REFUND").length}
-            </div>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
-            <CreditCard className="w-4 h-4" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-slate-200/80 p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Tamper Protection</span>
-            <div className="text-xl font-bold text-emerald-600 mt-0.5">Active</div>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <Lock className="w-4 h-4" />
-          </div>
-        </div>
-      </div>
+      <StatGrid>
+        <StatTile dark title="Total" icon={Database} value={logs.length} caption="Recorded events" />
+        <StatTile
+          title="Conflicts"
+          icon={AlertTriangle}
+          value={logs.filter((l) => l.action === "CLEAR_CONFLICT").length}
+          chip="Cleared"
+          chipTone="warning"
+          delay={60}
+        />
+        <StatTile
+          title="Refunds"
+          icon={CreditCard}
+          value={logs.filter((l) => l.action === "ISSUE_REFUND").length}
+          chip="Issued"
+          chipTone="error"
+          delay={120}
+        />
+        <StatTile title="Status" icon={Lock} value="Active" chip="Immutable" chipTone="success" delay={180} />
+      </StatGrid>
 
       {/* Search and Filters Bar */}
-      <div className="bg-white rounded-xl border border-slate-200/80 p-3 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="bg-white rounded-xl border border-slate-200/80 p-2.5 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-2.5 shrink-0">
         <div className="relative flex-1 w-full">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by actor name, role, IP address, resource ID, or detail..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 text-slate-800"
+            placeholder="Search audit logs..."
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50/80 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 text-slate-800"
           />
         </div>
 
@@ -186,7 +147,7 @@ export function AuditView() {
             onChange={(e) => setActionFilter(e.target.value)}
             className="px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-700 font-medium focus:outline-none"
           >
-            <option value="all">All Action Types</option>
+            <option value="all">All Actions</option>
             <option value="VIEW_DOCUMENT">View Document</option>
             <option value="DOWNLOAD_DOCUMENT">Download Document</option>
             <option value="CLEAR_CONFLICT">Clear Conflict</option>
@@ -203,7 +164,7 @@ export function AuditView() {
             <option value="all">All Resources</option>
             <option value="Document">Documents</option>
             <option value="Booking">Bookings</option>
-            <option value="Contract">Fee Contracts</option>
+            <option value="Contract">Contracts</option>
             <option value="Finance">Finance</option>
             <option value="Settings">Settings</option>
           </select>
@@ -211,27 +172,27 @@ export function AuditView() {
       </div>
 
       {/* Audit Logs Table */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex-1 flex flex-col min-h-0">
+      <div className="bg-white rounded-xl border border-slate-200/80 shadow-2xs overflow-hidden flex-1 flex flex-col min-h-0">
         <div className="overflow-x-auto flex-1 custom-scrollbar">
-          <table className="w-full text-left text-xs border-collapse table-fixed min-w-[1180px]">
+          <table className="w-full text-left text-xs border-collapse table-fixed min-w-[1100px]">
             <colgroup>
               <col className="w-[140px]" />
               <col className="w-[170px]" />
               <col className="w-[160px]" />
-              <col className="w-[150px]" />
-              <col className="w-[290px]" />
-              <col className="w-[130px]" />
               <col className="w-[140px]" />
+              <col className="w-[300px]" />
+              <col className="w-[120px]" />
+              <col className="w-[120px]" />
             </colgroup>
             <thead className="bg-slate-50/80 text-slate-500 font-semibold uppercase tracking-wider text-[11px] border-b border-slate-200/80 sticky top-0 z-10">
               <tr>
-                <th className="py-3 px-4">Timestamp</th>
-                <th className="py-3 px-4">Actor & Role</th>
+                <th className="py-3 px-4">Time</th>
+                <th className="py-3 px-4">Actor</th>
                 <th className="py-3 px-4">Action</th>
-                <th className="py-3 px-4">Resource Target</th>
-                <th className="py-3 px-4">Operation Details</th>
-                <th className="py-3 px-4">IP Origin</th>
-                <th className="py-3 px-4 text-right pr-5">Integrity</th>
+                <th className="py-3 px-4">Target</th>
+                <th className="py-3 px-4">Details</th>
+                <th className="py-3 px-4">IP</th>
+                <th className="py-3 px-4 text-right pr-5">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -299,7 +260,7 @@ export function AuditView() {
                     <td className="py-3.5 px-4 whitespace-nowrap text-right pr-5">
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
                         <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                        SHA-256 Valid
+                        Verified
                       </span>
                     </td>
                   </tr>
@@ -310,12 +271,12 @@ export function AuditView() {
         </div>
 
         {/* Footer info */}
-        <div className="px-4 py-3 bg-slate-50/80 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
+        <div className="px-4 py-2.5 bg-slate-50/80 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-2">
-            <Lock className="w-3.5 h-3.5 text-slate-600" />
-            <span>Immutable WORM Storage: Log entries cannot be pruned, updated, or rewritten by any staff role.</span>
+            <Lock className="w-3.5 h-3.5 text-slate-500" />
+            <span>Immutable Ledger</span>
           </div>
-          <span>Showing <strong className="text-slate-800">{filteredLogs.length}</strong> of {logs.length} entries</span>
+          <span>{filteredLogs.length} of {logs.length} entries</span>
         </div>
       </div>
     </div>

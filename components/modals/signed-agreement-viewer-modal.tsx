@@ -71,15 +71,12 @@ export function SignedAgreementViewerModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold tracking-tight">
-                  Executed E-Signature Dossier
+                  Signed Agreement
                 </h3>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/30">
-                  VERIFIED AUDIT PROOF
+                  Verified
                 </span>
               </div>
-              <p className="text-xs text-gray-300">
-                Tamper-evident legal electronic signature record (Page 6 & 10)
-              </p>
             </div>
           </div>
 
@@ -94,7 +91,7 @@ export function SignedAgreementViewerModal({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-5 text-xs">
+        <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4 text-xs">
           {/* Document Header Card */}
           <div className="p-4 rounded-xl bg-gray-50/70 border border-gray-200/80 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -106,26 +103,26 @@ export function SignedAgreementViewerModal({
                   {documentTitle}
                 </span>
                 <span className="text-[11px] text-gray-500 font-mono">
-                  File: {pdfName}
+                  {pdfName}
                 </span>
               </div>
             </div>
 
             <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-[11px]">
-              ✓ Legally Binding
+              Signed
             </span>
           </div>
 
           {/* Electronic Signature Audit Trail Grid */}
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-gray-700 uppercase tracking-wider text-[11px]">
-              E-Signature Forensic Audit Trail (توثيق التوقيع):
+              Audit Trail:
             </span>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl bg-gray-50/70 border border-gray-200/80">
               <div className="flex flex-col gap-1">
                 <span className="text-gray-400 font-medium text-[10px] uppercase">
-                  Signatory Identity
+                  Signatory
                 </span>
                 <span className="font-bold text-navy-950 text-xs">
                   {clientName}
@@ -134,7 +131,7 @@ export function SignedAgreementViewerModal({
 
               <div className="flex flex-col gap-1">
                 <span className="text-gray-400 font-medium text-[10px] uppercase">
-                  Signature Timestamp
+                  Timestamp
                 </span>
                 <span className="font-mono font-bold text-gray-800 text-xs">
                   {signedDate}
@@ -143,7 +140,7 @@ export function SignedAgreementViewerModal({
 
               <div className="flex flex-col gap-1">
                 <span className="text-gray-400 font-medium text-[10px] uppercase">
-                  Client IP & ISP Origin
+                  IP Address
                 </span>
                 <span className="font-mono text-gray-700 text-xs flex items-center gap-1">
                   <Globe className="w-3 h-3 text-gray-400" />
@@ -153,10 +150,10 @@ export function SignedAgreementViewerModal({
 
               <div className="flex flex-col gap-1">
                 <span className="text-gray-400 font-medium text-[10px] uppercase">
-                  Signature Method
+                  Method
                 </span>
                 <span className="text-gray-700 text-xs">
-                  Touchpad Signature + OTP Verification
+                  E-Signature + OTP
                 </span>
               </div>
             </div>
@@ -167,7 +164,7 @@ export function SignedAgreementViewerModal({
             <div className="flex items-center justify-between text-[11px]">
               <span className="font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
-                Document Cryptographic Fingerprint (بصمة الوثيقة SHA-256):
+                SHA-256:
               </span>
               <button
                 type="button"
@@ -175,7 +172,7 @@ export function SignedAgreementViewerModal({
                 className="px-2 py-0.5 rounded-md bg-white/10 hover:bg-white/20 text-white flex items-center gap-1 cursor-pointer transition-colors"
               >
                 {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                <span>{copied ? "Copied" : "Copy Hash"}</span>
+                <span>{copied ? "Copied" : "Copy"}</span>
               </button>
             </div>
             <code className="text-[11px] font-mono text-gray-300 break-all bg-black/40 p-2.5 rounded-lg border border-white/5 select-all">
@@ -191,10 +188,10 @@ export function SignedAgreementViewerModal({
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-emerald-950 text-xs">
-                  Delivered via WhatsApp Business API
+                  WhatsApp Delivery
                 </span>
                 <span className="text-emerald-800 text-[11px]">
-                  Delivered to {clientPhone} with direct encrypted PDF download link.
+                  Sent to {clientPhone}
                 </span>
               </div>
             </div>
@@ -205,7 +202,7 @@ export function SignedAgreementViewerModal({
               className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs whitespace-nowrap shrink-0 transition-colors"
             >
               <Send className="w-3 h-3" />
-              Resend WhatsApp
+              Resend
             </button>
           </div>
         </div>
@@ -223,7 +220,7 @@ export function SignedAgreementViewerModal({
           <button
             type="button"
             onClick={handleDownloadPdf}
-            className="px-4 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-lg shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 text-xs font-semibold bg-navy-950 hover:bg-navy-900 text-white rounded-full shadow-2xs cursor-pointer flex items-center gap-1.5 transition-colors"
           >
             {downloadSuccess ? (
               <>
@@ -233,7 +230,7 @@ export function SignedAgreementViewerModal({
             ) : (
               <>
                 <Download className="w-3.5 h-3.5" />
-                <span>Download Certified PDF</span>
+                <span>Download PDF</span>
               </>
             )}
           </button>

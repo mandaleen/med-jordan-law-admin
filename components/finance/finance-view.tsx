@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { Segmented } from "@/components/ui/segmented";
+import { PageHeader } from "@/components/ui/page-header";
 import {
   Wallet,
   ArrowDownLeft,
@@ -15,7 +18,6 @@ import {
   X,
 } from "lucide-react";
 import { FinanceTransaction, INITIAL_TRANSACTIONS } from "@/lib/mock-data";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TaxInvoiceModal, TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
@@ -101,23 +103,9 @@ export function FinanceView() {
         </div>
       )}
 
-      {/* Header & Filter Controls */}
-      <div className="apple-glass-card p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="w-10 h-10 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold shadow-xs">
-            <Wallet className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-[17px] font-bold text-navy-900 tracking-tight">Finance & Gateway Settlement</h2>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Gateway Connected
-              </span>
-            </div>
-            <p className="text-[12px] text-slate-400">Payment outcomes, auto-logged settlements & one-click refunds</p>
-          </div>
-        </div>
+      <PageHeader title="Finance" description="Revenue, payouts and transactions across counsel and payment methods." />
 
+      <div className="surface-card p-3 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
           {/* Search Box */}
@@ -142,20 +130,15 @@ export function FinanceView() {
             )}
           </div>
 
-          {/* Date Range Picker */}
-          <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-medium">
-            {(["today", "week", "month", "year"] as const).map((range) => (
-              <button
-                key={range}
-                onClick={() => setDateRange(range)}
-                className={`px-2.5 py-1 rounded-lg cursor-pointer capitalize ${
-                  dateRange === range ? "bg-white text-navy-900 font-bold shadow-xs" : "text-slate-500"
-                }`}
-              >
-                {range === "year" ? "YTD" : range}
-              </button>
-            ))}
-          </div>
+          <Segmented
+            label="Date range"
+            value={dateRange}
+            onChange={setDateRange}
+            options={(["today", "week", "month", "year"] as const).map((range) => ({
+              id: range,
+              label: <span className="capitalize">{range === "year" ? "YTD" : range}</span>,
+            }))}
+          />
 
           {/* Lawyer Filter */}
           <select
@@ -171,83 +154,48 @@ export function FinanceView() {
         </div>
       </div>
 
-      {/* REVENUE SUMMARY METRIC CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Gross Volume */}
-        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider text-[11px]">Gross Volume</span>
-            <span className="p-2 rounded-lg bg-slate-50 text-slate-600">
-              <DollarSign className="w-4 h-4" />
-            </span>
-          </div>
-          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2">
-            ${totalGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium whitespace-nowrap">
-            <TrendingUp className="w-3.5 h-3.5 shrink-0" />
-            <span className="whitespace-nowrap truncate">+24.6% vs previous period</span>
-          </div>
-        </div>
-
-        {/* Net Settled Payouts */}
-        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider text-[11px]">Net Office Payout</span>
-            <span className="p-2 rounded-lg bg-slate-50 text-emerald-600">
-              <ArrowDownLeft className="w-4 h-4" />
-            </span>
-          </div>
-          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
-            ${totalNet.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-          </div>
-          <span className="text-[11px] text-emerald-600 font-medium whitespace-nowrap truncate">
-            ✓ Available for firm distribution
-          </span>
-        </div>
-
-        {/* Gateway Processing Fees */}
-        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider text-[11px]">Gateway Fees (2.5%)</span>
-            <span className="p-2 rounded-lg bg-slate-50 text-slate-600">
-              <CreditCard className="w-4 h-4" />
-            </span>
-          </div>
-          <div className="text-2xl font-bold font-mono tracking-tight text-navy-900 my-2 whitespace-nowrap">
-            ${totalGatewayFees.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-          </div>
-          <span className="text-[11px] text-slate-400 whitespace-nowrap truncate">
-            Auto-deducted at transaction clearance
-          </span>
-        </div>
-
-        {/* Total Refunded */}
-        <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[135px]">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-semibold uppercase tracking-wider text-[11px]">Total Refunded</span>
-            <span className="p-2 rounded-lg bg-rose-50 text-rose-600">
-              <RotateCcw className="w-4 h-4" />
-            </span>
-          </div>
-          <div className="text-2xl font-bold font-mono tracking-tight text-slate-700 my-2 whitespace-nowrap">
-            ${totalRefunded.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-          </div>
-          <span className="text-[11px] text-slate-400 whitespace-nowrap truncate">
-            Policy cancellations & waivers
-          </span>
-        </div>
-      </div>
+      <StatGrid>
+        <StatTile
+          dark
+          title="Gross"
+          icon={DollarSign}
+          value={`$${totalGross.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
+          chip={<><TrendingUp className="w-3 h-3" />24.6%</>}
+          caption="vs previous period"
+        />
+        <StatTile
+          title="Net Payout"
+          icon={ArrowDownLeft}
+          value={`$${totalNet.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
+          chip="Available"
+          chipTone="success"
+          delay={60}
+        />
+        <StatTile
+          title="Fees (2.5%)"
+          icon={CreditCard}
+          value={`$${totalGatewayFees.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
+          caption="Auto-deducted"
+          delay={120}
+        />
+        <StatTile
+          title="Refunded"
+          icon={RotateCcw}
+          value={`$${totalRefunded.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
+          chip="Cancellations"
+          chipTone="error"
+          delay={180}
+        />
+      </StatGrid>
 
       {/* REVENUE CHARTS & LAWYER ATTRIBUTION */}
       <FinanceCharts dateRange={dateRange} lawyerAttribution={lawyerAttribution} />
 
       {/* TRANSACTIONS TABLE */}
-      <div className="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex-1 flex flex-col min-h-[460px] overflow-hidden">
+      <div className="surface-table shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex-1 flex flex-col min-h-[460px]">
         <div className="p-4 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white shrink-0">
           <div>
-            <h3 className="text-sm font-semibold text-navy-900">Gateway Transactions Ledger</h3>
-            <p className="text-xs text-slate-500">Every gateway transaction auto-logged with per-row refund actions</p>
+            <h3 className="text-sm font-semibold text-navy-900">Transactions</h3>
           </div>
           <button
             type="button"
@@ -255,7 +203,7 @@ export function FinanceView() {
             className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-colors shadow-none self-start sm:self-auto"
           >
             <Download className="w-3.5 h-3.5" />
-            Export Statement
+            Export
           </button>
         </div>
 
@@ -275,13 +223,13 @@ export function FinanceView() {
             </colgroup>
             <thead className="sticky top-0 z-10">
               <tr className="bg-slate-50/80 border-b border-slate-200/80">
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Transaction ID</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">ID</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Client</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Service & Counsel</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Date & Time</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Service</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Date</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Gross</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Gateway Fee</th>
-                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Net Payout</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Fee</th>
+                <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end">Net</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Method</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-start">Status</th>
                 <th className="py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500 text-end pe-5">Actions</th>
@@ -450,7 +398,7 @@ export function FinanceView() {
             <span className="hidden sm:inline">Fees: <strong className="font-mono text-slate-600">-${totalGatewayFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">Total Net Settlements:</span>
+            <span className="text-slate-400">Total Net:</span>
             <span className="font-mono font-bold text-emerald-700 text-[13px]">
               ${totalNet.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>

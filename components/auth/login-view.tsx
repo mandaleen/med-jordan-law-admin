@@ -24,12 +24,10 @@ import {
   KeyRound,
   Building2,
   Clock,
-  Sparkles,
 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { LogoSvg } from "@/components/brand/logo-svg";
 import { Language, getTranslation } from "@/lib/i18n";
-import { CURRENT_USER } from "@/lib/mock-data";
 
 interface PartnerProfile {
   id: string;
@@ -303,14 +301,10 @@ export function LoginView() {
         {/* Top Chambers Header & Live Telemetry Badge */}
         <div className="relative z-10 space-y-6">
           <div className="flex items-center justify-between gap-4">
-            {/* Live Security Enclave Pill */}
+            {/* Security Enclave Pill */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md shadow-xs">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
               <span className="text-[11px] font-mono tracking-wider text-gray-200 uppercase font-medium">
-                {isArabic ? "نظام مشفر مباشر · بروتوكول 256-Bit" : "SECURE ENCLAVE · 256-BIT AES"}
+                {isArabic ? "مشفر 256-Bit" : "256-BIT ENCRYPTED"}
               </span>
             </div>
 
@@ -386,7 +380,7 @@ export function LoginView() {
             <div className="flex items-center gap-2">
               <Cpu className="w-3.5 h-3.5 text-emerald-400" />
               <span>{isArabic ? "بوابة محكمة التمييز:" : "Court Gateway:"}</span>
-              <span className="text-white font-medium">{isArabic ? "متصلة ومحدثة" : "Synced (Active)"}</span>
+              <span className="text-white font-medium">{isArabic ? "متصلة" : "Active"}</span>
             </div>
             <span className="text-gray-400 text-[10px]">TLS 1.3 · ECDSA</span>
           </div>
@@ -598,7 +592,7 @@ export function LoginView() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={getTranslation("auth.email_placeholder", lang)}
-                        className="w-full py-2.5 ps-9 pe-3 text-sm text-navy-950 bg-transparent rounded-xl outline-none placeholder:text-gray-400 disabled:opacity-60"
+                        className="w-full py-2.5 ps-9 pe-3 text-sm text-navy-950 bg-transparent rounded-full outline-none placeholder:text-gray-400 disabled:opacity-60"
                       />
                     </div>
                   </div>
@@ -634,7 +628,7 @@ export function LoginView() {
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder={getTranslation("auth.password_placeholder", lang)}
-                        className="w-full py-2.5 ps-9 pe-10 text-sm text-navy-950 bg-transparent rounded-xl outline-none placeholder:text-gray-400 disabled:opacity-60"
+                        className="w-full py-2.5 ps-9 pe-10 text-sm text-navy-950 bg-transparent rounded-full outline-none placeholder:text-gray-400 disabled:opacity-60"
                       />
                       <button
                         type="button"

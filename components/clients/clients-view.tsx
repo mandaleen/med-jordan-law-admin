@@ -15,21 +15,25 @@ import {
   Building2,
   User,
   ShieldCheck,
-  Phone,
-  Mail,
   FileText,
   DollarSign,
   ArrowUpDown,
   LayoutGrid,
   Table as TableIcon,
-  ExternalLink,
   MessageSquare,
+  ChevronDown,
+  Scale,
+  Landmark,
+  Sparkles,
+  RotateCcw,
 } from "lucide-react";
 import { ClientProfile, INITIAL_CLIENTS } from "@/lib/mock-data";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientAvatar } from "@/components/ui/client-avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
+import { StatTile, StatGrid } from "@/components/ui/stat-tile";
+import { ActionButton } from "@/components/ui/action-button";
+import { Segmented } from "@/components/ui/segmented";
 import { TaxInvoiceModal, TaxInvoiceData } from "@/components/modals/tax-invoice-modal";
 import { ClientDetail } from "./client-detail";
 import { NewClientModal } from "./new-client-modal";
@@ -85,6 +89,10 @@ export function ClientsView() {
 
   const retainedCount = useMemo(() => {
     return clients.filter((c) => c.status === "Retained").length;
+  }, [clients]);
+
+  const activeMattersClientsCount = useMemo(() => {
+    return clients.filter((c) => c.activeCasesCount > 0).length;
   }, [clients]);
 
   // Filter & sort clients
@@ -192,7 +200,7 @@ export function ClientsView() {
   };
 
   return (
-    <div className="flex-1 flex flex-col gap-6 min-h-0">
+    <div className="flex-1 flex flex-col gap-5 min-h-0">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed bottom-6 end-6 z-50 p-3.5 bg-navy-950 text-white rounded-xl shadow-[var(--shadow-float)] border border-navy-800 flex items-center justify-between text-xs font-medium animate-in fade-in slide-in-from-bottom-2 shrink-0">
@@ -208,250 +216,185 @@ export function ClientsView() {
         <div className="flex-1 flex flex-col gap-6 min-h-0">
           {/* 1. Executive Architectural Page Header */}
           <PageHeader
-            eyebrow="Practice Management · Amman Headquarters"
-            title="Client Accounts & Corporate Entities"
-            description="Corporate retainers, individual representations, power of attorney registry, and verified billing ledger."
+            title="Clients"
+            description="Client accounts, corporate entities, retainers, and billing."
             actions={
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleExportRegistry}
-                  className="h-9 px-3.5 inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium transition-colors cursor-pointer"
-                >
-                  <Download className="w-4 h-4 text-gray-500" />
-                  <span>Export Registry</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsNewClientOpen(true)}
-                  className="h-9 px-4 inline-flex items-center gap-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-medium transition-colors shadow-xs cursor-pointer"
-                >
-                  <Plus className="w-4 h-4 text-gold-300" />
-                  <span>Onboard Client / Entity</span>
-                </button>
-              </div>
+              <>
+                <ActionButton icon={<Download className="w-4 h-4" />} onClick={handleExportRegistry}>
+                  Export
+                </ActionButton>
+                <ActionButton variant="primary" icon={<Plus className="w-4 h-4" strokeWidth={2.4} />} onClick={() => setIsNewClientOpen(true)}>
+                  New Client
+                </ActionButton>
+              </>
             }
           />
 
-          {/* 2. Executive KPI Summary Ribbon */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 shrink-0">
-            <div className="bg-white border border-gray-200/90 rounded-xl p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">
-                Total Client Accounts
-              </span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-bold text-navy-900 font-numeric">{clients.length}</span>
-                <span className="text-xs text-gray-500 font-medium">Registered</span>
-              </div>
-              <span className="text-[11px] text-gray-400 mt-1 block">
-                {corporateCount} Corporate · {individualCount} Individuals
-              </span>
-            </div>
+          <StatGrid>
+            <StatTile
+              dark
+              title="Total Clients"
+              icon={Users}
+              value={clients.length}
+              unit="Registered"
+              caption={`${corporateCount} corporate · ${individualCount} individual`}
+              selected={activeFilter === "all"}
+              onClick={() => setActiveFilter("all")}
+            />
+            <StatTile
+              title="Retainers"
+              icon={DollarSign}
+              value={`$${totalBilledNum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              chip={<><Sparkles className="w-3 h-3" />{retainedCount} active</>}
+              chipTone="success"
+              selected={activeFilter === "retained"}
+              onClick={() => setActiveFilter("retained")}
+              delay={60}
+            />
+            <StatTile
+              title="Active Cases"
+              icon={Scale}
+              value={totalActiveCases}
+              unit="Matters"
+              chip={<><Landmark className="w-3 h-3" />In court</>}
+              selected={activeFilter === "active-matters"}
+              onClick={() => setActiveFilter("active-matters")}
+              delay={120}
+            />
+            <StatTile
+              title="Compliance"
+              icon={ShieldCheck}
+              value="100%"
+              chip={<><CheckCircle2 className="w-3 h-3" />Verified</>}
+              chipTone="success"
+              caption="POA & KYC"
+              onClick={() => showToast("✓ All client POA mandates & Bar Council KYC documents are active and verified.")}
+              delay={180}
+            />
+          </StatGrid>
 
-            <div className="bg-white border border-gray-200/90 rounded-xl p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">
-                Retainer Portfolio (YTD)
-              </span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-bold text-navy-900 font-mono tabular-nums">
-                  ${totalBilledNum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          {/* 3. Executive Filter & Command Center */}
+          <div className="flex flex-col gap-3 shrink-0">
+            {/* Top Row: Segmented Filter Tabs & Quick Registry Stats */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <Segmented
+                label="Client filter"
+                value={activeFilter}
+                onChange={setActiveFilter}
+                options={[
+                  { id: "all", label: "All", icon: <Users className="w-3.5 h-3.5" />, count: clients.length },
+                  { id: "corporate", label: "Corporate", icon: <Building2 className="w-3.5 h-3.5" />, count: corporateCount },
+                  { id: "individual", label: "Individual", icon: <User className="w-3.5 h-3.5" />, count: individualCount },
+                  { id: "retained", label: "Retained", icon: <ShieldCheck className="w-3.5 h-3.5" />, count: retainedCount },
+                  { id: "active-matters", label: "Active Cases", icon: <Briefcase className="w-3.5 h-3.5" />, count: activeMattersClientsCount },
+                ]}
+              />
+
+              {/* Live Filter Summary & Reset Pill */}
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-gray-500 font-medium">
+                  Showing <strong className="text-navy-950 font-semibold">{filteredAndSortedClients.length}</strong> of{" "}
+                  {clients.length} accounts
                 </span>
-              </div>
-              <span className="text-[11px] text-emerald-700 font-medium mt-1 block">
-                Across {retainedCount} Active Retainers
-              </span>
-            </div>
-
-            <div className="bg-white border border-gray-200/90 rounded-xl p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">
-                Active Court Matters
-              </span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-bold text-navy-900 font-numeric">{totalActiveCases}</span>
-                <span className="text-xs text-gray-500 font-medium">Litigation Dockets</span>
-              </div>
-              <span className="text-[11px] text-gray-400 mt-1 block">Palace of Justice (قصر العدل)</span>
-            </div>
-
-            <div className="bg-white border border-gray-200/90 rounded-xl p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-              <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider block">
-                POA & KYC Standing
-              </span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-bold text-emerald-800 font-numeric">100%</span>
-                <span className="text-xs text-emerald-700 font-medium">Compliant</span>
-              </div>
-              <span className="text-[11px] text-gray-400 mt-1 block">Notary Public & Bar Audited</span>
-            </div>
-          </div>
-
-          {/* 3. Filter & Command Bar */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 shrink-0">
-            {/* Filter Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 lg:pb-0">
-              <button
-                type="button"
-                onClick={() => setActiveFilter("all")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeFilter === "all"
-                    ? "bg-navy-900 text-white"
-                    : "bg-white text-gray-600 hover:text-navy-900 border border-gray-200/90"
-                }`}
-              >
-                <span>All Accounts</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    activeFilter === "all" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {clients.length}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilter("corporate")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeFilter === "corporate"
-                    ? "bg-navy-900 text-white"
-                    : "bg-white text-gray-600 hover:text-navy-900 border border-gray-200/90"
-                }`}
-              >
-                <Building2 className="w-3.5 h-3.5" />
-                <span>Corporate Groups</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    activeFilter === "corporate" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {corporateCount}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilter("individual")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeFilter === "individual"
-                    ? "bg-navy-900 text-white"
-                    : "bg-white text-gray-600 hover:text-navy-900 border border-gray-200/90"
-                }`}
-              >
-                <User className="w-3.5 h-3.5" />
-                <span>Private Clients</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    activeFilter === "individual" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {individualCount}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilter("retained")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeFilter === "retained"
-                    ? "bg-navy-900 text-white"
-                    : "bg-white text-gray-600 hover:text-navy-900 border border-gray-200/90"
-                }`}
-              >
-                <span>Retained Counsel</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    activeFilter === "retained" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {retainedCount}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveFilter("active-matters")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeFilter === "active-matters"
-                    ? "bg-navy-900 text-white"
-                    : "bg-white text-gray-600 hover:text-navy-900 border border-gray-200/90"
-                }`}
-              >
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>Active Litigation</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    activeFilter === "active-matters" ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {clients.filter((c) => c.activeCasesCount > 0).length}
-                </span>
-              </button>
-            </div>
-
-            {/* Search, Sort, and View Mode Toggle */}
-            <div className="flex items-center gap-2">
-              <div className="relative min-w-[240px] flex-1 lg:flex-none">
-                <Search className="w-3.5 h-3.5 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder="Search name, commercial reg, tax ID..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full ps-8 pe-7 py-1.5 text-xs bg-white border border-gray-200/90 rounded-lg focus:outline-none focus:border-navy-900 text-gray-900 placeholder:text-gray-400 transition-colors"
-                />
-                {searchQuery && (
+                {(activeFilter !== "all" || searchQuery) && (
                   <button
                     type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute end-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                    aria-label="Clear search"
+                    onClick={() => {
+                      setActiveFilter("all");
+                      setSearchQuery("");
+                    }}
+                    className="text-[11px] font-semibold text-navy-700 hover:text-navy-950 bg-navy-50 hover:bg-navy-100 border border-navy-200/60 px-2 py-0.5 rounded-full transition-colors cursor-pointer inline-flex items-center gap-1"
                   >
-                    <X className="w-3 h-3" />
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset</span>
                   </button>
                 )}
               </div>
+            </div>
 
-              {/* Sort Selector */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="h-8 px-2.5 text-xs bg-white border border-gray-200/90 rounded-lg text-gray-700 focus:outline-none focus:border-navy-900 cursor-pointer"
-              >
-                <option value="billed-desc">Sort: Highest Billed</option>
-                <option value="cases-desc">Sort: Active Dockets</option>
-                <option value="name-asc">Sort: Name (A–Z)</option>
-              </select>
+            {/* Bottom Row: Search, Sort Selector & View Mode Switcher */}
+            <div className="surface-card p-2 sm:p-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+              {/* Full-featured Search Bar */}
+              <div className="relative flex-1 min-w-[260px]">
+                <Search className="w-4 h-4 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search clients..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full ps-9 pe-16 py-2 text-xs bg-gray-50 hover:bg-gray-50 focus:bg-white border border-navy-900/10 focus:border-navy-900 focus:ring-2 focus:ring-navy-900/10 rounded-full text-gray-900 placeholder:text-gray-400 transition-all outline-none"
+                />
+                <div className="absolute end-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                  {searchQuery ? (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="p-1 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 cursor-pointer transition-colors"
+                      aria-label="Clear search"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-medium text-gray-400 bg-white border border-gray-200 rounded shadow-2xs">
+                      /
+                    </kbd>
+                  )}
+                </div>
+              </div>
 
-              {/* View Toggle */}
-              <div className="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200/60 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setViewMode("cards")}
-                  className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "cards" ? "bg-white text-navy-900 shadow-2xs" : "text-gray-500 hover:text-gray-900"
-                  }`}
-                  title="Detailed Dossier Cards"
-                >
-                  <LayoutGrid className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode("table")}
-                  className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "table" ? "bg-white text-navy-900 shadow-2xs" : "text-gray-500 hover:text-gray-900"
-                  }`}
-                  title="Compact Ledger Table"
-                >
-                  <TableIcon className="w-3.5 h-3.5" />
-                </button>
+              {/* Controls Right: Sort & View Toggle */}
+              <div className="flex items-center gap-2 self-end md:self-auto shrink-0">
+                {/* Sort Dropdown */}
+                <div className="relative inline-flex items-center">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-gray-500 absolute start-2.5 pointer-events-none" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as SortOption)}
+                    className="h-8.5 ps-8 pe-7 text-xs font-medium bg-gray-50/80 hover:bg-gray-50 border border-gray-200/90 rounded-lg text-gray-700 hover:text-navy-950 focus:outline-none focus:border-navy-900 focus:bg-white transition-colors cursor-pointer appearance-none"
+                  >
+                    <option value="billed-desc">Billed (High to Low)</option>
+                    <option value="cases-desc">Active Cases</option>
+                    <option value="name-asc">Name (A–Z)</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute end-2 pointer-events-none" />
+                </div>
+
+                {/* View Toggle (Cards vs Table) */}
+                <div className="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200/70 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("cards")}
+                    className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                      viewMode === "cards"
+                        ? "bg-white text-navy-950 shadow-xs font-semibold ring-1 ring-black/5"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                    title="Detailed Dossier Cards"
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline text-[11px]">Dossiers</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("table")}
+                    className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                      viewMode === "table"
+                        ? "bg-white text-navy-950 shadow-xs font-semibold ring-1 ring-black/5"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                    title="Compact Ledger Table"
+                  >
+                    <TableIcon className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline text-[11px]">Ledger</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           {/* 4. Directory Presentation (Cards vs Compact Table) */}
           {filteredAndSortedClients.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-xs">
+            <div className="surface-card p-12 text-center">
               <EmptyState
                 icon={UserX}
                 title="No client accounts found"
@@ -474,7 +417,7 @@ export function ClientsView() {
                 <div
                   key={client.id}
                   onClick={() => setSelectedClientId(client.id)}
-                  className="bg-white border border-gray-200/90 hover:border-navy-900/40 rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-xs transition-all cursor-pointer group flex flex-col justify-between gap-4"
+                  className="bg-white border border-gray-200/80 hover:border-navy-900/30 rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer group flex flex-col justify-between gap-4"
                 >
                   {/* Card Header */}
                   <div>
@@ -637,7 +580,7 @@ export function ClientsView() {
                             status: "Paid via Gateway",
                           });
                         }}
-                        className="px-2.5 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1"
+                        className="px-2.5 py-1.5 rounded-full border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1"
                         title="Generate Official Jordan Tax Invoice"
                       >
                         <FileText className="w-3.5 h-3.5 text-navy-800" />
@@ -646,7 +589,7 @@ export function ClientsView() {
 
                       <button
                         type="button"
-                        className="px-3 py-1.5 rounded-lg bg-navy-900 group-hover:bg-navy-800 text-white text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs"
+                        className="px-3 py-1.5 rounded-full bg-navy-900 group-hover:bg-navy-800 text-white text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1 shadow-2xs"
                       >
                         <span>Client 360</span>
                         <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -658,18 +601,18 @@ export function ClientsView() {
             </div>
           ) : (
             /* COMPACT LEDGER TABLE (Non-overflowing, clean tabular layout) */
-            <div className="bg-white border border-gray-200/90 rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+            <div className="surface-table shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
               <div className="overflow-x-auto custom-scrollbar">
                 <table className="w-full text-start border-collapse text-xs">
                   <thead>
                     <tr className="bg-gray-50/90 border-b border-gray-200/80 text-[11px] font-semibold uppercase tracking-[0.05em] text-gray-500">
-                      <th className="py-3 px-4 text-start">Client / Legal Entity</th>
-                      <th className="py-3 px-4 text-start">Commercial Reg / ID</th>
-                      <th className="py-3 px-4 text-start">POA Standing</th>
-                      <th className="py-3 px-4 text-start">Active Dockets</th>
-                      <th className="py-3 px-4 text-start">Total Billed</th>
+                      <th className="py-3 px-4 text-start">Client</th>
+                      <th className="py-3 px-4 text-start">National / Reg ID</th>
+                      <th className="py-3 px-4 text-start">POA</th>
+                      <th className="py-3 px-4 text-start">Active Cases</th>
+                      <th className="py-3 px-4 text-start">Billed</th>
                       <th className="py-3 px-4 text-start">Status</th>
-                      <th className="py-3 px-4 text-end pe-5">Action</th>
+                      <th className="py-3 px-4 text-end pe-5">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -714,7 +657,7 @@ export function ClientsView() {
 
                         <td className="py-3.5 px-4 align-middle whitespace-nowrap">
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 text-xs font-medium border border-blue-200/60">
-                            <Briefcase className="w-3 h-3 text-blue-600" />
+                            <Briefcase className="w-3.5 h-3.5 text-blue-600" />
                             <span>{client.activeCasesCount} Matters</span>
                           </span>
                         </td>
@@ -751,9 +694,9 @@ export function ClientsView() {
                         <td className="py-3.5 px-4 text-end align-middle whitespace-nowrap pe-5">
                           <button
                             type="button"
-                            className="px-2.5 py-1 rounded-md bg-gray-100 group-hover:bg-navy-900 group-hover:text-white text-gray-700 text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1"
+                            className="px-2.5 py-1 rounded-full bg-gray-100 group-hover:bg-navy-900 group-hover:text-white text-gray-700 text-xs font-medium transition-colors cursor-pointer inline-flex items-center gap-1"
                           >
-                            <span>Dossier</span>
+                            <span>View</span>
                             <ChevronRight className="w-3.5 h-3.5" />
                           </button>
                         </td>

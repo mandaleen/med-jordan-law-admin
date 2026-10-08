@@ -53,7 +53,7 @@ export function FinanceRefundModal({
               <RotateCcw className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-base font-bold text-navy-900">Issue Gateway Refund</DialogTitle>
+              <DialogTitle className="text-base font-bold text-navy-900">Refund</DialogTitle>
               <DialogDescription className="text-xs text-slate-400">
                 Ref: {transaction.txnRef} · {transaction.clientName}
               </DialogDescription>
@@ -68,18 +68,18 @@ export function FinanceRefundModal({
               <span className="font-semibold text-slate-800">{transaction.service}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500">Original Gross Amount:</span>
+              <span className="text-slate-500">Gross:</span>
               <span className="font-bold text-slate-900">${transaction.grossAmount.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-500">Gateway Method:</span>
+              <span className="text-slate-500">Method:</span>
               <span className="text-slate-700">{transaction.paymentMethod}</span>
             </div>
           </div>
 
           {/* Refund Type */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">Refund Type:</label>
+            <label className="text-xs font-bold text-slate-700">Type:</label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -101,14 +101,14 @@ export function FinanceRefundModal({
                     : "bg-slate-50 text-slate-700 border-slate-200"
                 }`}
               >
-                Partial Refund
+                Partial
               </button>
             </div>
           </div>
 
           {refundAmountType === "partial" && (
             <div>
-              <label className="text-xs font-bold text-slate-700">Partial Amount ($):</label>
+              <label className="text-xs font-bold text-slate-700">Amount ($):</label>
               <input
                 type="number"
                 placeholder="e.g. 50.00"
@@ -120,16 +120,16 @@ export function FinanceRefundModal({
           )}
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">Reason for Refund:</label>
+            <label className="text-xs font-bold text-slate-700">Reason:</label>
             <select
               value={refundReason}
               onChange={(e) => setRefundReason(e.target.value)}
               className="w-full p-2 text-xs border border-slate-200 rounded-xl bg-slate-50 text-slate-800 focus:outline-none focus:ring-1 focus:ring-navy-900"
             >
-              <option value="Client requested cancellation >48h prior">Client requested cancellation &gt;48h prior</option>
-              <option value="Mutual agreement / emergency postponement">Mutual agreement / emergency postponement</option>
-              <option value="Lawyer emergency unavailability">Lawyer emergency unavailability</option>
-              <option value="Billing discrepancy correction">Billing discrepancy correction</option>
+              <option value="Client requested cancellation >48h prior">Client cancellation (&gt;48h)</option>
+              <option value="Mutual agreement / emergency postponement">Mutual agreement</option>
+              <option value="Lawyer emergency unavailability">Lawyer unavailable</option>
+              <option value="Billing discrepancy correction">Billing correction</option>
             </select>
           </div>
         </div>
@@ -147,7 +147,7 @@ export function FinanceRefundModal({
             onClick={handleExecute}
             className="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs cursor-pointer whitespace-nowrap shrink-0 transition-colors"
           >
-            Execute Refund
+            Refund
           </button>
         </DialogFooter>
       </DialogContent>

@@ -28,14 +28,13 @@ export function FinanceCharts({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Left: Monthly Trend Visualizer */}
-      <div className="lg:col-span-2 apple-glass-card p-5 rounded-xl flex flex-col justify-between">
+      <div className="lg:col-span-2 surface-card p-5 rounded-xl flex flex-col justify-between">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
-            <h3 className="text-sm font-bold text-navy-900">Revenue Trajectory & Gateway Settlement</h3>
-            <p className="text-xs text-slate-400">Gross intake volume vs net cleared deposits</p>
+            <h3 className="text-sm font-bold text-navy-900">Revenue</h3>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800">
-            Filtered: {dateRange.toUpperCase()}
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-navy-50 text-navy-800">
+            {dateRange.toUpperCase()}
           </span>
         </div>
 
@@ -53,12 +52,12 @@ export function FinanceCharts({
                   />
                   {/* Net Bar */}
                   <div
-                    className="w-1/2 bg-blue-500 rounded-t-lg transition-all hover:bg-blue-400 cursor-pointer"
+                    className="w-1/2 bg-gold-500 rounded-t-lg transition-all hover:bg-gold-300 cursor-pointer"
                     style={{ height: `${(bar.net / 6000) * 100}%` }}
                     title={`Net: $${bar.net}`}
                   />
                 </div>
-                <span className={`text-[11px] font-semibold ${bar.isCurrent ? "text-blue-600 font-bold" : "text-slate-400"}`}>
+                <span className={`text-[11px] font-semibold ${bar.isCurrent ? "text-navy-700 font-bold" : "text-slate-400"}`}>
                   {bar.label}
                 </span>
               </div>
@@ -68,23 +67,22 @@ export function FinanceCharts({
           <div className="flex items-center justify-center gap-6 pt-4 border-t border-slate-100 text-xs">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-md bg-navy-900" />
-              <span className="text-slate-600 font-medium">Gross Gateway Intake</span>
+              <span className="text-slate-600 font-medium">Gross</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-md bg-blue-500" />
-              <span className="text-slate-600 font-medium">Net Payout Received</span>
+              <span className="w-3 h-3 rounded-md bg-gold-500" />
+              <span className="text-slate-600 font-medium">Net</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right: Revenue by Lawyer Attribution */}
-      <div className="apple-glass-card p-5 rounded-xl flex flex-col justify-between">
+      <div className="surface-card p-5 rounded-xl flex flex-col justify-between">
         <div>
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-sm font-bold text-navy-900">Counsel Attribution</h3>
-              <p className="text-xs text-slate-400">Revenue realization by lawyer</p>
+              <h3 className="text-sm font-bold text-navy-900">Attribution</h3>
             </div>
           </div>
 
@@ -102,16 +100,16 @@ export function FinanceCharts({
                   />
                 </div>
                 <div className="flex items-center justify-between text-[10px] text-slate-400">
-                  <span>{lawyer.cases} matters settled</span>
-                  <span>{lawyer.percent}% share</span>
+                  <span>{lawyer.cases} matters</span>
+                  <span>{lawyer.percent}%</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] text-slate-500 mt-4">
-          Consultation fee distribution is audited and reconciled with monthly partner disbursements.
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-[11px] text-slate-400 mt-4">
+          Audited with monthly disbursements.
         </div>
       </div>
     </div>

@@ -31,19 +31,19 @@ export function EmptyState({
         className
       )}
     >
-      <div className="w-12 h-12 rounded-2xl bg-navy-50 text-navy-800 border border-navy-200/60 flex items-center justify-center shadow-2xs mb-3.5">
+      <div className="w-14 h-14 rounded-full pattern-hatch text-navy-800 border border-navy-200 flex items-center justify-center mb-4">
         <Icon className="w-6 h-6 text-navy-700" />
       </div>
 
-      <h3 className="text-sm font-bold text-navy-950 tracking-tight mb-1">{title}</h3>
-      <p className="text-xs text-gray-500 leading-relaxed mb-4 max-w-xs">{description}</p>
+      <h3 className="text-[15px] font-semibold text-navy-950 tracking-tight mb-1">{title}</h3>
+      <p className="text-[13px] text-gray-500 leading-relaxed mb-5 max-w-xs">{description}</p>
 
       <div className="flex flex-wrap items-center justify-center gap-2">
         {actionLabel && onAction && (
           <button
             type="button"
             onClick={onAction}
-            className="px-3.5 py-1.5 bg-navy-900 hover:bg-navy-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            className="px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white rounded-full text-xs font-semibold press transition-all cursor-pointer"
           >
             {actionLabel}
           </button>
@@ -52,7 +52,7 @@ export function EmptyState({
           <button
             type="button"
             onClick={onSecondaryAction}
-            className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-navy-900 border border-gray-300 rounded-xl text-xs font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 bg-white hover:bg-navy-50 text-navy-900 border border-navy-900/20 rounded-full text-xs font-semibold press transition-all cursor-pointer"
           >
             {secondaryActionLabel}
           </button>

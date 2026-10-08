@@ -33,7 +33,7 @@ export function RefundModal({ booking, onClose, onConfirm }: RefundModalProps) {
             <DollarSign className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-navy-900">Issue Gateway Refund & Cancel</h3>
+            <h3 className="text-base font-bold text-navy-900">Refund & Cancel</h3>
             <p className="text-xs text-gray-500">
               {booking.clientName} · {booking.fee}
             </p>
@@ -41,8 +41,7 @@ export function RefundModal({ booking, onClose, onConfirm }: RefundModalProps) {
         </div>
 
         <p className="text-xs text-gray-700 leading-relaxed">
-          This triggers an immediate reversal via the original payment gateway. The transaction will be logged in the
-          client&apos;s account profile and subtracted from the office revenue ledger.
+          Reverses the fee via the payment gateway and logs the transaction.
         </p>
 
         <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs flex flex-col gap-1.5">
@@ -51,31 +50,31 @@ export function RefundModal({ booking, onClose, onConfirm }: RefundModalProps) {
             <span className="font-mono font-bold text-navy-900">{booking.transactionId}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-500">Gross Refund Amount:</span>
+            <span className="text-gray-500">Refund Amount:</span>
             <span className="font-bold text-success">{booking.fee}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-500">Gateway Fee Reversed:</span>
-            <span className="text-gray-700 font-medium">100% full reversal</span>
+            <span className="text-gray-500">Reversal:</span>
+            <span className="text-gray-700 font-medium">100% Full</span>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-gray-700">Refund Justification:</label>
+            <label className="text-xs font-bold text-gray-700">Reason:</label>
             <select
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               className="w-full p-2 text-xs border border-gray-300 rounded-xl bg-gray-50 text-gray-900 focus:outline-none"
             >
               <option value="Client requested cancellation >48h prior">
-                Client requested cancellation &gt;48h prior (Policy 100%)
+                Client cancellation (&gt;48h)
               </option>
               <option value="Mutual agreement / emergency postponement">
-                Mutual agreement / emergency postponement
+                Mutual agreement
               </option>
-              <option value="Lawyer emergency unavailability">Lawyer emergency unavailability</option>
-              <option value="Office fee waiver">Office fee waiver</option>
+              <option value="Lawyer emergency unavailability">Lawyer unavailable</option>
+              <option value="Office fee waiver">Fee waiver</option>
             </select>
           </div>
 
@@ -91,7 +90,7 @@ export function RefundModal({ booking, onClose, onConfirm }: RefundModalProps) {
               type="submit"
               className="px-4 py-2 text-xs font-bold bg-error hover:bg-error/90 text-white rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-colors"
             >
-              Execute Gateway Refund
+              Issue Refund
             </button>
           </div>
         </form>
